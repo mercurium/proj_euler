@@ -1,0 +1,58 @@
+%\documentstyle [12pt,amsmath,amsfonts] {article}
+
+\documentclass [12pt] {article}
+
+\addtolength{\oddsidemargin}{-.75in}
+\addtolength{\evensidemargin}{-.75in}
+\addtolength{\textwidth}{1.3in}
+\addtolength{\topmargin}{-.75in}
+\addtolength{\textheight}{1.85in}
+
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{ latexsym, graphicx }
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+
+\newcommand{\ov}{\overline}
+\newcommand{\overbar}{\overline}
+\newcommand{\union}{\bigcup}
+\newcommand{\intersect}{\bigcap}
+\newcommand{\ud}{\underline}
+\newcommand{\Rarr}{\Rightarrow}
+\newcommand{\rarr}{\rightarrow}
+\newcommand{\rawrr}{\rightarrow}
+\newcommand{\Righarrow}{\Rightarrow}
+\newcommand{\LRarr}{\Leftrightarrow}
+\newcommand{\trileft}{\vartriangleleft}
+\newcommand{\infinity}{\infty}
+\newcommand{\fract}{\frac}
+\newcommand{\no}{\noindent}
+\newcommand{\dst}{\displaystyle}
+\newcommand{\dsp}{\displaystyle}
+\newcommand{\dps}{\displaystyle}
+\newcommand{\bs}{\backslash}
+
+\begin{document}
+
+\ud{The methodology for solving the problem}
+
+Basically, we want $a = xF_1+x^2F_2 + x^3F_3 + \dotso$ to equal an integer for x being a rational number. \\
+
+So we know that the recurrence relation for the fibonacci numbers is $F_n = F_{n-1} + F_{n-2}$. Then, using the recurrence relation $F_n = \frac{ (1+\sqrt{5})^n}{2^n \sqrt{5}} + \frac{ (1-\sqrt{5})^n} {2^n \sqrt{5}}$ \\
+ 
+Then if we have $A_F(x) = xF_1 + x^2F_2+ x^3F_3+\dotso$, this is equivalent to saying $$A_F(x) = \sum_{k=1}^{\infty} x^kF_k = \sum_{k=1}^{\infty} x^k  \frac{ (1+\sqrt{5})^k}{2^k \sqrt{5}} + x^k\frac{ (1-\sqrt{5})^k} {2^k \sqrt{5}}$$ \\
+  
+Then the sum of the terms come out to be $\frac 1 {\sqrt{5}} ( \frac {2}{2-x(1+\sqrt{5})} - \frac 2 {2-x(1-\sqrt{5})})$, or simplified out, $a = \frac{-4x}{4x^2+4x+4} = \frac {-x}{x^2+x+1} = a$. \\
+
+Cross multiplying it out, we get that $-x = a(x^2+x-1)$, or $ax^2 +(a+1)x -a = 0$. Since we want rational solutions, the x inputted to this must be rational, thus $\frac {-a \pm \sqrt{(a+1)^2+4a^2}}{2a}$ must be rational $\Rarr$ $\sqrt{(a+1)^2 + 4a^2}$ must be rational, thus $(a+1)^2 + 4a^2 = 5a^2+2a+1$ must be a square. \\
+
+Now for the less elegant part. Given the hint that the first solution is 2, followed by 15, 104, and 714, I concluded that there was a ratio between answers approximated to be 6.854, a number I updated at each stage (to reduce the number of computations at each step). Thus, given an answer, start checking at 6.854-ish * answer to find the next answer. After repeating enough times, the solution 1120149658760 is found $\ \ \square$
+\end{document}

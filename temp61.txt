@@ -1,0 +1,234 @@
+
+and len(item[3][0]) == 1 and len(item[4][0]) == 1 and len(item[5][0]) == 1
+
+,[set(),6],[set(),7],[set(),8]
+######################################################
+def tri_add(n):
+  if len(str(n)) == 4 and str(n)[2]!= '0':
+    if n%100 in tri:
+      tri[n%100] += [n/100]
+    else: tri[n%100] = [n/100]
+
+def squ_add(n):
+  if len(str(n)) == 4 and str(n)[2]!= '0' and n/100 in tri:
+    if n%100 in squ:
+      squ[n%100] += [n/100]
+    else: squ[n%100] = [n/100]
+
+def penta_add(n):
+  if len(str(n)) == 4 and str(n)[2]!= '0' and n/100 in squ:
+    if n%100 in penta:
+      penta[n%100] += [n/100]
+    else: penta[n%100] = [n/100]
+
+tri = dict()
+squ = dict()
+penta = dict()
+for i in range(40,150):
+  n = i*(i+1)/2
+  tri_add(n)
+
+
+for i in range(30,100):
+  n = i**2
+  squ_add(n)
+
+for i in range(30,100):
+  n = i*(3*i-1)/2
+  penta_add(n)
+print penta
+######################################################
+
+def dig_add(n,lstz):
+  if len(str(n)) == 4 and str(n)[2]!= '0':
+    lstz[0].add(n)
+    lstz[1].add(n/100)
+    lstz[2].add(n%100)
+
+def dig_add2(n,lstz,filter):
+  if len(str(n)) == 4 and str(n)[2]!= '0':
+    if n/100 in filter:
+      lstz[0].add(n)
+      lstz[1].add(n/100)
+      lstz[2].add(n%100)
+
+tri = [set(),set(),set()]
+squ = [set(),set(),set()]
+penta=[set(),set(),set()]
+hexa =[set(),set(),set()]
+hepta=[set(),set(),set()]
+octa =[set(),set(),set()]
+def dig_add(n,lstz):
+  if len(str(n)) == 4 and str(n)[2]!= '0':
+    lstz[0].add(n)
+    lstz[1].add(n/100)
+    lstz[2].add(n%100)
+
+def dig_add2(n,lstz,filter, filter2):
+  if len(str(n)) == 4 and str(n)[2]!= '0':
+    if n/100 in filter and n%100 in filter2:
+      lstz[0].add(n)
+      lstz[1].add(n/100)
+      lstz[2].add(n%100)
+
+tri = [set(),set(),set()]
+squ = [set(),set(),set()]
+penta=[set(),set(),set()]
+hexa =[set(),set(),set()]
+hepta=[set(),set(),set()]
+octa =[set(),set(),set()]
+for i in range(2,150):
+  dig_add(i*(i+1)/2,tri)
+  dig_add(i**2,squ)
+  dig_add(i*(3*i-1)/2,penta)
+  dig_add(i*(2*i-1),hexa)
+  dig_add(i*(5*i-3)/2,hepta)
+  dig_add(i*(3*i-2),octa)
+
+first = tri[1].union(squ[1]).union(penta[1])
+last = tri[2].union(squ[2]).union(penta[2])
+
+print last, len(last)
+print tri[2], len(tri[2])
+
+
+tri = [set(),set(),set()]
+squ = [set(),set(),set()]
+penta=[set(),set(),set()]
+for i in range(2,150):
+  dig_add2(i*(i+1)/2,tri,last,first)
+  dig_add2(i**2,squ,last,first)
+  dig_add2(i*(3*i-1)/2,penta,last,first)
+print '\n \n'
+print len(first)
+print first
+print len(last)
+print last
+
+squ = list(squ[0])
+squ.sort()
+print '\n \n'
+print squ, len(squ)
+
+
+
+
+##########################################################
+
+
+for i in range(2,150):
+  dig_add(i*(i+1)/2,tri)
+  dig_add(i**2,squ)
+  dig_add(i*(3*i-1)/2,penta)
+  dig_add(i*(2*i-1),hexa)
+  dig_add(i*(5*i-3)/2,hepta)
+  dig_add(i*(3*i-2),octa)
+
+first = tri[1].union(squ[1]).union(penta[1])
+last = tri[2].union(squ[2]).union(penta[2])
+
+print last, len(last)
+print tri[2], len(tri[2])
+
+
+tri = [set(),set(),set()]
+squ = [set(),set(),set()]
+penta=[set(),set(),set()]
+for i in range(2,150):
+  dig_add2(i*(i+1)/2,tri,last)
+  dig_add2(i**2,squ,last)
+  dig_add2(i*(3*i-1)/2,penta,last)
+print '\n \n'
+print first, '\n', len(first)
+print last,'\n', len(last)
+
+
+
+
+########################################################
+
+tri = set()
+squ = set()
+penta=set()
+hexa =set()
+hepta=set()
+octa =set()
+for i in range(2,150):
+  tri.add(i*(i+1)/2)
+  squ.add(i**2)
+  penta.add(i*(3*i-1)/2)
+  hexa.add(i*(2*i-1))
+  hepta.add(i*(5*i-3)/2)
+  octa.add(i*(3*i-2))
+  
+
+
+
+#####################################################
+
+import string
+import math
+import time
+start = time.time()
+
+def dig_add(n,a,b): #a = first two digits, b = last two
+  if len(str(n))==4:
+    lst[a].add(n/100)
+    lst[b].add(n%100)
+
+tri = set()
+squ = set()
+penta=set()
+lst = [set(),set(),set(),set(),set(),set()]
+
+
+for i in range(2,150):
+  dig_add(i*(i+1)/2,0,1)
+  dig_add(i**2,2,3)
+  dig_add(i*(3*i-1)/2,4,5)
+
+#goes in the order triangle, pentagon, square
+#naming lists based on which list has the last two digits as this
+lst_t = lst[1].intersection(lst[4]) 
+lst_s = lst[3].intersection(lst[0])
+lst_p = lst[5].intersection(lst[2])
+lst = [set(),set(),set(),set(),set(),set()]
+for i in range(2,180):
+  n = i*(i+1)/2
+  if len(str(n))==4:
+    if n/100 in lst_s and n%100 in lst_t:
+      tri.add(n)
+      dig_add(n,0,1)
+
+for i in range(2,180):
+  n = i**2
+  if len(str(n))==4:
+    if n/100 in lst_p and n%100 in lst_s:
+      squ.add(n)
+      dig_add(n,2,3)
+
+for i in range(2,180):
+  n = i*(3*i-1)/2
+  if len(str(n))==4:
+    if n/100 in lst_t and n%100 in lst_p:
+      penta.add(n)
+      dig_add(n,4,5)
+print tri
+print squ
+print penta
+
+lst_t = lst[1].intersection(lst[4]) 
+lst_s = lst[3].intersection(lst[0])
+lst_p = lst[5].intersection(lst[2])
+
+
+
+print "Time Taken: " + str(time.time()-start)
+
+
+
+
+
+
+
+

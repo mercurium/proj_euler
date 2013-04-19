@@ -1,0 +1,68 @@
+for i in range(0,size+1):
+  prime_set[primes[i]] = set()
+
+
+#this is going to be the initial setup of which primes can concatenate with others. 
+for i in range(0,size+1): 
+  n = primes[i]
+  n_s = str(n)
+  for j in range(i+1,size+1):
+    m_s = str(primes[j])
+    if is_prime(int(n_s+m_s)) and is_prime(int(m_s +n_s)):
+      prime_set[n].add(primes[j])
+      prime_set[primes[j]].add(n)
+
+print "part 1 done"
+print "Time Taken: " + str(time.time()-start)
+
+
+#print prime_set, '\n'
+lst = prime_set.keys()
+
+for i in range(0,5):
+  for item in lst:
+    if len(prime_set[item]) <4:
+      for thing in prime_set[item]:
+        prime_set[thing].discard(item)
+      del prime_set[item]
+  lst = prime_set.keys()
+
+print "part 2 done" # this is step two =P
+print "Time Taken: " + str(time.time()-start)
+
+p_set2 = {}
+for i in range(0,len(lst)):
+  for j in range(i+1, len(lst)):
+    a = str(lst[i])
+    b = str(lst[j])
+    if lst[i] in prime_set[lst[j]] and is_prime(int(a+b)) and is_prime(int(b+a)):
+      p_set2[(lst[i],lst[j])] = prime_set[lst[i]].intersection(prime_set[lst[j]] )
+
+lst = p_set2.keys()
+
+for i in range(0,5):
+  for item in lst:
+    if len(p_set2[item]) <2:
+      del p_set2[item]
+  lst = p_set2.keys()
+
+print p_set2
+
+########################################
+prime_set = ['17']
+
+
+for i in primes:
+  works = 1
+  for item in prime_set:
+    if i < int(prime_set[-1]):
+      works = 0
+      break
+    if not is_prime(int(str(i)+item) ) or not is_prime(int(item+str(i) ) ):
+      works = 0
+      break
+  if works ==1:
+    print i
+    prime_set += [str(i)]
+  if len(prime_set) == 5:
+    break
