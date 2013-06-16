@@ -9,17 +9,17 @@ lst = string.split(tmp.read().strip(),'","')
 words = dict()
 for w in lst: #list of words that are anagrams
   sorted_word = string.join(sorted(w),'')
-  try:
+  if sorted_word in words:
     words[sorted_word] += [w]
-  except:
+  else:
     words[sorted_word] = [w]
 
 words2 = {}
 for w in words.keys():
   if len(words[w]) >= 2:
-    try:
+    if len(words[w][0]) in words2:
       words2[len(words[w][0])] += [words[w]]
-    except:
+    else:
       words2[len(words[w][0])] = [words[w]]
 w =words = words2
 print words2

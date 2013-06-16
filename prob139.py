@@ -2,7 +2,7 @@ import time
 import math
 start = time.time()
 
-size = 10**6
+size = 10**8
 py_trip = set()
 count = 0
 

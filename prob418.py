@@ -14,7 +14,7 @@ def sum10(abc):
     sumz += 10 ** (abc[1] / log_err)
     return sumz + 10 ** (abc[2] / log_err)
 
-size = 2 * 3 * 5 * 7 * 11
+size = fa(20) #2 * 3 * 5 * 7 * 11
 log_err = 1000.
 vals = factor(size)[:-1]
 
