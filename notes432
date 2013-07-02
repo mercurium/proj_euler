@@ -1,0 +1,30 @@
+~/Desktop/python_projects/proj_euler $python prob432.py
+Time Taken: 0.107777118683 (prime factorization found)
+27266 1964 100068 27268 180523 337089
+0.0809 0.0058 0.2969 0.0809 0.5355
+45480596821125120
+Time Taken: 0.715856075287 finished entire job
+
+Base Time of all operations: 0.608078956604
+
+
+100x part 1:
+Time Taken: 0.605273962021 --> Time Taken: 0.801824092865
+
+
+8.09x the total operations...
+so like... if it were just part 1 alone, it would be
+.2/8 = .025
+
+
+100x part 2:
+.044708 time overall
+
+10x part 3:
+.0307977 time overall
+
+100x part 4:
+.0455355 time overall
+
+100x part 5:
+.0542945 time overall

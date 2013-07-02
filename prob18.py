@@ -8,19 +8,19 @@ start = time.time()
 temp = open('prob18lst.txt','r')
 lst = string.split(temp.read(), '\n')
 
-for i in range(0, len(lst)):
+for i in xrange(0, len(lst)):
   lst[i] = string.split(lst[i],' ')
 
 lst = lst[:-1] 
 
-for i in range(0, len(lst)):
-  for j in range(0, len(lst[i])):
+for i in xrange(0, len(lst)):
+  for j in xrange(0, len(lst[i])):
     lst[i][j] = int(lst[i][j])
 ans = lst[:] #up to here is just cleaning up the input
 
 #this computes the max value for getting to each spot (row,col) and then stores it for future use
-for i in range(1,len(lst)): 
-  for j in range(0, len(lst[i])):
+for i in xrange(1,len(lst)): 
+  for j in xrange(0, len(lst[i])):
     if j == 0:
       lst[i][j] += lst[i-1][0]
     elif j == len(lst[i]) -1:

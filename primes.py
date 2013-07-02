@@ -20,32 +20,6 @@ primes_few = [int(i) for i in primes_few]
 carmichael = [561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341, 41041, 46657, 52633, 62745, 63973, 75361, 101101, 115921, 126217, 162401, 172081, 188461, 252601, 278545, 294409, 314821, 334153, 340561, 399001, 410041, 449065, 488881, 512461, 530881, 552721, 656601, 658801, 670033, 748657, 825265, 838201, 852841, 997633, 1024651, 1033669, 1050985, 1082809, 1152271, 1193221, 1461241, 1569457, 1615681, 1773289, 1857241, 1909001, 2100901, 2113921, 2433601, 2455921, 2508013, 2531845, 2628073, 2704801, 3057601, 3146221, 3224065, 3581761, 3664585, 3828001]
 
 
-
-def is_primeH(n):
-  lst = primes[:]
-  if primes[-1] < n:
-    return -1
-  if primes_few[-1] > n:
-    lst = primes_few[:]
-    while len(lst) > 0:
-      if n == lst[len(lst)//2]:
-        return 1
-      elif n > lst[len(lst)//2]:
-        lst = lst[len(lst)//2+1:]
-      else:
-        lst = lst[:len(lst)//2]
-    return -1
-      
-  while len(lst) > 0:
-    if n == lst[len(lst)//2]:
-      return 1
-    elif n > lst[len(lst)//2]:
-      lst = lst[len(lst)//2+1:]
-    else:
-      lst = lst[:len(lst)//2]
-  return -1
-
-
 def factor_rec(val, count):
   while(val >= count):
     if val % count == 0:
@@ -64,7 +38,7 @@ def factor(val):
   
 def factor_smart(val):
   found = -1
-  for i in range(0, len(primes)):
+  for i in xrange(0, len(primes)):
     if val % primes[i] ==0:
       found =primes[i]
       break
@@ -79,20 +53,6 @@ def totient(n):
     else:
       result = result * lst[i]
   return result
-
-
-"""
-def is_prime(n): #we're going to ignore this method for now
-  if n < carmichael[-1]:
-    return primer2(n)
-  if n <= primes[-1]:
-    if is_primeH(n)==1:
-      return True
-    return False
-  if len(factor(n)) == 2:
-    return True
-  return False
-"""
 
 #http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 def miller_rabin(n): 
