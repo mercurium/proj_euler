@@ -17,7 +17,8 @@ def f(m,n):
 	print m,n, 'hii', val,val2,val3, round(log(val*val2-val3,10),2), val*val2-val3
 	return val*val2-val3
 
-def test(m,n):
+#really only meant for n = 2, testing if f(m,n) performs as I want it to
+def test(m,n): 
 	return m* fa(2*m-2)/(2**(m-1)) - fa(m-1)
 
 def main():
@@ -41,3 +42,8 @@ def main():
 			break
 	return sumz		
 
+"""
+Okay, I didn't solve it but my reasoning for the formula in f(m,n) is that I noticed 
+
+
+"""
