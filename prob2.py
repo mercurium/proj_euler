@@ -1,12 +1,22 @@
 import time
 start = time.time()
 
-fib_val = [0,1]
-i = 1
-while fib_val[i] < 4000000:
-  fib_val.append(fib_val[i] + fib_val[i-1])
-  i = i+1
-lst = [x for x in fib_val if x % 2 == 0]
-
-print sum(lst)
+SIZE = 4*10**6
+a,b = 1,1
+sumz = 0
+while a <SIZE:
+	a,b = b,a+b
+	if a % 2 == 0:
+		sumz+= a
+print sumz
 print "Time Taken: " + str(time.time()-start)
+
+"""
+[tw-mbp13-jerrychen proj_euler (master)]$ python prob2.py 
+4613732
+Time Taken: 0.000344038009644
+
+Pretty simple exercise, just get the next fibonnaci number at each step, if it's even, add it to the sum. Stop the loop when you hit thelimit 
+"""
+
+

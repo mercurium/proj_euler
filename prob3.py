@@ -21,3 +21,7 @@ def factor(val):
 
 print factor(valz)[:-1]
 print "Time Taken: " + str(time.time()-start)
+
+"""
+not a very hard problem if you consider that you *only* AT MOST need to check ~2.4 million divisions, much less in the actual case, and quite a few less if you do some preprocessing to find the prime numbers first. I have a better prime factorization algorithm (though it's stil pretty bad) and a prime checking algorithm under primes.py and miller_rabin.py
+"""
