@@ -8,16 +8,16 @@ lst = string.split(temp.read(),'\n')
 size = len(lst)-1
 start = time.time()
 
-for i in range(0,len(lst)):
+for i in xrange(0,len(lst)):
   lst[i] = string.split(lst[i],',')
 
 lst = lst[:-1] +lst[-1][:-1]
-for i in range(0,len(lst)):
-  for j in range(0, len(lst[i])):
+for i in xrange(0,len(lst)):
+  for j in xrange(0, len(lst[i])):
     lst[i][j] = int(lst[i][j]) #this is just cleaning stuff
 
 answer = []
-for i in range(0,size):
+for i in xrange(0,size):
   answer =answer+[[-1]*size]
 
 answer[0][0] = lst[0][0]
