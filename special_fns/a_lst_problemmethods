@@ -1,6 +1,6 @@
 
 partitions 78
 sped up sieve under spedupsieve.py
-
+approximating a power: special_fns/approx.py
 66 Pell's equations
 78 partitions
