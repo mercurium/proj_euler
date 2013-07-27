@@ -16,31 +16,40 @@ sumz = 0
 count = 0
 for index in range(len(subsets)):
 	setz = subsets[index]
-	temp_set = set()
-	temp_sum = sum(setz)
-	set_size = len(setz)
+	subset_sums = set()
+	TEMP_SUM = sum(setz)
+	SET_SIZE = len(setz)
 	works = True
-	for i in xrange(1,set_size):
+	for i in xrange(1,SET_SIZE):
 		if not works:
 			break
-		for j in combinations(sub_index[:set_size],i):
+		temp_set = set()
+		for j in combinations(sub_index[:SET_SIZE],i):
 			k = sum( setz[(ord(l)-97)] for l in j)
-			if k in temp_set:
+			if k in subset_sums or k in temp_set:
+				works = False
+				break
+			elif len(subset_sums) >= 1 and k < max(subset_sums):
 				works = False
 				break
 			else:
 				temp_set.add(k)
-			if i * 2 > set_size and 2 * k < temp_sum:
-				works = False
-				break
-			elif i *2 < set_size and k *2 > temp_sum:
-				works = False
-				break
+		for val in temp_set:
+			subset_sums.add(val)	
 	if works:
-		sumz += temp_sum
+		sumz += TEMP_SUM
 		count += 1
-		print temp_sum, index, count
 		print "This set works:", setz
+		print TEMP_SUM, index, count, sumz
 
 print sumz, count
 print "Time Taken:", time.time() - start
+
+"""
+Congratulations, the answer you gave to problem 105 is correct.
+
+You are the 3559th person to have solved this problem.
+
+Return to Problems page.
+
+"""
