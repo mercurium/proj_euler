@@ -1,13 +1,14 @@
-#solve n/p+n/p^2 +... + n/p^k >= 1234567890 for all p < m for m in range 10 to size...
-#or equivalently... n(1/p+1/p^2+1/p^3+...)
-#(1/p + 1/p^2 + 1/p^3 + ... ) = 1/(p-1)
-#so we can use n = val / (1/p + 1/p^2 + 1/p^3 + ... etc)
-# ---> n = val / (1/(p-1) ) --> n = val * (p-1) + stuff to be 0 mod p
+"""
+solve n/p+n/p^2 +... + n/p^k >= 1234567890 for all p < m for m in range 10 to size...
+or equivalently... n(1/p+1/p^2+1/p^3+...)
+(1/p + 1/p^2 + 1/p^3 + ... ) = 1/(p-1)
+so we can use n = val / (1/p + 1/p^2 + 1/p^3 + ... etc)
+ ---> n = val / (1/(p-1) ) --> n = val * (p-1) + stuff to be 0 mod p
 
-#okay, so that didn't work so i had to alter my original algorithm. Now I'm testing all primes less than n to see if they have the optimal solution. Obviously this is much slower than what we want since it requries a O(n/ln(n)) testing instead of a simple O(1) testing per number... and this testing doesn't come cheap...also it's not correct atm :D;; oops
+okay, so that didn't work so i had to alter my original algorithm. Now I'm testing all primes less than n to see if they have the optimal solution. Obviously this is much slower than what we want since it requries a O(n/ln(n)) testing instead of a simple O(1) testing per number... and this testing doesn't come cheap...also it's not correct atm :D;; oops
 
-#raaaah @___@... I'll ask michikins to help me with this =D
-
+raaaah @___@... I'll ask michikins to help me with this =D
+"""
 import time
 from bitarray import bitarray
 from primes import *
