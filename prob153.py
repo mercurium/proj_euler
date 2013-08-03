@@ -58,4 +58,11 @@ If (1+2i) divides 5, then it also divides 10,15,20, etc... I forgot about that c
 Congratulations, the answer you gave to problem 153 is correct.
 
 You are the 1203rd person to have solved this problem.
+
+Total is: 17971254122360635
+Time Taken:  458.844228029
+
+In java... lololol... =/...
+The answer for size 100000000 is: 17971254122360635
+The time taken was: 20.288524384 seconds
 """
