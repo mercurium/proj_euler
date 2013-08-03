@@ -1,37 +1,40 @@
 import time
 start = time.time()
 
-SIZE = 10**5
+SIZE = 10**8
 
+
+def gcd(a,b):
+	while a != 0:
+		a,b = b%a,a
+	return b
 
 def real_num(size):
 	sumz = 0
 	for i in xrange(1,size+1):
 		sumz += (size//i) * i	
-
 	return sumz	
 
 def complex_num(size):
 	sumz = 0
-	seen = set()
+	squares = [x**2 for x in xrange(int(size**.5)+5)]
 	for i in xrange(1,int(size**.5)+1):
-		a = i **2
+		a = squares[i] 
 		for j in xrange(i,size+1):
-			b = j**2
+			b = squares[j] 
 			if a + b > size:
 				break
 			for k in xrange(1,size+1):
-				if k*(a+b) > size:
+				if k*(a+b) > size: 
 					break
-				if (i*k,j*k) in seen:
+				c = gcd(i,j)
+				if c != 1: 
 					continue
-				seen.add((i*k,j*k))
 				if i == j:
 					sumz += (2 * i * k) * (size/ ((a + b) * k ))
 				else:
 					sumz += (2 * (i+j) * k) * (size/ ((a + b) * k ))
-#				print complex(i*k,j*k), (2 * i * k) * (size/ ((i**2 + j**2) * k ))
-		#print i
+		print i, j
 	return sumz	
 
 def test():
@@ -47,10 +50,12 @@ print "Time Taken: ", time.time() - start
 
 """
 This can be calculated by calculating the real_num numbers and the complex_num numbers separately. 
-
-
 ...except oh boy. This problem is harder than I expected.
 
 If (1+2i) divides 5, then it also divides 10,15,20, etc... I forgot about that case... sigh....
 
+
+Congratulations, the answer you gave to problem 153 is correct.
+
+You are the 1203rd person to have solved this problem.
 """
