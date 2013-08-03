@@ -39,7 +39,6 @@ for index in range(len(subsets)):
 	if works:
 		sumz += TEMP_SUM
 		count += 1
-		print temp_sum, index, count, sumz
 		print "This set works:", setz
 		print TEMP_SUM, index, count, sumz
 
