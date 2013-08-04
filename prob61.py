@@ -62,11 +62,3 @@ print "WE FOUND THEM :D YAY DADDY!"
 
 
 print "Time Taken: " + str(time.time()-start)
-
-
-
-
-
-
-
-
