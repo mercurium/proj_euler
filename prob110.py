@@ -1,7 +1,7 @@
 import time
 start = time.time()
 
-SIZE = 10**6
+SIZE = 10**4
 LIM = 4*10**6
 
 
@@ -48,7 +48,7 @@ for num in xrange(1,SIZE):
 		prod *= factor_map[f]
 		numz *= f**(factor_map[f]-1)
 	if prod/2 >= LIM:
-		print prod, int(numz**.5+ .5), "DONE!!!"
+		print prod, int(numz**.5), "DONE!!!"
 		break
 	if prod > maxz:
 		maxz = prod
