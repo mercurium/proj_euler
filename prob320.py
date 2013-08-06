@@ -27,6 +27,9 @@ for i in xrange(3,len(lst),2):
 		prime_set.add(i)
 		for j in range(2*i,len(lst),i):
 			lst[j]= 1
+for i in xrange(2,len(lst),2):
+	lst[i] = 1
+
 prime_lst = list(prime_set)
 prime_lst.sort()
 
@@ -43,7 +46,6 @@ def estimate(n,val,base):
 	return expected * (base-1) + base*20
 
 def cfpn(n, val, base): #compute for power of random base
-
 	p = base
 	sumz = 0
 	comp = base
@@ -64,46 +66,39 @@ def cfpn(n, val, base): #compute for power of random base
 
 	if val_check2 == expected:
 		return correction
-	diff = val_check2-expected
+	diff = val_check2 - expected
 
 	while diff > 0:
 		if correction % (p**(diff+1)) == 0:
 			return correction
 		correction -= base
 		val_check2 = sum([correction/base**i for i in xrange(1,int(log(correction,base)+1) ) ])
-		diff = val_check2 -expected
+		diff = val_check2 - expected
 
 	while diff < 0:
 		correction += base
 		val_check2 = sum([correction/base**i for i in xrange(1,int(log(correction,base)+1) ) ])
-		diff = val_check2 -expected
+		diff = val_check2 - expected
 
-	
-	if correction % (p**(diff+1)) == 0:
-		return correction
-
-	if val_check2 != expected: 
-		print "error on ", n, "We're", val_check2-expected, "off for base:", base
-
-	################################################################################
-	return valz
-	
+	return correction
 
 loop_count = 0	
 sumz = 0
 for i in xrange(10,size+1):
 	val2 = 0
 	maxz = 0
-	if i not in prime_set:
+	if lst[i]:
 		for j in xrange(0,len(prime_lst)):
-			if prime_lst[j] > i: break
-			if estimate(i,val,prime_lst[j]) < val2:
+			a = prime_lst[j]
+			if a > i: break
+			if i%a > 20: continue
+			if estimate(i,val,a) < val2:
 				continue
-			temp = cfpn(i,val,prime_lst[j])
+			temp = cfpn(i,val,a)
 			loop_count +=1
 			if temp > val2:
 				val2 = temp
-				maxz = prime_lst[j]
+				maxz = a
 	else:
 		maxz = i
 		val2 = cfpn(i,val,i)
