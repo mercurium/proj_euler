@@ -18,7 +18,6 @@ val = 1234567890
 sumz = 0
 size = 10**3
 
-
 prime_set = set([2])
 #lst = bitarray('0'*(int(size*1.1)))
 lst = [0]*int(size*1.3)
@@ -36,11 +35,11 @@ prime_lst.sort()
 print "Time Taken:", time.time()- start
 
 def estimate(n,val,base):
+	n /= base
 	sumz = 0
-	comp = base
-	while comp <= n:
-		sumz += n/comp
-		comp *= base
+	while n != 0:
+		sumz +=n
+		n/=base	
 	expected = sumz * val
 
 	return expected * (base-1) + base*20
@@ -55,9 +54,8 @@ def cfpn(n, val, base): #compute for power of random base
 	expected = sumz * val
 
 #	print sumz, val, base-1
-	valz = expected * (base-1) + (expected % base) # not (sumz * val * -1) because (base-1) = -1 mod base
+	valz = expected * (base-1) + (expected % base)
 
-	############################################
 	val_check = sum([valz/base**i for i in xrange(1,int(log(valz,base)+1) ) ])
 	correction = valz + (expected - val_check) * (base-1)
 	correction += (-1 * correction)%base	
@@ -82,36 +80,75 @@ def cfpn(n, val, base): #compute for power of random base
 
 	return correction
 
+
+pset = [2,3,5,7,11,13]
+
 loop_count = 0	
+lc = 0
+bc = 0
 sumz = 0
+val2 = 0
 for i in xrange(10,size+1):
-	val2 = 0
-	maxz = 0
 	if lst[i]:
-		for j in xrange(0,len(prime_lst)):
-			a = prime_lst[j]
-			if a > i: break
-			if i%a > 20: continue
+		#processed_lst = pset[:]
+		plst = pset[:]
+		for arg in pset:
+			if i/arg in prime_set:
+				plst.append(i/arg)
+		if int(i**.5) in prime_set:
+			plst.append(int(i**.5))
+
+		if int(i/2**.5) in prime_set:
+			plst.append(int(i/2**.5))
+
+
+		#for j in xrange(0,len(prime_lst)):
+		for j in xrange(len(plst)):
+			lc +=1
+			#a = prime_lst[j] 
+			a = plst[j]  	#get rid of plst and replace with prime_lst to get exact ans
+			if a > i/2:
+				bc +=1
+				break
+			if i%a > 20:
+				 continue
 			if estimate(i,val,a) < val2:
 				continue
+
 			temp = cfpn(i,val,a)
 			loop_count +=1
-			if temp > val2:
+			if temp >= val2:
 				val2 = temp
 				maxz = a
 	else:
 		maxz = i
 		val2 = cfpn(i,val,i)
+		lc+=1
 		loop_count +=1
-	#print maxz, i
+	if maxz > 5 and i/maxz > 6:
+		print maxz, i, i/maxz
 	sumz+= val2
 
 print sumz
 print "Time Taken:", time.time()- start
 
 print "damn, that was:", loop_count, "loops..."
-
+print "total loop count was", lc
+print "but we managed to break out of...", bc, "loops"
 """
-614538266565663 is the right answer,
-614538266179707 is mine... =/
+614538266565663 is the right answer, for 10^3
+
+My current fastest answer is:
+Time Taken: 0.0379350185394
+
+Stats on 10^4:
+61690942682501005 CORRECT ANSWER   Time Taken: 1.33670401573
+61690276015610065 Time Taken: 0.195645093918
+61690035275036446 (my approximations)
+61688283422307148
+61683361197356786
+Time Taken: 1.33670401573
+damn, that was: 9149 loops...
+total loop count was 3190078
+
 """
