@@ -16,7 +16,7 @@ from math import *
 
 val = 1234567890
 sumz = 0
-size = 10**3
+size = 10**5
 
 prime_set = set([2])
 #lst = bitarray('0'*(int(size*1.1)))
@@ -31,6 +31,14 @@ for i in xrange(2,len(lst),2):
 
 prime_lst = list(prime_set)
 prime_lst.sort()
+
+index = 0
+least_prime = [0] * (size+1)
+lp_sq = [0] * (size+1)
+for i in range(len(least_prime)):
+	if i**.5 >= prime_lst[index]:
+		index+=1
+	least_prime[i] = index
 
 print "Time Taken:", time.time()- start
 
@@ -81,25 +89,30 @@ def cfpn(n, val, base): #compute for power of random base
 	return correction
 
 
-pset = [2,3,5,7,11,13]
+pset = [2,3,5,7,11,13,17,19,23]
 
 loop_count = 0	
 lc = 0
 bc = 0
 sumz = 0
 val2 = 0
+maxz = 2
 for i in xrange(10,size+1):
 	if lst[i]:
 		#processed_lst = pset[:]
 		plst = pset[:]
-		for arg in pset:
-			if i/arg in prime_set:
-				plst.append(i/arg)
-		if int(i**.5) in prime_set:
-			plst.append(int(i**.5))
+		for arg in range(1,min(int(i**(1/3.) ), 20) ):
+			temp_val = i/arg
+			if temp_val in prime_set:
+				plst.append(temp_val)
+			#if int(temp_val**.5) in prime_set:
+				#plst.append(int(temp_val**.5))
+			plst.append(prime_lst[least_prime[temp_val]-1])
+			plst.append(prime_lst[least_prime[temp_val]-2])
 
-		if int(i/2**.5) in prime_set:
-			plst.append(int(i/2**.5))
+		#plst.append(prime_lst[least_prime[i]]) #least_prime is the smallest prime that is greater than i^(1/2)
+		#plst.append(prime_lst[least_prime[i]-1]) #this is the largest prime bigger than i^(i/2)
+		plst.append(maxz)
 
 
 		#for j in xrange(0,len(prime_lst)):
@@ -125,7 +138,7 @@ for i in xrange(10,size+1):
 		val2 = cfpn(i,val,i)
 		lc+=1
 		loop_count +=1
-	if maxz > 5 and i/maxz > 6:
+	if lst[i] and maxz not in plst: #maxz > 13 and i/maxz > 13 and maxz != int(i**.5): 
 		print maxz, i, i/maxz
 	sumz+= val2
 
