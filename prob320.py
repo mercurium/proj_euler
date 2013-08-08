@@ -13,10 +13,16 @@ import time
 #from bitarray import bitarray
 start = time.time()
 from math import *
+import sys
+
 
 val = 1234567890
 sumz = 0
-size = 10**5
+
+if len(sys.argv) > 1:
+	size = int(sys.argv[1])
+else:
+	size = 10**4
 
 prime_set = set([2])
 #lst = bitarray('0'*(int(size*1.1)))
@@ -91,63 +97,55 @@ def cfpn(n, val, base): #compute for power of random base
 
 pset = [2,3,5,7,11,13,17,19,23]
 
-loop_count = 0	
-lc = 0
-bc = 0
-sumz = 0
-val2 = 0
-maxz = 2
+loop_count = lc = sumz = max_req = 0	
+max_val = 2
 for i in xrange(10,size+1):
 	if lst[i]:
 		#processed_lst = pset[:]
 		plst = pset[:]
 		for arg in range(1,min(int(i**(1/3.) ), 20) ):
 			temp_val = i/arg
-			if temp_val in prime_set:
+			if temp_val in prime_set and i%temp_val == 0:
 				plst.append(temp_val)
-			#if int(temp_val**.5) in prime_set:
-				#plst.append(int(temp_val**.5))
-			plst.append(prime_lst[least_prime[temp_val]-1])
-			plst.append(prime_lst[least_prime[temp_val]-2])
 
-		#plst.append(prime_lst[least_prime[i]]) #least_prime is the smallest prime that is greater than i^(1/2)
-		#plst.append(prime_lst[least_prime[i]-1]) #this is the largest prime bigger than i^(i/2)
-		plst.append(maxz)
 
+			a,b = prime_lst[least_prime[temp_val] - 1], prime_lst[least_prime[temp_val] - 2]
+			if i%a == 0:
+				plst.append(a)
+			if i%b == 0:
+				plst.append(b)
 
 		#for j in xrange(0,len(prime_lst)):
 		for j in xrange(len(plst)):
 			lc +=1
-			#a = prime_lst[j] 
+		#	a = prime_lst[j] 
 			a = plst[j]  	#get rid of plst and replace with prime_lst to get exact ans
-			if a > i/2:
-				bc +=1
-				break
-			if i%a > 20:
-				 continue
-			if estimate(i,val,a) < val2:
+
+			if estimate(i,val,a) < max_req: #shortcut compute some values so we don't have to do all of them.
 				continue
 
 			temp = cfpn(i,val,a)
 			loop_count +=1
-			if temp >= val2:
-				val2 = temp
-				maxz = a
+			if temp >= max_req:
+				max_req = temp
+				max_val = a
 	else:
-		maxz = i
-		val2 = cfpn(i,val,i)
+		max_val = i
+		max_req = cfpn(i,val,i)
 		lc+=1
 		loop_count +=1
-	if lst[i] and maxz not in plst: #maxz > 13 and i/maxz > 13 and maxz != int(i**.5): 
-		print maxz, i, i/maxz
-	sumz+= val2
+	#if lst[i] and max_val not in plst: #max_val > 13 and i/max_val > 13 and max_val != int(i**.5): 
+	#	print max_val, i, i/max_val
+	sumz+= max_req
 
 print sumz
 print "Time Taken:", time.time()- start
 
 print "damn, that was:", loop_count, "loops..."
 print "total loop count was", lc
-print "but we managed to break out of...", bc, "loops"
+
+
+
 """
 614538266565663 is the right answer, for 10^3
 
@@ -164,4 +162,9 @@ Time Taken: 1.33670401573
 damn, that was: 9149 loops...
 total loop count was 3190078
 
+Stats on 10^5: (on mac) it's now linear <3
+[tw-mbp13-jerrychen proj_euler (prob320)]$ python prob320.py 100000
+Time Taken: 0.150601148605
+6172360352621332245
+Time Taken: 7.22241616249
 """
