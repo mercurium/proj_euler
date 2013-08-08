@@ -10,7 +10,7 @@ okay, so that didn't work so i had to alter my original algorithm. Now I'm testi
 raaaah @___@... I'll ask michikins to help me with this =D
 """
 import time
-#from bitarray import bitarray
+from bitarray import bitarray
 start = time.time()
 from math import *
 import sys
@@ -18,6 +18,7 @@ import sys
 
 val = 1234567890
 sumz = 0
+mod = 10**18
 
 if len(sys.argv) > 1:
 	size = int(sys.argv[1])
@@ -25,12 +26,11 @@ else:
 	size = 10**4
 
 prime_set = set([2])
-#lst = bitarray('0'*(int(size*1.1)))
-lst = [0]*int(size*1.3)
+lst = bitarray('0'*(int(size*1.1)))
 for i in xrange(3,len(lst),2):
 	if lst[i] == 0:
 		prime_set.add(i)
-		for j in range(2*i,len(lst),i):
+		for j in xrange(2*i,len(lst),i):
 			lst[j]= 1
 for i in xrange(2,len(lst),2):
 	lst[i] = 1
@@ -41,7 +41,7 @@ prime_lst.sort()
 index = 0
 least_prime = [0] * (size+1)
 lp_sq = [0] * (size+1)
-for i in range(len(least_prime)):
+for i in xrange(len(least_prime)):
 	if i**.5 >= prime_lst[index]:
 		index+=1
 	least_prime[i] = index
@@ -67,7 +67,6 @@ def cfpn(n, val, base): #compute for power of random base
 		comp *= base
 	expected = sumz * val
 
-#	print sumz, val, base-1
 	valz = expected * (base-1) + (expected % base)
 
 	val_check = sum([valz/base**i for i in xrange(1,int(log(valz,base)+1) ) ])
@@ -95,15 +94,15 @@ def cfpn(n, val, base): #compute for power of random base
 	return correction
 
 
-pset = [2,3,5,7,11,13,17,19,23]
+pset = prime_lst[:40]
 
 loop_count = lc = sumz = max_req = 0	
 max_val = 2
 for i in xrange(10,size+1):
 	if lst[i]:
-		#processed_lst = pset[:]
+		
 		plst = pset[:]
-		for arg in range(1,min(int(i**(1/3.) ), 20) ):
+		for arg in xrange(1,int(i**(1/3.)) ):
 			temp_val = i/arg
 			if temp_val in prime_set and i%temp_val == 0:
 				plst.append(temp_val)
@@ -115,13 +114,10 @@ for i in xrange(10,size+1):
 			if i%b == 0:
 				plst.append(b)
 
-		#for j in xrange(0,len(prime_lst)):
-		for j in xrange(len(plst)):
+		for a in plst:
 			lc +=1
-		#	a = prime_lst[j] 
-			a = plst[j]  	#get rid of plst and replace with prime_lst to get exact ans
-
-			if estimate(i,val,a) < max_req: #shortcut compute some values so we don't have to do all of them.
+			#shortcut compute some values so we don't have to do all of them.
+			if estimate(i,val,a) < max_req: 
 				continue
 
 			temp = cfpn(i,val,a)
@@ -134,9 +130,9 @@ for i in xrange(10,size+1):
 		max_req = cfpn(i,val,i)
 		lc+=1
 		loop_count +=1
-	#if lst[i] and max_val not in plst: #max_val > 13 and i/max_val > 13 and max_val != int(i**.5): 
-	#	print max_val, i, i/max_val
-	sumz+= max_req
+	sumz= (sumz + max_req) % mod
+	if i%1024 == 0:
+		print i
 
 print sumz
 print "Time Taken:", time.time()- start
@@ -147,6 +143,12 @@ print "total loop count was", lc
 
 
 """
+OKAY, so my notes for this problem before I forget. All those numbers below are the computations that I was keeping track of.
+
+So first off, the problem wants you to find the smallest n such that (a!)^(1234567890)|n!. However, the only terms that really matter are one of the prime terms in 'a'. Thus, we only need to check the primes. Of course, of these primes, not all of them are relevant. As such, we want to limit our checking of irrelevant numbers. Originally, I was trying to only check ~40 numbers per 'a' (in contrast to checking all primes < a, which is a/log(a) of them), but when I realized that I only had to do this for 10^6, I broke out of this and started checking ~120 numbers per 'a', making it slower, but still a linear time algorithm...
+
+'estimate' was my fast checker to see if a prime couldn't be a candidate for a solution, and i used cfpn to geck for prime numbers to find the smallest number N such that N! is a multiple of prime^large number.
+
 614538266565663 is the right answer, for 10^3
 
 My current fastest answer is:
@@ -166,5 +168,17 @@ Stats on 10^5: (on mac) it's now linear <3
 [tw-mbp13-jerrychen proj_euler (prob320)]$ python prob320.py 100000
 Time Taken: 0.150601148605
 6172360352621332245
-Time Taken: 7.22241616249
+Time Taken: 8.22241616249
+
+278157919195482643
+
+Congratulations, the answer you gave to problem 320 is correct.
+
+You are the 432nd person to have solved this problem.
+
+Time Taken: 86.4940459728
+damn, that was: 421026 loops...
+total loop count was 38692684
+
 """
+
