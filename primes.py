@@ -54,6 +54,22 @@ def totient(n):
       result = result * lst[i]
   return result
 
+#this takes a set of values and bases so that we can find x s.t.
+#x = a1 mod b1
+#x = a2 mod b2
+#... and so on for any number of bases
+
+def crt(bases, vals):  
+  big_base = 1 
+  sumz = 0 
+  for val in bases: big_base *= val 
+  for i in range(0,len(bases)):
+    curr_base = big_base / bases[i]
+    inverse = ext_gcd(bases[i],curr_base)[1]
+    sumz += vals[i] * curr_base * inverse
+  return sumz % big_base
+
+
 #http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 def miller_rabin(n): 
   if n == 1: return False
