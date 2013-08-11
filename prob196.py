@@ -39,3 +39,14 @@ for p in pos:
 	print sumz
 print sumz
 print "Time Taken:", time.time() - START
+
+"""
+Congratulations, the answer you gave to problem 196 is correct.
+
+You are the 1225th person to have solved this problem.
+
+
+322303240771079935
+Time Taken: 284.793769121
+was the answer on my laptop, I imagine it would be much faster on my desktop
+"""
