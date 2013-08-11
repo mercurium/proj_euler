@@ -2,26 +2,40 @@ import time
 START = time.time()
 from primes import m_r
 
-pos = [8,9] # 5678027
+pos = [5678027, 7208785]
 
 def neighbors(n,row):
 	row_start = row*(row-1)/2 + 1
 	pos = n - row_start
-	lower, upper = (row-1)*(row-2)/2 +1, row*(row+1)/2+1
 	if pos != 0:
-		neighbors = [lower+pos-1, lower+pos, lower+pos+1, upper+pos-1, \
-				upper+pos, upper + pos +1]
+		if row % 2 == 0:
+			neighbors = [ n-row+2,n-row,n+row]
+		else:
+			neighbors = [n-row+1,n+row-1,n+row+1]
 	else:
-		neighbors = [lower,lower+1,upper,upper+1]
+		neighbors = [n+row,n+row+1,n-row+1,n-row+2]
 	return neighbors	
 
 sumz = 0
 for p in pos:
-	for i in xrange(p*(p-1)/2+1, p*(p+1)/2):
+	i = p*(p-1)/2+1
+	while i < p*(p+1)/2 - 1:
 		if m_r(i):
-			neigh_sum = sum([m_r(x) for x in neighbors(i,p)])
+			neigh = neighbors(i,p)
+			neigh_sum = sum([m_r(x) for x in neigh])
 			if neigh_sum >= 2:
 				sumz += i
-				print i
+				print i, neigh
+			else:
+				for num in neigh:
+					row = p-1 if num < i else p+1
+					if m_r(num):
+						neigh_sum = sum([m_r(x) for x in neighbors(num,row)]) 
+						if neigh_sum >= 2:
+							sumz +=i
+							print i, num, p, row
+							break
+		i+=1
+	print sumz
 print sumz
 print "Time Taken:", time.time() - START
