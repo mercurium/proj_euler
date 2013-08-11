@@ -25,7 +25,6 @@ for p in pos:
 			neigh_sum = sum([m_r(x) for x in neigh])
 			if neigh_sum >= 2:
 				sumz += i
-				print i, neigh
 			else:
 				for num in neigh:
 					row = p-1 if num < i else p+1
@@ -33,7 +32,6 @@ for p in pos:
 						neigh_sum = sum([m_r(x) for x in neighbors(num,row)]) 
 						if neigh_sum >= 2:
 							sumz +=i
-							print i, num, p, row
 							break
 		i+=1
 	print sumz
@@ -48,5 +46,12 @@ You are the 1225th person to have solved this problem.
 
 322303240771079935
 Time Taken: 284.793769121
+
+01:31 ~/Desktop/python_projects/proj_euler $ python prob196.py 
+79697256800321526
+322303240771079935
+Time Taken: 100.014121056 (on my desktop)
+
+
 was the answer on my laptop, I imagine it would be much faster on my desktop
 """
