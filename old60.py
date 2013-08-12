@@ -1,43 +1,81 @@
+#note to self, if p1 and p2 can concatenate together, then either one of them is 3 or p1 = p2 mod 3 (or else we get 1+2 = 0 mod 3 --> 3|p1p2)
+
 import time
 start = time.time()
-from primes import *
+from primes import * 
 
-ps = [str(i) for i in ([3]+primes[3:10000])]#29]) ] #ps for primes_small
-vals = {} #vals = dict of primes that can concatenate to primes
-pset = set(ps)
 
-for i in xrange(0,len(ps)):
-  wv = set() #wv for values that work, working values
-  for j in xrange(0,len(ps)):
-    if m_r(int(ps[i] + ps[j])) and m_r(int(ps[j] + ps[i])):
-      wv.add(ps[j])
-  vals[ps[i]] = wv
-print vals['3']
-print "Time Taken:", time.time() - start  
+primesss = set()
+size = 10**7
+primes_uns = [0]*size
+for i in range(2,len(primes_uns)):
+  if primes_uns[i] == 0:
+    for j in range(2*i,len(primes_uns),i):
+      primes_uns[j] += 1
+    primesss.add(i)
 
-def main():
-  for i in ps:
-    pset2 = pset.intersection(vals[i]) 
-    if len(pset2) == 0: continue
-    for j in ps:
-      if j not in pset2: continue
-      pset3 = pset2.intersection(vals[j])
-      if len(pset3) == 0: continue
-      for k in ps:
-        if k not in pset3: continue
-        pset4 = pset3.intersection(vals[k])
-        if len(pset4) == 0: continue
-        for a in ps:
-          if a not in pset4: continue
-          pset5 = pset4.intersection(vals[a])
-          if len(pset5) == 0: continue
-          else: 
-            return i,j,k,a,list(pset5)[0]
-        
-print main()
-print "Time Taken:", time.time() - start 
+temp = list(primesss)
+temp.sort()
+prime_s = temp[:3000]
+items = dict()
 
-#Time Taken: 36.2037830353
-#13 5197 5701 6733 8389
-#93 5 2 1 this was the size of the list
+def is_primez(n):
+  if n <= size: return n in primesss
+  val = m_r(n)
+  if val != -1: return val
+  return is_prime(n)
+
+print "part0 done"
+print "Time Taken: " + str(time.time()-start)
+
+for i in prime_s:
+  items[i] = set()
+
+lst1 = [3] + [x for x in prime_s if x%3 ==1]
+lst2 = [3] + [x for x in prime_s if x%3 ==2]
+for i in lst1: #first loop lol
+  for j in lst1:
+    if is_primez(int(str(i) + str(j)) ) and is_primez(int(str(j) + str(i)) ):
+      items[i].add(j)
+      items[j].add(i)
+
+for i in lst2: #first loop lol
+  for j in lst2:
+    if is_primez(int(str(i) + str(j)) ) and is_primez(int(str(j) + str(i)) ):
+      items[i].add(j)
+      items[j].add(i)
+
+print items
+print "part1 done"
+print "Time Taken: " + str(time.time()-start)
+items2 = dict()
+
+for i in items.keys():
+  if len(items[i]) >= 2:
+    for j in items.keys():
+      if i< j and i in items[j] and j in items[i]:
+        stuff = items[i].intersection(items[j])
+        if len(stuff) >= 2:
+         items2[(i,j)] = items[i].intersection(items[j])
+
+print items2
+print "part2 done"
+print "Time Taken: " + str(time.time()-start)
+
+items3 = dict()
+
+for i in items2.keys():
+  for j in items2.keys():
+    it = set(list(i)+list(j))
+    if len(it) == 4 and i[0] in items2[j] and i[1] in items2[j] and j[0] in items2[i] and j[1] in items2[i]:
+      stuff = items2[i].intersection(items2[j])
+      if len(stuff) != 0:
+        items3[tuple(it)] = stuff
+
+print items3
+print "part3 done"
+print "Time Taken: " + str(time.time()-start)
+
+
+
 
