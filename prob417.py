@@ -26,7 +26,7 @@ def get_plst(size):  #returns a list of numbers, each of which are a prime facto
 	return lst
 plst = get_plst(SIZE)
 
-def get_totient(size):
+def get_totient(size):  #gives you the totients of all numbers i <= size
 	lst = range(size+1)
 	lst[0] = 1
 	for i in xrange(2,len(lst)):
@@ -68,7 +68,7 @@ def old_rep_dig(n):
 		powz +=1	
 	return powz
 
-values = [0] * SIZE			
+values = [0] * SIZE
 values[3] = 1
 for i in xrange(5,SIZE,2):
 	if i %1024 == 1:
@@ -77,6 +77,7 @@ for i in xrange(5,SIZE,2):
 		values[i] = values[i/5]
 		continue
 	values[i] = rep_dig(i)
+	#print i, values[i]
 	
 
 for i in xrange(2,SIZE,2):
@@ -94,5 +95,11 @@ is the right answer for size 10^3
 17:43 ~/Desktop/python_projects/proj_euler $ python prob417.py 1000000
 55535191115
 time taken: 22.1281189919
+
+
+446572970925740 (answer)
+time taken: 4837.17608619
+For comparison sake... LOL, 7200ish seconds on school computer (via ssh) 7214.40327597
+
 
 """
