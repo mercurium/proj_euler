@@ -60,13 +60,6 @@ def rep_dig(n):
 	for powz in potential_pows:
 		if pow(10,powz,n) == 1:
 			return powz
-	return -1
-
-def old_rep_dig(n):
-	powz = 1	
-	while pow(10,powz,n) != 1:
-		powz +=1	
-	return powz
 
 values = [0] * SIZE
 values[3] = 1
@@ -77,13 +70,10 @@ for i in xrange(5,SIZE,2):
 		values[i] = values[i/5]
 		continue
 	values[i] = rep_dig(i)
-	#print i, values[i]
-	
 
 for i in xrange(2,SIZE,2):
 	values[i] = values[i/2]
 
-#print values
 print sum(values)
 print "time taken: " +str(time.time()-start)	
 
