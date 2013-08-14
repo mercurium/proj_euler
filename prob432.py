@@ -1,14 +1,17 @@
 import time
 start = time.time()
+import sys
 
-size = 10**6
-mod = 10**9
+
+
+SIZE = 10**6 if len(sys.argv) == 1 else int(sys.argv[1])
+MOD = 10**9
 
 def setup():
-	lst = [0] + [1,2] * (size//2+1)
-	for i in xrange(3,size+1,2):
+	lst = [0] + [1,2] * (SIZE//2+1)
+	for i in xrange(3,SIZE+1,2):
 		if lst[i] == 1:
-			for j in xrange(i**2, size+1,2*i):
+			for j in xrange(i**2, SIZE+1,2*i):
 				if lst[j] == 1:
 					lst[j] = i
 			lst[i] = i
@@ -19,7 +22,7 @@ pfactor_lst = setup()
 def pfactor(n):
 	if n == 1:
 		return []
-	if n > size:
+	if n > SIZE:
 		return "too big, fool"
 	if n == pfactor_lst[n]:
 		return [n]
@@ -33,30 +36,30 @@ def main():
 	c1,c2,c3,c4,c5 = 0,0,0,0,0
 	sumz = 0
 	prev_seen = dict()
-	for n in xrange(1,size+1):
+	for n in xrange(1,SIZE+1):
 		if n%2 == 0:
 			a = prev_seen[n/2] * 2
-			if n <= size/2: prev_seen[n] = a
+			if n <= SIZE/2: prev_seen[n] = a
 			sumz +=a
 			continue
 		if n%3 == 0:
 			a = prev_seen[n/3] * 3
-			if n <= size/2: prev_seen[n] = a
+			if n <= SIZE/2: prev_seen[n] = a
 			sumz+=a
 			continue
 		if n%5 == 0:
 			a = prev_seen[n/5] * 5
-			if n <= size/2: prev_seen[n] = a
+			if n <= SIZE/2: prev_seen[n] = a
 			sumz+=a
 			continue
 		if n%7 == 0:
 			a = prev_seen[n/7] * 7
-			if n <= size/2: prev_seen[n] = a
+			if n <= SIZE/2: prev_seen[n] = a
 			sumz+=a
 			continue
 		if n%11 == 0:
 			a = prev_seen[n/11] * 11
-			if n <= size/2: prev_seen[n] = a
+			if n <= SIZE/2: prev_seen[n] = a
 			sumz+=a
 			continue
 		m = n
@@ -84,7 +87,7 @@ def main():
 				prev = pfactor_lst[m]
 				m /= pfactor_lst[m]
 				c5+=1
-		if n < size/2:	prev_seen[n] = temp
+		if n < SIZE/2:	prev_seen[n] = temp
 		sumz += temp
 	total_reps= tr = c1+c2+c3+c4+c5
 	print c1,c2,c3,c4,c5, total_reps

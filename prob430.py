@@ -2,21 +2,21 @@ import time
 start = time.time()
 import sys
 
-size = int(sys.argv[1])
-num_iter = int(sys.argv[2])
+SIZE = int(sys.argv[1])
+NUM_ITER = int(sys.argv[2])
 
 def main():
-	x = [(2*k*(size-k+1)-1)/size**2. for k in xrange(1,size/2+1)]
+	x = [(2*k*(SIZE-k+1)-1)/SIZE**2. for k in xrange(1,SIZE/2+1)]
 
 	results = 0
 	ncrd = 1.
 
-	for i in xrange(0,num_iter+1,2):
+	for i in xrange(0,NUM_ITER+1,2):
 		temp = 0
-		for j in xrange(0,size/2):
-			temp += x[j]**i * (1-x[j])**(num_iter-i)
+		for j in xrange(0,SIZE/2):
+			temp += x[j]**i * (1-x[j])**(NUM_ITER-i)
 		results += temp * ncrd
-		ncrd = (ncrd * (num_iter-i) * (num_iter-i-1)) / ((i+1) * (i+2))
+		ncrd = (ncrd * (NUM_ITER-i) * (NUM_ITER-i-1)) / ((i+1) * (i+2))
 
 	print results*2
 	print "Time Taken:", time.time() - start
