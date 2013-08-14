@@ -16,7 +16,7 @@ def calculate_path(angle):
   for t in xrange(0,400):
     t0 = t/10.
     xpos = 256 + 40 * cos(angle) * t0
-    ypos = 200 + 40 * sin(angle) * t0 - 9.81*t0*t0
+    ypos = 200 + 40 * sin(angle) * t0 - 9.81*t0*t0/2
     if ypos < 0:
       break
     draw_pt(int(size -ypos),int(xpos),[255,0,0],0)
@@ -34,8 +34,8 @@ for i in xrange(0,size):
 #This draws an approximation to the graph
 for t in xrange(-200,200):
   x = 256+t*2
-  y = int(271 + t**2/63*2**.5)
-  draw_pt(y,x,[0,255,0],1)
+  y = int(229 + t**2/83.)
+  draw_pt(y,x,[0,255,0],0)
 
 img = smp.toimage( data )       # Create a PIL image
 img.show()                      # View in default viewer
