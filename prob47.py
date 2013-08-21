@@ -1,20 +1,26 @@
 from primes import *
 import time
-start = time.time()
+START = time.time()
+SIZE = 150000 # Arbitrary, would have increased if I didn't get an answer.
 
-def remove_dupl(lst):
-  return list(set(lst))
+num_prime_factors = [0] * SIZE 
+for i in xrange(2,SIZE):
+	if num_prime_factors[i] == 0:
+		for n in xrange(i*2,len(num_prime_factors),i):
+			num_prime_factors[n]+=1
 
-lst = [0] * 150000
-for i in range(2,len(lst)):
-  if lst[i] == 0:
-    for n in range(i*2,len(lst),i):
-      lst[n]+=1
-  
-print "time elapsed = " + str(time.time()-start)
+print "Time taken for first step:",time.time() -START
 
-for i in range(0,len(lst)-4):
-  if lst[i] == 4 and lst[i+1]==4 and lst[i+2]==4 and lst[i+3]==4:
-    print i
-    break
-print "time elapsed = " + str(time.time()-start)
+for i in xrange(0,SIZE - 4):
+	if num_prime_factors[i:i+4] == [4,4,4,4]:
+		print "The answer is:", i
+		break
+print "Time taken:",time.time() -START
+
+"""
+12:28 ~/Desktop/python_projects/proj_euler $ python prob47.py
+Time taken for first step: 0.059818983078
+The answer is: 134043
+Time taken: 0.0975661277771
+
+"""

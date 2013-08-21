@@ -1,34 +1,24 @@
 import time
-start = time.time()
+START = time.time()
+
+MOD = 10**10
+sumz = 0 
+for i in xrange(1,1001):
+	sumz = sumz + pow(i,i, MOD)
+	
+print sumz % MOD
+print "Time taken:",time.time() -START
 
 
+"""
+12:33 ~/Desktop/python_projects/proj_euler $ python prob48.py
+9110846700
+Time taken: 0.00292992591858
 
-def rep_sq(n, pow, mod):
-  if pow == 1:
-    return n % mod
-  i = 1
-  lst = [1,n]
-  while 2 **i <= pow:
-    lst = lst + [lst[i]**2 %mod]
-    i = i+1 #up till now is just compiling the list of pow
-  
-  pows = [0]
-  power = pow
-  while power > 0:
-    pows = pows + [power % 2]
-    power = power //2 
-  
-  product = 1
-  for i in range(0,len(pows)):
-    if pows[i] == 1:
-      product = product * lst[i] % mod
-  return product
+Lol, using my previous repeated squaring method... I had 
+12:30 ~/Desktop/python_projects/proj_euler $ python prob48.py
+9110846700
+Time taken: 0.0142669677734
 
-
-sum = 0 
-for i in range(1,1001):
-  sum = sum + rep_sq(i,i,10**10)
-  
-print sum % 10**10
-
-print "Time Taken: " + str(time.time()-start)
+...7x slower using it.. :[
+"""
