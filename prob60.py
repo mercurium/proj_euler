@@ -8,34 +8,34 @@ pset = set(ps)
 
 
 for i in xrange(0,len(ps)):
-  wv = set() #wv for values that work, working values
-  for j in xrange(0,len(ps)):
-    if m_r(int(ps[i] + ps[j])) and m_r(int(ps[j] + ps[i])):
-      wv.add(ps[j])
-  vals[ps[i]] = wv
+	wv = set() #wv for values that work, working values
+	for j in xrange(0,len(ps)):
+		if m_r(int(ps[i] + ps[j])) and m_r(int(ps[j] + ps[i])):
+			wv.add(ps[j])
+	vals[ps[i]] = wv
 print vals['13']
-print "Time Taken:", time.time() - start  
+print "Time Taken:", time.time() - start	
 
 def main():
-  for i in ps:
-    pset2 = pset.intersection(vals[i]) 
-    if len(pset2) == 0: continue
-    for j in ps:
-      if j not in pset2: continue
-      pset3 = pset2.intersection(vals[j])
-      if len(pset3) == 0: continue
-      for k in ps:
-        if k not in pset3: continue
-        pset4 = pset3.intersection(vals[k])
-        if len(pset4) == 0: continue
-        for a in ps:
-          if a not in pset4: continue
-          pset5 = pset4.intersection(vals[a])
-          if len(pset5) == 0: continue
-          else:
-            print len(pset2),len(pset3),len(pset4),len(pset5)
-            return i,j,k,a,list(pset5)[0]
-        
+	for i in ps:
+		pset2 = pset.intersection(vals[i]) 
+		if len(pset2) == 0: continue
+		for j in ps:
+			if j not in pset2: continue
+			pset3 = pset2.intersection(vals[j])
+			if len(pset3) == 0: continue
+			for k in ps:
+				if k not in pset3: continue
+				pset4 = pset3.intersection(vals[k])
+				if len(pset4) == 0: continue
+				for a in ps:
+					if a not in pset4: continue
+					pset5 = pset4.intersection(vals[a])
+					if len(pset5) == 0: continue
+					else:
+						print len(pset2),len(pset3),len(pset4),len(pset5)
+						return i,j,k,a,list(pset5)[0]
+				
 print main()
 print "Time Taken:", time.time() - start 
 

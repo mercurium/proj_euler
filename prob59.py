@@ -1,29 +1,26 @@
 import string
 import time
 
-start = time.time()
-temp = open('prob59lst.txt','r')
-lst = string.split(temp.read(),',')
+START = time.time()
+input_data = open('data59.txt','r')
+xor_chars = string.split(input_data.read(),',')
 
+xor_chars = [int(xor_chars[i]) for i in xrange(len(xor_chars))]
 
-counter = {}
-for i in range(0, len(lst)):
-  lst[i] = int(lst[i]) #int-ifying all the entries
+sumz = 0
+for i in xrange(0,len(xor_chars)):
+	if i % 3 == 0:
+		xor_chars[i] = xor_chars[i]^103
+	elif i % 3 == 1:
+		xor_chars[i] = xor_chars[i]^111
+	else:	
+		xor_chars[i] = xor_chars[i]^100
+	sumz = sumz + xor_chars[i]
 
-sum = 0
-for i in range(0,len(lst)):
-  if i % 3 == 0:
-    lst[i] = lst[i]^103
-  if i % 3 == 1:
-    lst[i] = lst[i]^111
-  if i % 3 == 2:
-    lst[i] = lst[i]^100
-  sum = sum + lst[i]
+for i in xrange(0,len(xor_chars)):
+	xor_chars[i] = chr(xor_chars[i])
 
-for i in range(0,len(lst)):
-  lst[i] = chr(lst[i])
+print string.join(xor_chars,'')
+print sumz
 
-print string.join(lst,'')
-print sum
-
-print "Time Taken:", time.time()-start
+print "Time Taken:", time.time()-START

@@ -1,21 +1,16 @@
 import string
-def count_dig(n):
-  n = str(n)
-  sum = 0
-  for i in range(0,len(n)):
-    if n[i] != 'L':
-      sum += int(n[i])
-  return sum
+import time
+START = time.time()
 
-max = 0
-max_i, max_j = 0,0
-for i in range(50,100):
-  for j in range(50,100):
-    n = i**j
-    mn = count_dig(n)
-    if max < mn:
-      max = mn
-      max_i,max_j = i,j
-print max, max_i,max_j
+max_dig_sum= 0
+max_a, max_b = 0,0
+for a in range(50,100):
+	for b in range(50,100):
+		n = a**b
+		dig_sum = sum([int(dig) for dig in str(n)])
+		if max_dig_sum< dig_sum:
+			max_dig_sum= dig_sum
+			max_a,max_b = a,b
 
-
+print max_dig_sum, max_a,max_b
+print "Time Taken:", time.time() - START
