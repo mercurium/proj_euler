@@ -22,7 +22,7 @@ def approx_pow(n,powz,dig):
 	return product
 
 def truncate(num, dig):
-	num_len = len(str(num))
+	num_len = int(math.log(num,10)) 
 	if num_len < dig:
 		return num
 	return num/10**(num_len -dig)
