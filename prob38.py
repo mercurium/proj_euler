@@ -1,12 +1,14 @@
-from primes import *
-import math
+import string
+import time
 
-
+START = time.time()
+max_value = 0
 for i in range(9236,9500):
-  item = str(i) + str(i*2)
-  checker = 0
-  for j in range(1,10):
-    if str(j) in item:
-      checker+=1
-  if checker == 9:
-    print i, 2*i
+	next_num = str(i) + str(i*2)
+	if string.join(sorted(next_num),'') == '123456789':
+		print i, 2*i
+		if int(next_num) > max_value:
+			max_value = next_num
+
+print "The answer was:", max_value
+print "Time Taken:", time.time() - START

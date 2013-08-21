@@ -1,12 +1,12 @@
 import time
-start = time.time()
+START = time.time()
 
-
-
-for i in range(1,10):
-  for j in range(1,10):
-    for k in range(1,10):
-      if (10. * i + j)/(10*j + k) == i*1.0/k and i != k:
-        print i,j,k
-         
-print "Time Taken: " + str(time.time()-start)
+for loop in range(111,999):
+	if loop % 10 == 0 or loop / 10 % 10 == 0:
+		continue
+	# i,j,k = loop/100, loop/10 %10, loop %10
+	if (loop/10) * (loop%10) == (loop/100) * (loop %100)  and loop % 10 != loop /100:
+		print loop/10, loop %100 
+	
+				 
+print "Time Taken:", time.time() - START

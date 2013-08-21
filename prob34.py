@@ -1,23 +1,22 @@
 import string
 import math
-from math import factorial
+from math import factorial as fa
 import time
-start = time.time()
+START = time.time()
 
 
 
-def fact_sum(n):
-  if n == 0:
-    return 0
-  return factorial(n%10) + fact_sum(n/10)
-  
+def fact_sumz(n):
+	if n == 0: return 0 #base case
+	return fa(n%10) + fact_sumz(n/10)
+	
 
-sum = 0
+sumz = 0
 for i in range(3,10**6):
-  if fact_sum(i) ==i:
-    sum = sum + i
-    print i, sum
+	if fact_sumz(i) ==i:
+		sumz += i
+		print i, sumz
 
-print sum
+print sumz
 
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time() - START

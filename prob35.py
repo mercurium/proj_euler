@@ -1,28 +1,26 @@
-from primes import *
-import string
-import math
 import time
-start = time.time()
+from bitarray import bitarray
+START = time.time()
+SIZE = 10**6
+
 
 def rot_check(item):
-  j = len(str(item))  
-  for i in range(0,j):
-    if lst[item/10**i + (item % 10**i)*(10**(j-i))] != 0:
-      return False
-  return True
+	j = len(str(item))	
+	for i in xrange(0,j):
+		if prime_checking_lst[item/10**i + (item % 10**i)*(10**(j-i))] != 0: # Checking if all of the rotations are prime
+			return False
+	return True
 
-lst = [0]*10**6
+prime_checking_lst = bitarray('0' * SIZE) 
 
 count = 0
-for i in range(2,len(lst)): #this marks the nonprimes
-  if lst[i] == 0:
-    for j in range(2*i,len(lst),i):
-      lst[j]+=1 #lst[j] is marked as not prime
+for i in xrange(2,len(prime_checking_lst)): #this marks the nonprimes
+	if prime_checking_lst[i] == 0:
+		for j in xrange(i**2,len(prime_checking_lst),i):
+			prime_checking_lst[j] = 1 #prime_checking_lst[j] is marked as not prime
 
-for i in range(2,len(lst)):
-  if lst[i] == 0 and rot_check(i):
-    count+=1
-#    print i
+for i in xrange(2,len(prime_checking_lst)):
+	if prime_checking_lst[i] == 0 and rot_check(i):
+		count+=1
 print count
-
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time() - START

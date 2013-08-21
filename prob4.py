@@ -1,19 +1,19 @@
 import string
 import time
-start = time.time()
+START = time.time()
 
 def reverse(num):
-  return int(str(num)[::-1])
+	return int(str(num)[::-1])
 
 for a in range(999, 900, -1):
-  for b in range(999,a,-1):
-    c = a * b
-    if  reverse(c) == c:
-      print c, a, b
-      break
+	for b in range(999,a,-1):
+		c = a * b
+		if reverse(c) == c:
+			print c, a, b
+			break
 
-print "Time Taken: " + str(time.time()-start)
 
+print "Time Taken:", time.time()-START
 """
 Question: Find the largest palindrome that can be expressed as a product of two 3-digit numbers
 

@@ -1,16 +1,13 @@
 import string
-temp = open('prob13lst.txt','r')
+temp = open('prob13number_list.txt','r')
 
 import time
-start = time.time()
+START = time.time()
 
 strz = temp.read()
-lst = string.split(strz, '\n')
-sum = 0
-for i in range(0,len(lst)-1):
-  lst[i] = int(lst[i])
-  sum = sum + lst[i]
-  
-print sum / 10**40
+number_list = string.split(strz.strip(), '\n')
+sumz = sum([ int(x) for x in number_list])
+	
+print str(sumz)[:10] 
 
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time() - START

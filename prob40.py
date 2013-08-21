@@ -1,6 +1,6 @@
 import string
 import time
-start = time.time()
+START = time.time()
 
 A = range(10**6)
 B = [str(x) for x in A]
@@ -11,4 +11,4 @@ for i in xrange(7):
 	print C[10**i]
 
 print "answer is: ", prod
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START

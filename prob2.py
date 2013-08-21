@@ -1,5 +1,5 @@
 import time
-start = time.time()
+START = time.time()
 
 SIZE = 4*10**6
 a,b = 1,1
@@ -9,7 +9,7 @@ while a <SIZE:
 	if a % 2 == 0:
 		sumz+= a
 print sumz
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time()-START 
 
 """
 [tw-mbp13-jerrychen proj_euler (master)]$ python prob2.py 

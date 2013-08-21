@@ -5,14 +5,14 @@ SIZE = 15*10**4
 lst = [0] * SIZE 
 count = 0
 for i in xrange(3,SIZE,2):
-  if lst[i] == 0:
-    for n in xrange(i**2,SIZE,i*2):
-      lst[n]=1
-    count+=1
-  if count == 10001:
-    print i
-    break
-    
+	if lst[i] == 0:
+		for n in xrange(i**2,SIZE,i*2):
+			lst[n]=1
+		count+=1
+	if count == 10001:
+		print i
+		break
+		
 print "Time Taken:", time.time()-start
 
 """
