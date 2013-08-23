@@ -3,36 +3,36 @@
 import time
 import math
 
-start = time.time()
+START = time.time()
 
 #2,3,5,7,11,13,17,19,23 squared
 prime_sqz = [4,9,25,49,121,169,289,361,529]
 
 def sq_free(n):
-  for prime in prime_sqz:
-    if n % prime == 0:
-      return False
-  return True
+	for prime in prime_sqz:
+		if n % prime == 0:
+			return False
+	return True
 
 
 size = 51
 
-lst = [[1]*(x+1) for x in range(0,51)]
+lst = [[1]*(x+1) for x in xrange(0,51)]
 
-for i in range(1,len(lst)):
-  for j in range(0,i):
-    if j != 0 and j != len(lst[i])-1:
-      lst[i][j] = lst[i-1][j]+lst[i-1][j-1]
-print "time taken: " + str(time.time()-start)
+for i in xrange(1,len(lst)):
+	for j in xrange(0,i):
+		if j != 0 and j != len(lst[i])-1:
+			lst[i][j] = lst[i-1][j]+lst[i-1][j-1]
+print "time taken: " + str(time.time()-START)
 
 answer = set([1])
-for i in range(1,len(lst)):
-  for j in range(1,len(lst[i])-1):
-    if sq_free(lst[i][j]):
-      answer.add(lst[i][j])
+for i in xrange(1,len(lst)):
+	for j in xrange(1,len(lst[i])-1):
+		if sq_free(lst[i][j]):
+			answer.add(lst[i][j])
 
 print sum(answer)
-print "time taken: " + str(time.time()-start)
+print "Time Taken:", time.time()-START
 
 
 
