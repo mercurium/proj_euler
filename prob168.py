@@ -1,20 +1,25 @@
 import time
-start = time.time()
+START = time.time()
 import sys
 
-mod = 10**5
+MOD = 10**5
 sumz = 0
-if len(sys.argv) > 1:
-	lim = int(sys.argv[1])
-else:
-	lim = 6
 
-for n in xrange(1,lim):
-	for i in xrange(10**n, 10**(n+1)/2):
-		a = i/10 + (i%10)*10**n
-		if a%i == 0:
-			print i, a
-			sumz += i
+LIM = int(sys.argv[1]) if len(sys.argv) > 1 else 6
 
-print sumz % mod
-print "Time Taken:", time.time() - start
+def find_rep_dig(n,LIM):
+	for i in xrange(len(str(n)),LIM+1):
+		if pow(10,i,n) == 1:
+			return 10**i / n
+	return -1
+
+for i in xrange(3,100,2):
+	if i %5 == 0:
+		continue
+	print find_rep_dig(i,100), i
+
+
+
+
+print sumz % MOD
+print "Time Taken:", time.time() - START
