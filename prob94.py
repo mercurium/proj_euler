@@ -1,28 +1,28 @@
 import time
-start = time.time()
+START = time.time()
 import math
 
 size = 10**9
 sumz = 0
 
-for m in range(1,int(math.sqrt(size/2))):
-  diff = 2 if m%2==0 else 1
-  for n in range(1,m,diff):
-    a,b,c = 2*(m**2-n**2),4*m*n,m**2+n**2
-    if a+2*c > size: break
-    
-    if c-b == 1 or c-b == -1:
-      sumz+= b+2*c
-      print a/2,b/2,c, 'b'
-      
-      
-    elif c-a == 1 or c-a == -1:
-      sumz+=a+2*c
-      print b/2,a/2,c, 'a'
-  if 2*m*(m+1) > size: break
+for m in xrange(1,int(math.sqrt(size/2))):
+	diff = 2 if m%2==0 else 1  #interval to skip by.
+	for n in xrange(1,m,diff):
+		a,b,c = 2*(m**2-n**2),4*m*n,m**2+n**2
+		if a+2*c > size: break
+		
+		if c-b == 1 or c-b == -1:
+			sumz+= b+2*c
+			print a/2,b/2,c, 'b'
+			
+			
+		elif c-a == 1 or c-a == -1:
+			sumz+=a+2*c
+			print b/2,a/2,c, 'a'
+	if 2*m*(m+1) > size: break
 
 print sumz
-print "Time Taken:", time.time()- start
+print "Time Taken:", time.time()- START
 """
 518408346
 Time Taken: 77.2402789593
