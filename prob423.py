@@ -13,13 +13,13 @@ ext_gcd = extended_gcd
 
  
 size = 10#5*10**7 
-tmp = bitarray('110'+ '01'*(size/2-1)) #0 = prime, 1 = not prime
+is_prime = bitarray('110'+ '01'*(size/2-1)) #0 = prime, 1 = not prime
 num_mod = 10**9+7
 
 for i in xrange(3,size,2):
-	if tmp[i] == 0:
+	if is_prime[i] == 0:
 		for j in xrange(i**2,size,2*i):
-			tmp[j] = 1
+			is_prime[j] = 1
 
 
 
@@ -33,7 +33,7 @@ stored = 1
 
 for n in xrange(2,size+1):
 	#if n%1024==0: print n
-	if tmp[n] == 0: #number was prime
+	if is_prime[n] == 0: #number was prime
 		count+=1
 		stored = (stored * (n-1))%num_mod
 		stored = (ext_gcd(count,num_mod)[0]*stored) %num_mod

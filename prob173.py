@@ -1,8 +1,6 @@
-import math
 import time
 start = time.time()
 n = 10**6
-
 
 
 count = 0
@@ -10,10 +8,10 @@ square_diff = 2
 while (n - square_diff**2)/(2*square_diff) > 0:
 	count = count + (n - square_diff**2)/(2*square_diff)
 	square_diff = square_diff +2
-
-
 print count
 print "Time Taken:", time.time() - start
+
+
 """
 22:38 ~/Desktop/python_projects/proj_euler $ python prob173.py 
 1572729
