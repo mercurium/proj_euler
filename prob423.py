@@ -1,5 +1,5 @@
 import time
-start = time.time()
+START = time.time()
 from bitarray import bitarray
 
 def extended_gcd(a, b): #returns c,d such that ac+bd =1
@@ -23,7 +23,7 @@ for i in xrange(3,size,2):
 
 
 
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 
 
 sumz = 0 
@@ -47,7 +47,7 @@ for n in xrange(2,size+1):
 		sumz += stored
 
 
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 
 
 prod = pow(5,n-1,num_mod)
@@ -60,7 +60,7 @@ for k in xrange(1,count+1):
 	sumz += prod
 
 print (sumz*6)%num_mod
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 
 
 """
