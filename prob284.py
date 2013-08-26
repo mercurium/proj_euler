@@ -5,41 +5,41 @@ import string
 
 #largest digit in lst[0]
 def base14(num):
-  base = ''
-  while num != 0:
-    n = num%14
-    if n > 9: n = chr(n+87)
-    n = str(n)
-    base = n + base
-    num/=14
-  return base
+	base = ''
+	while num != 0:
+		n = num%14
+		if n > 9: n = chr(n+87)
+		n = str(n)
+		base = n + base
+		num/=14
+	return base
 
 #largest digit in lst[0]
 def base14lst(num):
-  base = [0]*10000
-  for slot in range(10000):
-    n = num%14
-    base[slot] = n
-    num/=14
-  return base[::-1]
+	base = [0]*10000
+	for slot in range(10000):
+		n = num%14
+		base[slot] = n
+		num/=14
+	return base[::-1]
 
 
 n1 = 7
 n2 = 8
 sumz = 1
 for dig in xrange(1,10000):
-  base = 14**dig
-  for i in xrange(0,14):
-    val = base*i+n1
-    if val**2 % (base*14) == val:
-      n1 = val
-      break
-  for i in xrange(0,14):
-    val = base*i+n2
-    if val**2 % (base*14) == val:
-      n2 = val
-      break
-  print dig
+	base = 14**dig
+	for i in xrange(0,14):
+		val = base*i+n1
+		if val**2 % (base*14) == val:
+			n1 = val
+			break
+	for i in xrange(0,14):
+		val = base*i+n2
+		if val**2 % (base*14) == val:
+			n2 = val
+			break
+	print dig
 
 print "Time Taken:", time.time() - start
 
@@ -48,12 +48,12 @@ lst2 = base14lst(n2)
 
 c1,c2 = 1,1
 for i in xrange(0,len(lst1)):
-  if lst1[i] != 0:
-    sumz += c1*lst1[i]
-    c1+=1
-  if lst2[i] != 0:
-    sumz += c2*lst2[i]
-    c2+=1
+	if lst1[i] != 0:
+		sumz += c1*lst1[i]
+		c1+=1
+	if lst2[i] != 0:
+		sumz += c2*lst2[i]
+		c2+=1
 
 
 print '\n', sumz, base14(sumz)
