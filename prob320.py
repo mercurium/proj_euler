@@ -1,54 +1,48 @@
 """
-solve n/p+n/p^2 +... + n/p^k >= 1234567890 for all p < m for m in range 10 to size...
+solve n/p+n/p^2 +... + n/p^k >= 1234567890 for all p < m for m in range 10 to SIZE...
 or equivalently... n(1/p+1/p^2+1/p^3+...)
 (1/p + 1/p^2 + 1/p^3 + ... ) = 1/(p-1)
 so we can use n = val / (1/p + 1/p^2 + 1/p^3 + ... etc)
- ---> n = val / (1/(p-1) ) --> n = val * (p-1) + stuff to be 0 mod p
+ ---> n = val / (1/(p-1) ) --> n = val * (p-1) + stuff to be 0 MOD p
 
 okay, so that didn't work so i had to alter my original algorithm. Now I'm testing all primes less than n to see if they have the optimal solution. Obviously this is much slower than what we want since it requries a O(n/ln(n)) testing instead of a simple O(1) testing per number... and this testing doesn't come cheap...also it's not correct atm :D;; oops
 
 raaaah @___@... I'll ask michikins to help me with this =D
 """
-import time
+import time,math, sys
 from bitarray import bitarray
 start = time.time()
-from math import *
-import sys
 
 
 val = 1234567890
 sumz = 0
-mod = 10**18
-
-if len(sys.argv) > 1:
-	size = int(sys.argv[1])
-else:
-	size = 10**4
+MOD = 10**18
+SIZE = int(sys.argv[1]) if len(sys.argv) > 1 else 10**6
 
 prime_set = set([2])
-lst = bitarray('0'*(int(size*1.1)))
-for i in xrange(3,len(lst),2):
-	if lst[i] == 0:
+is_prime = bitarray('1'*(int(SIZE*1.1)))
+for i in xrange(3,len(is_prime),2): #Dealing with evens later, generic sieve of Eratosthenes 
+	if is_prime[i]:
 		prime_set.add(i)
-		for j in xrange(2*i,len(lst),i):
-			lst[j]= 1
-for i in xrange(2,len(lst),2):
-	lst[i] = 1
+		for j in xrange(2*i,len(is_prime),i):
+			is_prime[j]= False
+for i in xrange(4,len(is_prime),2): #all multiples of 2 are prime
+	is_prime[i] = False
 
 prime_lst = list(prime_set)
 prime_lst.sort()
 
 index = 0
-least_prime = [0] * (size+1)
-lp_sq = [0] * (size+1)
-for i in xrange(len(least_prime)):
+least_prime_sqrt = [0] * (SIZE+1)
+lp_sq = [0] * (SIZE+1)
+for i in xrange(len(least_prime_sqrt)):  #I slightly regret this implementation, but this gives you the largest prime < sqrt(n)
 	if i**.5 >= prime_lst[index]:
 		index+=1
-	least_prime[i] = index
+	least_prime_sqrt[i] = index
 
 print "Time Taken:", time.time()- start
 
-def estimate(n,val,base):
+def estimate(n,val,base): #Compute an upper bound for how big the number can be
 	n /= base
 	sumz = 0
 	while n != 0:
@@ -58,7 +52,7 @@ def estimate(n,val,base):
 
 	return expected * (base-1) + base*20
 
-def cfpn(n, val, base): #compute for power of random base
+def cfpn(n, val, base): #Compute For Power of Number 
 	p = base
 	sumz = 0
 	comp = base
@@ -67,28 +61,28 @@ def cfpn(n, val, base): #compute for power of random base
 		comp *= base
 	expected = sumz * val
 
-	valz = expected * (base-1) + (expected % base)
+	valz = expected * (base-1) + (expected % base)  #This is the estimate of our answer, however it's not always right...
 
-	val_check = sum([valz/base**i for i in xrange(1,int(log(valz,base)+1) ) ])
+	val_check = sum([valz/base**i for i in xrange(1,int(math.log(valz,base)+1) ) ])  #checking to see how much we're off by...
 	correction = valz + (expected - val_check) * (base-1)
 	correction += (-1 * correction)%base	
 
-	val_check2 = sum([correction/base**i for i in xrange(1,int(log(correction,base)+1) ) ])
+	val_check2 = sum([correction/base**i for i in xrange(1,int(math.log(correction,base)+1) ) ]) #and a second check...
 
 	if val_check2 == expected:
 		return correction
 	diff = val_check2 - expected
 
-	while diff > 0:
+	while diff > 0: #Adjusting our value down, we got a power higher than needed
 		if correction % (p**(diff+1)) == 0:
 			return correction
 		correction -= base
-		val_check2 = sum([correction/base**i for i in xrange(1,int(log(correction,base)+1) ) ])
+		val_check2 = sum([correction/base**i for i in xrange(1,int(math.log(correction,base)+1) ) ])
 		diff = val_check2 - expected
 
-	while diff < 0:
+	while diff < 0: #Adjusting our value up, we got a power lower than we need.
 		correction += base
-		val_check2 = sum([correction/base**i for i in xrange(1,int(log(correction,base)+1) ) ])
+		val_check2 = sum([correction/base**i for i in xrange(1,int(math.log(correction,base)+1) ) ])
 		diff = val_check2 - expected
 
 	return correction
@@ -96,41 +90,38 @@ def cfpn(n, val, base): #compute for power of random base
 
 pset = prime_lst[:40]
 
-loop_count = lc = sumz = max_req = 0	
+loop_count = total_count = sumz = max_req = 0	
 max_val = 2
-for i in xrange(10,size+1):
-	if lst[i]:
-		
+for i in xrange(10,SIZE+1):
+	if not is_prime[i]: #primes are a nice special case so we can do it elsewhere.
 		plst = pset[:]
-		for arg in xrange(1,int(i**(1/3.)) ):
-			temp_val = i/arg
-			if temp_val in prime_set and i%temp_val == 0:
+		for arg in xrange(1,int(i**(1/3.)) ):  # Figuring out the prime powers that we need to check.
+			temp_val = i/arg #We need to check if the largest power comes from a multiple of the number
+			if temp_val in prime_set and i%temp_val == 0: 
 				plst.append(temp_val)
 
+			a,b = prime_lst[least_prime_sqrt[temp_val] - 1], prime_lst[least_prime_sqrt[temp_val] - 2]
+			if i%a == 0: plst.append(a)
+			if i%b == 0: plst.append(b)
 
-			a,b = prime_lst[least_prime[temp_val] - 1], prime_lst[least_prime[temp_val] - 2]
-			if i%a == 0:
-				plst.append(a)
-			if i%b == 0:
-				plst.append(b)
 
-		for a in plst:
-			lc +=1
+		for a in plst: #For every single potential prime that could give the largest power
+			total_count +=1
 			#shortcut compute some values so we don't have to do all of them.
 			if estimate(i,val,a) < max_req: 
-				continue
+				continue #computations skipped :)
 
-			temp = cfpn(i,val,a)
-			loop_count +=1
+			temp = cfpn(i,val,a) #This function is more costly...
+			loop_count +=1 #keeping track of how many times we actually need to do expensive computations
 			if temp >= max_req:
 				max_req = temp
 				max_val = a
 	else:
 		max_val = i
-		max_req = cfpn(i,val,i)
-		lc+=1
+		max_req = cfpn(i,val,i) #For primes p, we know that p is going to give the largest power that we need.
+		total_count +=1
 		loop_count +=1
-	sumz= (sumz + max_req) % mod
+	sumz= (sumz + max_req) % MOD #funny thing, I always forget to mod since I'm using python and I submit a 30 digit answer when they ask for 18 digits... :D;;
 	if i%1024 == 0:
 		print i
 
@@ -138,7 +129,7 @@ print sumz
 print "Time Taken:", time.time()- start
 
 print "damn, that was:", loop_count, "loops..."
-print "total loop count was", lc
+print "total loop count was", total_count
 
 
 
@@ -180,5 +171,7 @@ Time Taken: 86.4940459728
 damn, that was: 421026 loops...
 total loop count was 38692684
 
+
+Haha... originally I was computing for 10^8... was taking my computer forever xP
 """
 
