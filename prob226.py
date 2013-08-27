@@ -64,6 +64,6 @@ You are the 1045th person to have solved this problem
 The total area is: 0.11316017
 Time Taken: 263.636204004
 
-
+I suggest that if you're interested in this problem, you look at my code in helper226.py :). It creates a nice visualization of what the blancmange looks like. Quite a bit of regret on my part for not doing this cool problem earlier.
 """
 

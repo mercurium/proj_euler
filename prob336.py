@@ -9,25 +9,19 @@ def train_swap(train,position):
 	global SIZE
 	if position < 0: #last case, permuted all trains.
 		return [train]
-	#print train
 	new_train = train[:position] + train[position:][::-1]
-	#print new_train, 'new_train', position
 	if position == SIZE - 2:
 		return train_swap(new_train,position-1)
 
 	new_train_list = []
 	for i in xrange(position+1,SIZE-1):
 		next_train = new_train[:i] + new_train[i:][::-1]
-		#print position, next_train, "raaah", i
 		new_train_list += train_swap(next_train,position-1)	
-		#print new_train_list, "new_train_list"
 	return new_train_list
 
 def main():
 	train = range(1,SIZE-1) + [SIZE,SIZE-1]
-	#print train, "starting train"
 	permutations = train_swap(train,SIZE-3)
-	#print permutations
 	return permutations
 
 answer = sorted(main())
