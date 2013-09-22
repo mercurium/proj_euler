@@ -1,7 +1,5 @@
 import string
 import math
-true = True
-false = False
 
 #methods in file: is_prime(num), factor(val), totient(n), repeated_squaring(n,pow,mod), reverse_num(n), mergesort(list), gcd(a,b), ncr(n,r)
 
@@ -9,52 +7,127 @@ false = False
 # Afte all, it's much easier to modify code that's already there (this only holds for my own code) than dealing with off by one errors with a new algorithm :)
 
 temp = open('primenum.txt','r')
-primes = string.split(temp.read()[:-2],', ')
-primes = [int(i) for i in primes]
+primes = [int(i) for i in string.split(temp.read()[:-2],', ')]
 del primes[primes.index(9999)]
 primes_set = set(primes)
 
 
 temp = open('primenum10000.txt','r')
-primes_few = string.split(temp.read(),',')
-primes_few = [int(i) for i in primes_few]
+primes_few = [int(i) for i in string.split(temp.read(),',')]
 
 carmichael = [561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341, 41041, 46657, 52633, 62745, 63973, 75361, 101101, 115921, 126217, 162401, 172081, 188461, 252601, 278545, 294409, 314821, 334153, 340561, 399001, 410041, 449065, 488881, 512461, 530881, 552721, 656601, 658801, 670033, 748657, 825265, 838201, 852841, 997633, 1024651, 1033669, 1050985, 1082809, 1152271, 1193221, 1461241, 1569457, 1615681, 1773289, 1857241, 1909001, 2100901, 2113921, 2433601, 2455921, 2508013, 2531845, 2628073, 2704801, 3057601, 3146221, 3224065, 3581761, 3664585, 3828001]
 
 
-def factor_rec(val, count):
-	while(val >= count):
-		if val % count == 0:
-			 return count
-		count = count + 1
 
-def factor(val):
+def factor(val): #dumb factoring method, use the other one instead...
+	def factor_finder(val, count):
+		for i in xrange(count,val+1)
+			if val % count == 0:
+				 return i
+
 	if val == 1:
 		return [1]
-	if primer2(val):
+	if is_prime(val):
 		return [val,1]
-	temp = factor_smart(val)
-	if temp == -1:
-		temp = factor_rec(val, 2)
-	return [temp] + factor(val/temp)
+	next_factor = factor_finder(val, 2)
+	return [next_factor] + factor(val/next_factor)
 	
-def factor_smart(val):
-	found = -1
-	for i in xrange(0, len(primes)):
-		if val % primes[i] ==0:
-			found =primes[i]
-			break
-	return found
 	
-def totient(n):
+def totient(n): #dumb version, don't use this...
 	lst = factor(n)[:-1]
 	result = 1.0
-	for i in range(0,len(lst)):
+	for i in xrange(0,len(lst)):
 		if i==0 or lst[i] != lst[i-1]:
 			result = result * (lst[i]-1)
 		else:
 			result = result * lst[i]
 	return result
+
+
+def get_totient(size):  #gives you the totients of all numbers i <= size
+	lst = range(size+1)
+	lst[0] = 1
+	for i in xrange(2,len(lst)):
+		if lst[i] == i:
+			for j in xrange(i,len(lst),i):
+				lst[j] = (lst[j] * (i-1))/i 
+	return lst
+
+
+def pfactor_gen(size): #for each number n, return some factor of it.
+	stuff = [0,1,2] + [1,2] *(size/2-1)
+	for i in xrange(3,size,2):
+		if stuff[i] == 1:
+			for j in xrange(i**2,size,i*2):
+				stuff[j] = i
+			stuff[i] = i
+	return stuff
+
+
+def factor_given_pfactor(n): #simple factoring method, put one of the factors of n onto the list until we run out of factors
+	if n == 1:
+		return []
+	if pfactor[n] == n:
+		return [n]
+	factors = []
+	while pfactor[n] != 1:
+		factors.append(pfactor[n])
+		n /= pfactor[n]
+	return factors	
+
+
+def legendre(a,p): # http://en.wikipedia.org/wiki/Legendre_symbol
+	if a <= 1:
+		return 1
+	if a == 2:
+		if (p**2 -1)% 16 == 0:
+			return 1
+		return  -1
+	factors = factor(a)
+	product = 1
+	for f in factors:
+		if f == 2:
+			if (p**2 -1) % 16 != 0:
+				product *= -1
+		else:
+			product *= legendre(p%f,f) * pow(-1,(f-1)*(p-1)/4)
+	return product
+lg = legendre
+
+
+def cipolla(p): # http://en.wikipedia.org/wiki/Cipolla%27s_algorithm
+	n = 5
+	a = random.randint(int(p**.5)+1,p-1)
+	while legendre((a**2-n)%p,p) == 1:
+		a = random.randint(int(p**.5)+1,p-1)
+	val = rep_sq_sqrt((a,1,(a**2-n)%p), (p+1)/2, p)
+	return val[0]
+		
+
+def rep_sq_sqrt(n, powz, mod): #NOTE, n is a tuple... a,b,c so that we had a + b * sqrt(c)
+	def mult(a,b,mod): #multiplying numbers which share a square root (sqrt)
+		full = a[0] * b[0] + a[1] * b[1] * a[2]
+		frac = a[1] * b[0] + a[0] * b[1]
+		return (full%mod,frac%mod,a[2])
+	if powz == 0: return 1
+	if powz == 1: return (n[0] % mod,n[1] % mod, n[2])
+	
+	val = int(math.log(powz,2))
+	lst = [1,n] + [0] * val
+	for i in range(2,len(lst)):
+		lst[i] = mult(lst[i-1],lst[i-1],mod)
+	
+	pows = [0] * (val+1)
+	power = powz
+	for i in range(0,len(pows)):
+		pows[i] = power % 2
+		power = power //2 
+	product = (1,0,n[2])
+	for i in range(0,len(pows)):
+		if pows[i] == 1:
+			product = mult(product,lst[i+1], mod)
+	return product
+
 
 #this takes a set of values and bases so that we can find x s.t.
 #x = a1 mod b1
@@ -115,29 +188,11 @@ def miller_rabin(n):
 mr = m_r = miller_rabin
 
 def is_prime(n):
-	return primer2(n)
+	return mr(n)
 
-def primer2(n):
-	if n in carmichael or n ==1:
-		return False
-	
-	if n <= primes[-1]:
-		if n in primes_set:
-			return True
-		return False
-	for i in range(0,100):
-		if n % primes[i] == 0:
-			return False
-		if primes[i] >= n:
-			return True
-		if rep_sq(primes[i],n-1,n) != 1:
-			return False
-	return True
-	
 def rep_sq(n, powz, mod):
 	if powz == 0: return 1
 	if powz == 1: return n % mod
-	
 	
 	val = int(math.log(powz,2))
 	lst = [1,n] + [0] * val
@@ -154,18 +209,6 @@ def rep_sq(n, powz, mod):
 		if pows[i] == 1:
 			product = product * lst[i+1] % mod
 	return product
-
-def reverse(num):
-	return int(str(num)[::-1])
-	
-def reverser(strs):
-	return strs[::-1]
-
-
-def mergesort(lst): # Yeah I know this isn't mergesort, but the actual implementation in python is faster...
-	temp = lst[:]
-	temp.sort()
-	return temp
 
 
 def gcd(a,b):
