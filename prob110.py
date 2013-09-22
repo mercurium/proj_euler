@@ -27,7 +27,7 @@ for num in xrange(1,SIZE):
 	factors = factor(num)
 	factor_map = dict()
 	factor_set = set(factors + [2,3,5,7,11,13,17,19,23,29])
-	factor_map[2] = 7
+	factor_map[2] = 7   #These are just forcing the number to have these values to save time...
 	factor_map[3] = 7
 	factor_map[5] = 5
 	factor_map[7] = 5
@@ -50,7 +50,7 @@ for num in xrange(1,SIZE):
 	if prod/2 >= LIM:
 		print prod, int(numz**.5), "DONE!!!"
 		break
-	if prod > maxz:
+	if prod > maxz: #for benchmarking...
 		maxz = prod
 		print maxz, int(numz**.5)
 
