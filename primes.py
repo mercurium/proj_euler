@@ -25,6 +25,8 @@ def factor(val): #dumb factoring method, use the other one instead...
 		while val % x == 0:
 			factors.append(x)
 			val /= x
+	if val != 1:
+		factors.append(val)
 	return factors
 	
 def totient(n): #dumb version, don't use this...
