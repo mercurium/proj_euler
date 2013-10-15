@@ -81,6 +81,7 @@ for num_grid in range(50):
 			if nodes[-1] == 0: nodes[-1] = -1
 
 	solution = branch_and_bound(0, nodes, edge_dict, range(81))
+	print num_grid, time.time() - start
 
 	sumz += solution[0] * 100 + solution[1]*10+solution[2]
 	iterations = 0
