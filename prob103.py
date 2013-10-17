@@ -17,10 +17,13 @@ def test(setz):
 				return False
 			elif len(subset_sums) >= 1 and k < max(subset_sums):
 				return False
-			else:
-				temp_set.add(k)
-		for val in temp_set:
-			subset_sums.add(val)	
+				works = False
+				print [setz[ord(x)-97] for x in j], k, "error 1"
+				break
+			elif len(subset_sums) >= 1 and k < max(subset_sums):
+				works = False
+				print [setz[ord(x)-97] for x in j], k, "error 2"
+				break
 	return True
 
 
