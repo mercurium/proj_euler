@@ -102,5 +102,6 @@ You have earned 1 new award:
 
 Centurion: Solve one hundred consecutive problems
 
+For this problem, I used my graph coloring algorithm from the discrete optimization class
 
 """
