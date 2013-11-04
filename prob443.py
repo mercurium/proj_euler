@@ -85,4 +85,17 @@ Nice work, mercurium, you've just advanced to Level 9.
 2744233049300770
 Time Taken: 87.8681638241
 
+okay, so the writeup...
+I have to admit, I did not like my solution very much... it was quite hacky...
+
+Anyways, what I noticed for this was:
+if we have gcd(g,n) != 1, then we increment by more than one. However, the number of times we do it is quite limited (someone on forums mentioned that it's ~300 times max.
+
+So the interesting thing to note (not related to solving it) is that if gcd(g,n) != 1, then g+gcd(g,n) = 3n... weird as heck.
+
+Also, the solutions seem to cluster together, and only work once every doubling of n. Thus, we can skip most of the fluff in the middle for the numbers that aren't important (if 353 works, the next few are going to be around 700 something).
+
+I also noticed that if 382 was the last one in the cluster to work, then the following cluster would start with 761, aka, 2 * last - 1. Not sure why this happens, but hey, pretty cool :P
+
+So... yeah, should have done this yesterday =.=;; It only took me ~2 hours... T_T;;
 """
