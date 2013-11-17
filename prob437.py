@@ -2,7 +2,7 @@ from bitarray import bitarray
 import time,random,math
 START = time.time()
 
-SIZE = 10**4
+SIZE = 10**8
 
 
 def get_totient(size):  #gives you the totients of all numbers i <= size

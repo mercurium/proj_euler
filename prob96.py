@@ -3,15 +3,8 @@ import time
 import random
 start = time.time()
 
-iterations = 0
 
 def branch_and_bound(pos, solution, edge_dict, order):
-
-	global iterations
-	iterations +=1
-
-	if iterations % 1024 == 0:
-		print iterations, len(order)
 
 	largest_seen = max(solution)
 	if largest_seen  <= 9 and min(solution) >= 0:  #the done case =P
@@ -27,29 +20,17 @@ def branch_and_bound(pos, solution, edge_dict, order):
 			if len(set_check) == 8:
 				not_seen = list(set(range(1,10)).difference(set_check))[0]
 				solution[i] = not_seen
-				continue
-			if len(set_check) == 9:
+			elif len(set_check) == 9:
 				return -1
 
-	order_setup = [0] * len(order)
-	for i in range(len(order)):
-		if solution[order[i]] != -1:
-			order_setup[i] =  (2000,order[i])  #2000 is arbitrary large number to place these items at beginning.
-		else:
-			order_setup[i] =  ((sum([10 for x in (set([solution[c] for c in edge_dict[i]]))]) + \
-					5 * len(edge_dict[i])) * (.1 + random.random()) , order[i])
-	order = [x[1] for x in sorted(order_setup)[::-1]]
-
-
 	next_val = order[pos]
-	while solution[next_val] != -1 and pos > 0:
+	while solution[next_val] != -1 and pos >= 0 and pos < len(order)-1:
 		pos +=1
 		next_val = order[pos]
 
 	order = order[pos:]
 	pos = 0 
 
-	next_val = order[pos]
 	temp_set = set([ solution[c] for c in edge_dict[next_val]])
 	
 	for color in xrange(1,10):
@@ -60,9 +41,6 @@ def branch_and_bound(pos, solution, edge_dict, order):
 			if ans != -1:
 				return ans
 	return -1   #none of the colors above work for it...
-
-
-
 
 
 data_file = open("sudoku.txt",'r')
@@ -90,22 +68,40 @@ for i in range(81):
 	edge_dict[i].remove(i)
 
 
+skipped_grids = []
 #50 test cases, 10 lines ea...
 sumz = 0
-for grid in grids:
+skip_count = 0
+for num_grid in range(50):
+	grid = grids[num_grid]
 	nodes = []
 	for row in grid:
 		for node in row:
 			nodes.append(int(node))
 			if nodes[-1] == 0: nodes[-1] = -1
 
-
 	solution = branch_and_bound(0, nodes, edge_dict, range(81))
-
+	print num_grid, time.time() - start
 
 	sumz += solution[0] * 100 + solution[1]*10+solution[2]
-	print iterations, "\n\n finished a set :) \n\n"
 	iterations = 0
 
 print sumz
 print "Time Taken: ", time.time() -start
+
+
+"""
+
+Time Taken:  0.457056045532
+
+Congratulations, the answer you gave to problem 96 is correct.
+
+You are the 7889th person to have solved this problem.
+
+You have earned 1 new award:
+
+Centurion: Solve one hundred consecutive problems
+
+For this problem, I used my graph coloring algorithm from the discrete optimization class
+
+"""

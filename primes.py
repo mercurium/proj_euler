@@ -20,24 +20,20 @@ carmichael = [561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341, 4104
 
 
 def factor(val): #dumb factoring method, use the other one instead...
-	def factor_finder(val, count):
-		for i in xrange(count,val+1)
-			if val % count == 0:
-				 return i
-
-	if val == 1:
-		return [1]
-	if is_prime(val):
-		return [val,1]
-	next_factor = factor_finder(val, 2)
-	return [next_factor] + factor(val/next_factor)
-	
+	factors = []
+	for x in xrange(2, int(math.sqrt(val)+1)):
+		while val % x == 0:
+			factors.append(x)
+			val /= x
+	if val != 1:
+		factors.append(val)
+	return factors
 	
 def totient(n): #dumb version, don't use this...
-	lst = factor(n)[:-1]
+	lst = [-1] + factor(n)[:-1]
 	result = 1.0
-	for i in xrange(0,len(lst)):
-		if i==0 or lst[i] != lst[i-1]:
+	for i in xrange(1,len(lst)):
+		if lst[i] != lst[i-1]:
 			result = result * (lst[i]-1)
 		else:
 			result = result * lst[i]
