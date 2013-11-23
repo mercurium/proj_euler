@@ -20,7 +20,7 @@ pfactor = get_pfactor(SIZE)
 print "Part 1 done!"
 
 val_dict = {2:5,5:5}
-for n in range(1,SIZE):
+for n in range(1,SIZE/2+1):
 	k = SIZE - n
 	while k != 1:
 		p = pfactor[k]
@@ -36,8 +36,12 @@ for n in range(1,SIZE):
 		r /= p
 	prod = 1
 	for factor in val_dict.keys():
-		prod = (1 + pow(factor, val_dict[factor])) * prod % mod
-	count += prod - n
-
-print count
+		if val_dict[factor] == 0:
+			continue
+		prod = ((1 + pow(factor, val_dict[factor],mod)) * prod) % mod
+	count += prod*2
+	if n% 100 == 0:
+		print n
+count -= prod
+print (count - pow(2,SIZE,mod)+2) % mod
 print "Time Taken:", time.time() - START
