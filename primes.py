@@ -21,7 +21,15 @@ carmichael = [561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341, 4104
 
 def factor(val): #dumb factoring method, use the other one instead...
 	factors = []
-	for x in xrange(2, int(math.sqrt(val)+1)):
+	for x in primes_few:
+		if x > val:
+			break
+		while val % x == 0:
+			factors.append(x)
+			val /= x
+			if val == 0:
+				print "BIG FAT ERROR!!!"
+	for x in xrange(primes_few[-1], int(math.sqrt(val)+1)):
 		while val % x == 0:
 			factors.append(x)
 			val /= x
