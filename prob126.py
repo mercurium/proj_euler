@@ -1,32 +1,67 @@
 import time
 START = time.time() 
 
-SIZE = 50
+SIZE = 10000
 LAYERS = 100
 val_dict = dict()
 
 for i in xrange(1,SIZE):
-	for j in xrange(i,SIZE):
-		for k in xrange(j,SIZE):
+	for j in xrange(1,i+1):
+		if (i+1)*(j+1) + 1 > 25000: break
+
+		for k in xrange(1,j+1):
+			a,b = 2*(i*j+j*k+k*i), 4*(i+j+k-1)
+			if a > 25000: break
+
 			for layer in range(LAYERS):
-				val = 2 * (i*j+j*k+k*i) + layer * (4*(i+j+k-1)) + 4*layer**2
+				val = a + layer * b + 4*layer**2
+				if val > 25000: break
+
 				if val in val_dict:
 					val_dict[val] +=1
 				else:
 					val_dict[val] = 1
+	print i
 
-maxz = 0
-for i in val_dict:
-	if val_dict[i] > maxz:
-		print i, val_dict[i]
-		maxz = val_dict[i]
+
+for key in sorted(val_dict.keys()):
+	if val_dict[key] == 1000:
+		print key
+		break
 print "Time Taken:", time.time() - START
 
-"""
-formula for this is:
-2(ab+bc+ca) + n(4(a+b+c-1)) + 4n^2
 
-Math for this formula worked out below:
+
+
+
+
+
+
+
+
+
+
+
+"""
+ Congratulations, the answer you gave to problem 126 is correct.
+
+You are the 2215th person to have solved this problem.
+
+Answer: 18522
+Time Taken: 4.04020619392
+
+Okay, so the logic for this problem was as such. I first figured out that the nth layer had 2(ab+bc+ca) + 4n(a+b+c-1) +4n^2 blocks.
+Then I iterated over this list, and whenever i got to numbers that seemed to be too big to be the right answer (since some numbers <20000 were already having results of 1000+, it couldn't be too big), so I capped it at 25000. Then, after the iteration, I got the answer.... :D;;;...
+
+I just kept it going till it exhausted all possible results for plugging in to that field.
+
+Normally I would clean up my code below, but I like having my scratch notes below... :x
+
+
+formula for this is:
+2(ab+bc+ca) + 4n(a+b+c-1) + 4n^2
+
+Math for this formula worked out below (scratch work):
 
 First layer = 2(ab+bc+ac)
 second layer = 2(ab+bc+ac) + 4(a+b+c)
