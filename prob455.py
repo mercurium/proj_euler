@@ -5,17 +5,12 @@ SIZE = 10**6
 def findTrailing(num):
     if num % 10 == 0:
         return 0
-    ans = 0
-    for i in range(100):
-        if pow(num,i,100) == i:
-            ans = i
-            break
-    if ans == 0:
-        print num
-        return 0
-    for i in range(3,10):
-        ans = pow(num,ans,10**i)
-    return ans
+    ans = 1
+    while True:
+        new_pow = pow(num,ans, 10**9)
+        if new_pow == ans:
+            return new_pow
+        ans = new_pow
 
 sumz = 0
 for i in range(2,SIZE+1):
