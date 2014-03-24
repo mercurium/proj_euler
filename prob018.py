@@ -1,30 +1,33 @@
-testTriangle = [[0,3,0], [0, 7, 4, 0], [0, 2, 4, 6, 0], [0, 8, 5, 9, 3, 0]]
+import string
+import time
+START = time.time()
+#the efficiency for this code comes from the fact that I only need to compute a value for (row,col) once and then it's stored away for future use. An analogy would be F(n) = nth fibonacci number and finding:
+#F(n) = F(n-1)+F(n-2) = F(n-2)+F(n-3)+F(n-3)+F(n-4)	= ...
+#as opposed to finding F(1) to F(n-1) once then using that for finding F(n)
 
-# r = row, c = column (list[r][c])
-def maxGettingTo(lst, r, c):
-  if r == 0: 
-    return lst[0][1]
-  return lst[r][c] + max(maxGettingTo(lst, r-1, c), maxGettingTo(lst, r-1, c-1))
+temp = open('prob18inputz.txt','r')
+inputz = string.split(temp.read(), '\n')
 
+for i in xrange(0, len(inputz)):
+	inputz[i] = string.split(inputz[i],' ')
 
-print 'hi i work'
-print maxGettingTo(testTriangle, 3, 0)
-print maxGettingTo(testTriangle, 3, 1)
-print maxGettingTo(testTriangle, 3, 2)
-print maxGettingTo(testTriangle, 3, 3)
-r = len(testTriangle) - 1
+inputz = inputz[:-1] 
 
-for c in range(0, len(testTriangle[r]) -2):
-  print r
-  print c
-  print 'hi i dont work'
-  print maxGettingTo(testTriangle, 3, 0)
-  print maxGettingTo(testTriangle, r, c)
+for i in xrange(0, len(inputz)):
+	for j in xrange(0, len(inputz[i])):
+		inputz[i][j] = int(inputz[i][j])
+ans = inputz[:] #up to here is just cleaning up the input
 
-print max
+#this computes the max value for getting to each spot (row,col) and then stores it for future use
+for i in xrange(1,len(inputz)): 
+	for j in xrange(0, len(inputz[i])):
+		if j == 0: #end of rows --> only need to look at one.
+			inputz[i][j] += inputz[i-1][0]
+		elif j == len(inputz[i]) -1:
+			inputz[i][j] += inputz[i-1][j-1]
+		else:
+			inputz[i][j] += max(inputz[i-1][j], inputz[i-1][j-1])
 
+print max(inputz[len(inputz)-1])
 
-
-
-
-
+print "Time Taken:", time.time() - START
