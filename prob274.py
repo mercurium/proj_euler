@@ -17,17 +17,17 @@ size = 10**7
 tmp = bitarray('0'*size)
 primes = set()
 for i in xrange(3,size,2):
-	if tmp[i] == 0:
-		for j in xrange(i**2,size,2*i):
-			tmp[j] = 1
-		primes.add(i)
+    if tmp[i] == 0:
+        for j in xrange(i**2,size,2*i):
+            tmp[j] = 1
+        primes.add(i)
 primes.remove(5)
 prime_lst = sorted(list(primes))
 
 sumz = 0
 
 for prime in prime_lst:
-	sumz += (extended_gcd(10,prime)[0])%prime
+    sumz += (extended_gcd(10,prime)[0])%prime
  
 print sumz
 

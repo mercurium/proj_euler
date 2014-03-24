@@ -17,9 +17,9 @@ is_prime = bitarray('110'+ '01'*(size/2-1)) #0 = prime, 1 = not prime
 num_mod = 10**9+7
 
 for i in xrange(3,size,2):
-	if is_prime[i] == 0:
-		for j in xrange(i**2,size,2*i):
-			is_prime[j] = 1
+    if is_prime[i] == 0:
+        for j in xrange(i**2,size,2*i):
+            is_prime[j] = 1
 
 
 
@@ -32,19 +32,19 @@ count = 0 #for keeping track of how many primes we've seen so far...
 stored = 1
 
 for n in xrange(2,size+1):
-	#if n%1024==0: print n
-	if is_prime[n] == 0: #number was prime
-		count+=1
-		stored = (stored * (n-1))%num_mod
-		stored = (ext_gcd(count,num_mod)[0]*stored) %num_mod
-	else:
+    #if n%1024==0: print n
+    if is_prime[n] == 0: #number was prime
+        count+=1
+        stored = (stored * (n-1))%num_mod
+        stored = (ext_gcd(count,num_mod)[0]*stored) %num_mod
+    else:
  #if the number wasn't a prime, some sequence was ending, so we had to increment the sum
-		stored = (stored*5*(n-1))%num_mod
-		stored = (ext_gcd(n-count-1,num_mod)[0]*stored )%num_mod	
-		#for some reason, there was an extra factor of 5 in the product so this is just to get rid of it.
-		if n== 4: stored = stored/5
-		
-		sumz += stored
+        stored = (stored*5*(n-1))%num_mod
+        stored = (ext_gcd(n-count-1,num_mod)[0]*stored )%num_mod    
+        #for some reason, there was an extra factor of 5 in the product so this is just to get rid of it.
+        if n== 4: stored = stored/5
+        
+        sumz += stored
 
 
 print "Time Taken:", time.time() - START
@@ -53,11 +53,11 @@ print "Time Taken:", time.time() - START
 prod = pow(5,n-1,num_mod)
 sumz+= prod
 for k in xrange(1,count+1):
-#	if k%1024 == 0:
-#		print k
-	prod = (prod * (n-k+1))%num_mod
-	prod = (ext_gcd(5*k,num_mod)[0] * prod)%num_mod
-	sumz += prod
+#    if k%1024 == 0:
+#        print k
+    prod = (prod * (n-k+1))%num_mod
+    prod = (ext_gcd(5*k,num_mod)[0] * prod)%num_mod
+    sumz += prod
 
 print (sumz*6)%num_mod
 print "Time Taken:", time.time() - START

@@ -31,36 +31,36 @@ for i in range(2,len(rad_lst)): #set-up of rad list
 #if it's prime, then its radical is equal to itself.
 
 def rad_fail(n):
-	if rad_lst[n] *6 > n:
-		return True
-	if rad_lst[n] % 2 == 0 and rad_lst[n] * 15 > n:
-		return True
-	if rad_lst[n] % 3 == 0 and rad_lst[n] * 10 > n:
-		return True
-	if rad_lst[n] % 6 == 0 and rad_lst[n] * 35 > n:
-		return True
-	return False
+    if rad_lst[n] *6 > n:
+        return True
+    if rad_lst[n] % 2 == 0 and rad_lst[n] * 15 > n:
+        return True
+    if rad_lst[n] % 3 == 0 and rad_lst[n] * 10 > n:
+        return True
+    if rad_lst[n] % 6 == 0 and rad_lst[n] * 35 > n:
+        return True
+    return False
 
     
 
 for c in xrange(size):
-	if rad_fail(c):
-		b = c -1
-		if rad_lst[b]*rad_lst[c]< c:
-			count +=1
-			sumz+=c
-			print c-b,b,c
-	else:
-		#don't need to check even b if c is also even
-		diff = -2 if c%2 == 0 else -1 
-		for b in xrange(c-1,c//2,diff):
-			#we want to avoid checking gcd as much as possible
-			if rad_lst[b] == b or gcd(rad_lst[b],rad_lst[c]) != 1: pass
-			else:
-				if rad_lst[c] * rad_lst[b] * rad_lst[c-b] < c:
-					count +=1
-					sumz += c
-					print c-b,b,c
+    if rad_fail(c):
+        b = c -1
+        if rad_lst[b]*rad_lst[c]< c:
+            count +=1
+            sumz+=c
+            print c-b,b,c
+    else:
+        #don't need to check even b if c is also even
+        diff = -2 if c%2 == 0 else -1 
+        for b in xrange(c-1,c//2,diff):
+            #we want to avoid checking gcd as much as possible
+            if rad_lst[b] == b or gcd(rad_lst[b],rad_lst[c]) != 1: pass
+            else:
+                if rad_lst[c] * rad_lst[b] * rad_lst[c-b] < c:
+                    count +=1
+                    sumz += c
+                    print c-b,b,c
 
 
 print ''

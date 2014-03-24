@@ -3,12 +3,12 @@ START = time.time()
 from bitarray import bitarray
 
 def compute(n,a): # This computes what power of a^k is a divisor of n.
-	sumz = 0
-	n /= a
-	while n > 0:
-		sumz += n
-		n /= a
-	return sumz
+    sumz = 0
+    n /= a
+    while n > 0:
+        sumz += n
+        n /= a
+    return sumz
 
 SIZE = 10**3
 MOD  = 10**9+9
@@ -16,18 +16,18 @@ is_prime = bitarray('1' * (SIZE+1))
 prime_lst = [2]
 
 for i in xrange(3,SIZE,2):  #generic sieve function, as usual, evens aren't worth considering.
-	if is_prime[i]:
-		for j in xrange(i**2,SIZE,i*2):
-			is_prime[j] = False
-		prime_lst.append(i)
+    if is_prime[i]:
+        for j in xrange(i**2,SIZE,i*2):
+            is_prime[j] = False
+        prime_lst.append(i)
 
 print len(prime_lst)
 print "Time Taken:", time.time() - START
 
 prod = 1
 for prime in prime_lst:
-	prod *= ( pow(prime,compute(SIZE,prime) * 2, MOD) + 1) # doubling the power since it's a square, and adding 1 since it can divide that square, or it won't
-	prod %= MOD
+    prod *= ( pow(prime,compute(SIZE,prime) * 2, MOD) + 1) # doubling the power since it's a square, and adding 1 since it can divide that square, or it won't
+    prod %= MOD
 
 print prod
 print "Time Taken:", time.time() - START

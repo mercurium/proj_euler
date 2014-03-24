@@ -8,9 +8,9 @@ pows = [ (SIZE/7**i)%7 for i in range(LENGTH) ][::-1]
 
 sumz,mult = 0,1
 for i in xrange(LENGTH):
-	sumz += pows[i] * (pows[i] +1) * mult / 2 * 28**( (LENGTH-1) - i)
-	mult *= (pows[i] +1)
-	
+    sumz += pows[i] * (pows[i] +1) * mult / 2 * 28**( (LENGTH-1) - i)
+    mult *= (pows[i] +1)
+    
 print "The answer is:", sumz
 print "Time elapsed:", time.time() - START
 

@@ -13,28 +13,28 @@ prefix = '1' +('0'*num_dig) +'1'
 size = 2**num_dig - len(prefix)
 
 def test(n): #basically this part checks if each number is in the set....
-	if len(n) != size: 
-		return 0
-	
-	m = prefix + n + prefix
-	for i in product('10',repeat=num_dig):
-		i = string.join(i,'')
-		if i not in m: return 0
-	return int('1'+n+'1',2)
+    if len(n) != size: 
+        return 0
+    
+    m = prefix + n + prefix
+    for i in product('10',repeat=num_dig):
+        i = string.join(i,'')
+        if i not in m: return 0
+    return int('1'+n+'1',2)
 
 def main(): #makes a list of all possibilities and iterates through them
-	sumz = 0
-	count = 0
-	for i in combinations(range(size),2**(num_dig-1) -2):
-		num = 0
-		for j in i: num+= 10**j
-		num = '0' * (size-len(str(num))) + str(num)
-		val = test(num)
-		if val> 0:
-			sumz+= val
-			count +=1
-	print "The overall sum is:", sumz
-	print "numbers needed:", count
+    sumz = 0
+    count = 0
+    for i in combinations(range(size),2**(num_dig-1) -2):
+        num = 0
+        for j in i: num+= 10**j
+        num = '0' * (size-len(str(num))) + str(num)
+        val = test(num)
+        if val> 0:
+            sumz+= val
+            count +=1
+    print "The overall sum is:", sumz
+    print "numbers needed:", count
 
 main()
 print "Time Taken:", time.time() -start

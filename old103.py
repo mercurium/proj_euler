@@ -10,16 +10,16 @@ test_lst = [11,18,19,20,22,25]
 vals = set([0])
 done_set = set()
 for i in test_lst:
-	new_set = set()
-	for j in vals:
-		new_set.add(i+j)
-		if j <= sum(test_lst)/2:
-			done_set.add(j)
-	for j in new_set:
-		vals.add(j)
+    new_set = set()
+    for j in vals:
+        new_set.add(i+j)
+        if j <= sum(test_lst)/2:
+            done_set.add(j)
+    for j in new_set:
+        vals.add(j)
 for i in new_set:
-	if i <= sum(test_lst)/2:
-		done_set.add(i)
+    if i <= sum(test_lst)/2:
+        done_set.add(i)
 
 print sorted(done_set), len(sorted(done_set))
 print "Time Taken:", time.time() - START

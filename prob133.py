@@ -6,26 +6,26 @@ size = 10**5/2
 temp = bitarray('10' * size)
 prime_lst = []
 for i in xrange(3,len(temp),2):
-	if temp[i] == 0:
-		for j in xrange(i**2, len(temp),2*i):
-			temp[j] = 1
-		prime_lst.append(i)
+    if temp[i] == 0:
+        for j in xrange(i**2, len(temp),2*i):
+            temp[j] = 1
+        prime_lst.append(i)
 prime_lst = prime_lst[2:]
 
 test_lst = []
 for i in xrange(17):
-	for j in xrange(11):
-		test_lst.append(2**i*5**j)
+    for j in xrange(11):
+        test_lst.append(2**i*5**j)
 test_lst.sort()
 
 sumz = 10
 for i in prime_lst:
-	for j in test_lst:
-		if j > i:
-			sumz += i
-			break
-		if pow(10,j,i) == 1:
-			break
+    for j in test_lst:
+        if j > i:
+            sumz += i
+            break
+        if pow(10,j,i) == 1:
+            break
 print sumz
 
 print "Time Taken:", time.time() - start

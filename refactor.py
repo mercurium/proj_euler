@@ -1,13 +1,15 @@
-import string
+import string, math
 
-for i in range(100,460):
-    fileRead = open("prob"+str(i)+".py", "r")
+for i in range(1,500):
+    fileString = "old" + '0' * (2 - int(math.log(i,10)))+ str(i) + ".py"
+    try:
+        fileRead = open(fileString, "r")
+    except IOError:
+        continue
     data = string.split(fileRead.read(),"	")
     fileRead.close()
-    print data
     data = string.join(data,"    ")
-    print data
-    fileRead = open("prob"+str(i)+".py", "w")
+    fileRead = open(fileString,"w")
     fileRead.write(data)
     fileRead.close()
     

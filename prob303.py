@@ -14,27 +14,27 @@ values[999*5] = values[999] * 10
 
 num_dig = 1
 while len(num_left) != 0:
-	for i in product("012", repeat=num_dig):
+    for i in product("012", repeat=num_dig):
 
-		for dig in '12':
-			num = int(dig+string.join(i,""))
-			if num == 0:
-				continue
-			for j in num_left:
-				if num % j == 0:
-					if values[j] == 0:
-						values[j] = num
-					else:
-						values[j] = min(num, values[j])
+        for dig in '12':
+            num = int(dig+string.join(i,""))
+            if num == 0:
+                continue
+            for j in num_left:
+                if num % j == 0:
+                    if values[j] == 0:
+                        values[j] = num
+                    else:
+                        values[j] = min(num, values[j])
 
 
-	for i in range(1,SIZE+1):
-		if values[i] != 0:
-			num_left.discard(i)
-	num_dig+=1
-	print num_dig+1, len(num_left)
-	if len(num_left) < 50:
-		print sorted(num_left)
+    for i in range(1,SIZE+1):
+        if values[i] != 0:
+            num_left.discard(i)
+    num_dig+=1
+    print num_dig+1, len(num_left)
+    if len(num_left) < 50:
+        print sorted(num_left)
 
 print sum([values[i]/i for i in range(1,len(values))])
 print "Time elapsed:", time.time() - START

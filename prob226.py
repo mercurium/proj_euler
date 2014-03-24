@@ -9,26 +9,26 @@ radius = .25
 total_area = .25
 
 def compute(x):
-	total = 0
-	for i in xrange(0,200):  # THIS IS AN APPROXIMATION
-		temp = (2**i * x) % 1
-		temp = min(temp, (-1*temp)%1)
-		total += temp / 2.**i
-	return total
+    total = 0
+    for i in xrange(0,200):  # THIS IS AN APPROXIMATION
+        temp = (2**i * x) % 1
+        temp = min(temp, (-1*temp)%1)
+        total += temp / 2.**i
+    return total
 
 val = .1
 for digit in xrange(2,15):
-	min_dist = 5
-	min_val = -20
-	for i in xrange(-9,10):
-		x_val = i/10.**digit + val
-		y_val = compute(x_val)
-		dist = .25 - ( (cx - x_val)**2 + (cy - y_val)**2)**.5
-		if abs(dist) < abs(min_dist):
-			min_dist = dist
-			min_val = x_val
-	val = min_val
-	print val
+    min_dist = 5
+    min_val = -20
+    for i in xrange(-9,10):
+        x_val = i/10.**digit + val
+        y_val = compute(x_val)
+        dist = .25 - ( (cx - x_val)**2 + (cy - y_val)**2)**.5
+        if abs(dist) < abs(min_dist):
+            min_dist = dist
+            min_val = x_val
+    val = min_val
+    print val
 
 area_start = val # 0.0789077879653  # would be computed value
 area_end = .5
@@ -46,9 +46,9 @@ print circle_area, "This is the area of the circle that we want to add back on."
 early_area = 0
 ratio = 10**7. # THIS IS AN APPROXIMATION
 for i in xrange(0, int(area_start * ratio)):
-	early_area += compute(i/ratio) / ratio
-	if i % 1024 == 0:
-		print i
+    early_area += compute(i/ratio) / ratio
+    if i % 1024 == 0:
+        print i
 
 print "The total area is:", round(total_area - early_area - rectangle_area + circle_area, 8)
 

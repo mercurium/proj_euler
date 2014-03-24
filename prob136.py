@@ -8,23 +8,23 @@ iterations = 0
 
 
 for a in xrange(1,size):
-	for b in xrange(a//4+1,a):
-		n = a*(4*b-a)
-		if n > size:
-			break
-		iterations +=1
-		if n in vals:
-			vals[n] +=1
-		else:
-			vals[n] = 1
+    for b in xrange(a//4+1,a):
+        n = a*(4*b-a)
+        if n > size:
+            break
+        iterations +=1
+        if n in vals:
+            vals[n] +=1
+        else:
+            vals[n] = 1
 
 print "Time Taken:", time.time() - start
 
 
 count = 0
 for i in xrange(1,size):
-	if i in vals and vals[i] == 1:
-		count +=1
+    if i in vals and vals[i] == 1:
+        count +=1
 
 print "count =", count
 print "num of iterations= ", iterations

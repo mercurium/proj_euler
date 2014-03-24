@@ -6,24 +6,24 @@ rings = [1] + [3*x*(x-1)+2 for x in xrange(1,100000)]
 
 sol = [0,1]
 for i in xrange(2,len(rings)-2):
-	val = m_r(rings[i+1] - rings[i] +1) + \
-		m_r(rings[i+2] -rings[i] -1) + \
-		m_r(rings[i+1] - rings[i] -1)
-	if val == 3:
-		sol += [rings[i]]
+    val = m_r(rings[i+1] - rings[i] +1) + \
+        m_r(rings[i+2] -rings[i] -1) + \
+        m_r(rings[i+1] - rings[i] -1)
+    if val == 3:
+        sol += [rings[i]]
 
 for i in xrange(2,len(rings)-2):
-	a = rings[i] -1
-	val = m_r(a - rings[i-1]) + \
-		m_r(a -rings[i-2]) + \
-		m_r(rings[i+1] - 2 - a) 
-	if val == 3:
-		sol += [a]
+    a = rings[i] -1
+    val = m_r(a - rings[i-1]) + \
+        m_r(a -rings[i-2]) + \
+        m_r(rings[i+1] - 2 - a) 
+    if val == 3:
+        sol += [a]
 
 sol.sort()
 print len(sol)
 if len(sol) > 2000:
-	print sol[1999]
+    print sol[1999]
 print sol[:10]
 print "Time Taken:", time.time() - start
 

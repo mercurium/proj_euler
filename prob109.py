@@ -10,13 +10,13 @@ all_nums = sorted([0] + numbers + doubles + triples)
 
 count = 0
 for last_num in doubles:
-	for second in range(len(all_nums)):
-		second_num = all_nums[second]
-		for first_num in all_nums[:second+1] :
-			if first_num > second_num:
-				break
-			if last_num + second_num + first_num < 100:
-				count +=1
+    for second in range(len(all_nums)):
+        second_num = all_nums[second]
+        for first_num in all_nums[:second+1] :
+            if first_num > second_num:
+                break
+            if last_num + second_num + first_num < 100:
+                count +=1
 
 print "count was", count
 

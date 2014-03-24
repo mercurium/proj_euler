@@ -5,33 +5,33 @@ SIZE = 10**6
 vals = dict()
 
 for x in xrange(3,SIZE/4 + 2):
-	a = x**2
-	loop_start = x**2 - SIZE
-	if loop_start <= 1:
-		loop_start = 1
-	else:
-		loop_start = int(loop_start**.5)
-	if (loop_start + x) %2 == 1:
-		loop_start +=1
+    a = x**2
+    loop_start = x**2 - SIZE
+    if loop_start <= 1:
+        loop_start = 1
+    else:
+        loop_start = int(loop_start**.5)
+    if (loop_start + x) %2 == 1:
+        loop_start +=1
 
 
-	for y in xrange(loop_start,x-1,2):
-		value = a - y**2
-		if y == 0 or value > SIZE or value <= 0: 
-			continue
-		if value in vals:
-			vals[value] +=1
-		else:
-			vals[value] = 1
+    for y in xrange(loop_start,x-1,2):
+        value = a - y**2
+        if y == 0 or value > SIZE or value <= 0: 
+            continue
+        if value in vals:
+            vals[value] +=1
+        else:
+            vals[value] = 1
 
 count = dict()
 
 for i in xrange(30):
-	count[i] = 0
+    count[i] = 0
 
 for i in vals:
-	if vals[i] < 30:
-		count[vals[i]] +=1
+    if vals[i] < 30:
+        count[vals[i]] +=1
 
 print "Testing the value of count[15], should be 832, actually is:", count[15]
 

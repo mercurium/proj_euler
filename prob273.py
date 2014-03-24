@@ -8,29 +8,29 @@ numbers = {5:(1,2),13:(2,3),17:(1,4),29:(2,5),37:(1,6),41:(4,5),53:(2,7),61:(5,6
 numbs = [(1,2),(2,3),(1,4),(2,5),(1,6),(4,5),(2,7),(5,6),(3,8),(5,8),(4,9),(1,10),(3,10),(7,8),(4,11),(7,10)]
 
 def transform(p1,p2):
-	a,b = p1
-	c,d = p2
-	pair1 = (a*c+b*d,abs(a*d-b*c))
-	pair2 = (a*d+b*c,abs(a*c-b*d))
-	return pair1,pair2
+    a,b = p1
+    c,d = p2
+    pair1 = (a*c+b*d,abs(a*d-b*c))
+    pair2 = (a*d+b*c,abs(a*c-b*d))
+    return pair1,pair2
 
 
 
 def main():
-	sumz = 0
-	old_set = set([(0,1)])
-	new_set = set()
-	for i in numbs:
-		print i
-		for j in old_set:
-			new_set.add(j)
-			new1,new2 = transform(i,j)
-			if j != (0,1):
-				new_set.add(new1)
-			new_set.add(new2)
-		old_set = new_set
-		new_set = set()
-	return old_set
+    sumz = 0
+    old_set = set([(0,1)])
+    new_set = set()
+    for i in numbs:
+        print i
+        for j in old_set:
+            new_set.add(j)
+            new1,new2 = transform(i,j)
+            if j != (0,1):
+                new_set.add(new1)
+            new_set.add(new2)
+        old_set = new_set
+        new_set = set()
+    return old_set
 
 values = main()
 print len(values)

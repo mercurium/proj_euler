@@ -5,71 +5,71 @@ SIZE = 10**3 if len(sys.argv) <= 1 else int(sys.argv[1])
 
 
 def gcd(a,b):
-	if a == 0:
-		return b
-	return gcd(b%a,a)
+    if a == 0:
+        return b
+    return gcd(b%a,a)
 def lcm(a,b):
-	return a*b/gcd(a,b)
+    return a*b/gcd(a,b)
 
 def get_plst(size):  #returns a list of numbers, each of which are a prime factor of the ith element in the list.
-	lst = range(size+1)
-	lst[0] = 1
-	for i in xrange(2,len(lst),2):
-		lst[i] = 2
-	for i in xrange(3,len(lst),2):
-		if lst[i] == i:
-			for j in xrange(i**2,len(lst),2*i):
-				lst[j] = i
-	return lst
+    lst = range(size+1)
+    lst[0] = 1
+    for i in xrange(2,len(lst),2):
+        lst[i] = 2
+    for i in xrange(3,len(lst),2):
+        if lst[i] == i:
+            for j in xrange(i**2,len(lst),2*i):
+                lst[j] = i
+    return lst
 plst = get_plst(SIZE)
 
 def get_totient(size):  #gives you the totients of all numbers i <= size
-	lst = range(size+1)
-	lst[0] = 1
-	for i in xrange(2,len(lst)):
-		if lst[i] == i:
-			for j in xrange(i,len(lst),i):
-				lst[j] = (lst[j] * (i-1))/i 
-	return lst
+    lst = range(size+1)
+    lst[0] = 1
+    for i in xrange(2,len(lst)):
+        if lst[i] == i:
+            for j in xrange(i,len(lst),i):
+                lst[j] = (lst[j] * (i-1))/i 
+    return lst
 totient = get_totient(SIZE)
 
 
 def pfactor(n): #returns the entire list of prime factors of n
-	factors = []
-	while n > 1:
-		factors += [plst[n]]
-		n /= plst[n]
-	return sorted(factors)
+    factors = []
+    while n > 1:
+        factors += [plst[n]]
+        n /= plst[n]
+    return sorted(factors)
 
 def get_divisors(n): # returns all divisors of n.
-	factors = pfactor(n)
-	divisors = set([1])
-	for f in factors:
-		new_set = set()
-		for d in divisors:
-			new_set.add(f*d)
-		for i in new_set:
-			divisors.add(i)
-	return sorted(list(divisors))
+    factors = pfactor(n)
+    divisors = set([1])
+    for f in factors:
+        new_set = set()
+        for d in divisors:
+            new_set.add(f*d)
+        for i in new_set:
+            divisors.add(i)
+    return sorted(list(divisors))
 
 def rep_dig(n): #Gives the first power of 10 such that 10^k = 1 mod n.
-	potential_pows = get_divisors(totient[n])
-	for powz in potential_pows:
-		if pow(10,powz,n) == 1:
-			return powz
+    potential_pows = get_divisors(totient[n])
+    for powz in potential_pows:
+        if pow(10,powz,n) == 1:
+            return powz
 
 values = [0] * SIZE
 values[3] = 1
 for i in xrange(5,SIZE,2): #Evens are easy to compute, do it later
-	if i %1024 == 1: # My counter, once every 1024 to not add too much time to overall computation.
-		print i
-	if i %5 == 0: # multiples of 5 add no extra digits from the factor of 5.
-		values[i] = values[i/5]
-		continue
-	values[i] = rep_dig(i)
+    if i %1024 == 1: # My counter, once every 1024 to not add too much time to overall computation.
+        print i
+    if i %5 == 0: # multiples of 5 add no extra digits from the factor of 5.
+        values[i] = values[i/5]
+        continue
+    values[i] = rep_dig(i)
 
 for i in xrange(2,SIZE,2):
-	values[i] = values[i/2]
+    values[i] = values[i/2]
 
 print sum(values)
 print "Time Taken:", time.time() - START

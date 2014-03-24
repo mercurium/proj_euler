@@ -7,17 +7,17 @@ plst = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 
 
 ham_set = set([ 97**i for i in xrange(0,int(math.log(size,97) +1)) ])
 for i in xrange(len(plst)-2,-1,-1):
-	print plst[i], len(ham_set)
-	print "Time Taken:", time.time() - start
-	old_lst = sorted(list(ham_set))
-	val = plst[i]
-	for k in xrange(1, int(math.log(size, plst[i]) +1)):
-		for j in old_lst:
-			valz = j * val
-			if valz > size:
-				break
-			ham_set.add(valz)
-		val *= plst[i]
+    print plst[i], len(ham_set)
+    print "Time Taken:", time.time() - start
+    old_lst = sorted(list(ham_set))
+    val = plst[i]
+    for k in xrange(1, int(math.log(size, plst[i]) +1)):
+        for j in old_lst:
+            valz = j * val
+            if valz > size:
+                break
+            ham_set.add(valz)
+        val *= plst[i]
 
 print len(ham_set)
 print "Time Taken:", time.time() - start

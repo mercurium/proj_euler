@@ -7,44 +7,44 @@ min_val = dict()
 SIZE = 150
 
 def f(n):
-	return sum([fa(int(i)) for i in str(n)])
+    return sum([fa(int(i)) for i in str(n)])
 
 def sf(n):
-	return sum([int(i) for i in str(f(n))])
+    return sum([int(i) for i in str(f(n))])
 
 def g(n):
-	if n in min_val:
-		return min_val[n]
-	valz = 0
-	lim = max([0] + [min_val[x] for x in min_val]) 
-	while valz != n:
-		lim +=1
-		test = str(lim)
-		if len(test) > 4 and (ord(test[0]) > ord(test[1]) or ord(test[1])> ord(test[2]) or ord(test[2]) > ord(test[3]) or ord(test[3]) > ord(test[4]) ):
-			lim += 10**(len(test)-5)
-			continue
-		if len(test) > 6 and (ord(test[4]) > ord(test[5]) or ord(test[5]) > ord(test[6]) ):
-			lim += 10**(len(test)-7)
-			continue
+    if n in min_val:
+        return min_val[n]
+    valz = 0
+    lim = max([0] + [min_val[x] for x in min_val]) 
+    while valz != n:
+        lim +=1
+        test = str(lim)
+        if len(test) > 4 and (ord(test[0]) > ord(test[1]) or ord(test[1])> ord(test[2]) or ord(test[2]) > ord(test[3]) or ord(test[3]) > ord(test[4]) ):
+            lim += 10**(len(test)-5)
+            continue
+        if len(test) > 6 and (ord(test[4]) > ord(test[5]) or ord(test[5]) > ord(test[6]) ):
+            lim += 10**(len(test)-7)
+            continue
 
-		valz = sf(lim)
+        valz = sf(lim)
 
-		if valz not in min_val:
-			min_val[valz] = lim
-		if lim %65536== 0:
-			print "RAAAH", lim, n
-	return lim
+        if valz not in min_val:
+            min_val[valz] = lim
+        if lim %65536== 0:
+            print "RAAAH", lim, n
+    return lim
 
 def sg(n):
-	ans = g(n)
-	return sum( [int(i) for i in str(ans)]),ans
+    ans = g(n)
+    return sum( [int(i) for i in str(ans)]),ans
 
 lim = 1
 sumz = 0
 for i in range(1,SIZE+1):
-	ans, next_val = sg(i)
-	print i, ans, next_val
-	sumz += ans
+    ans, next_val = sg(i)
+    print i, ans, next_val
+    sumz += ans
 print sumz
 
 print "Time Taken:", time.time() - START

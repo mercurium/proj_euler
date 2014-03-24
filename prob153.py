@@ -5,41 +5,41 @@ SIZE = 10**8
 
 
 def gcd(a,b):
-	while a != 0:
-		a,b = b%a,a
-	return b
+    while a != 0:
+        a,b = b%a,a
+    return b
 
 def real_num(size):
-	sumz = 0
-	for i in xrange(1,size+1):
-		sumz += (size//i) * i	
-	return sumz	
+    sumz = 0
+    for i in xrange(1,size+1):
+        sumz += (size//i) * i    
+    return sumz    
 
 def complex_num(size):
-	sumz = 0
-	squares = [x**2 for x in xrange(int(size**.5)+5)]
-	for i in xrange(1,int(size**.5)+1):
-		a = squares[i] 
-		for j in xrange(i,size+1):
-			b = squares[j] 
-			if a + b > size:
-				break
-			for k in xrange(1,size+1):
-				if k*(a+b) > size: 
-					break
-				c = gcd(i,j)
-				if c != 1: 
-					continue
-				if i == j:
-					sumz += (2 * i * k) * (size/ ((a + b) * k ))
-				else:
-					sumz += (2 * (i+j) * k) * (size/ ((a + b) * k ))
-		print i, j
-	return sumz	
+    sumz = 0
+    squares = [x**2 for x in xrange(int(size**.5)+5)]
+    for i in xrange(1,int(size**.5)+1):
+        a = squares[i] 
+        for j in xrange(i,size+1):
+            b = squares[j] 
+            if a + b > size:
+                break
+            for k in xrange(1,size+1):
+                if k*(a+b) > size: 
+                    break
+                c = gcd(i,j)
+                if c != 1: 
+                    continue
+                if i == j:
+                    sumz += (2 * i * k) * (size/ ((a + b) * k ))
+                else:
+                    sumz += (2 * (i+j) * k) * (size/ ((a + b) * k ))
+        print i, j
+    return sumz    
 
 def test():
-	print "Test case for 5 is:",  (real_num(5) + complex_num(5) == 35 ) 
-	print "Test case for 10^5 is:", (real_num(10**5)+ complex_num(10**5) == 17924657155 )
+    print "Test case for 5 is:",  (real_num(5) + complex_num(5) == 35 ) 
+    print "Test case for 10^5 is:", (real_num(10**5)+ complex_num(10**5) == 17924657155 )
 
 #test()
 R = real_num(SIZE)

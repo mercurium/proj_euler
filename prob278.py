@@ -7,19 +7,19 @@ is_prime = bitarray('001' + '10'*(size/2))
 
 primes = {2}
 for i in xrange(3,size,2):
-	if is_prime[i]:
-		for j in xrange(i**2,size,2*i):
-			is_prime[j] = False
-		primes.add(i)
+    if is_prime[i]:
+        for j in xrange(i**2,size,2*i):
+            is_prime[j] = False
+        primes.add(i)
 
 primes = sorted(primes)
 sum_primes = sum(primes)
 sumz = 0
 for i in xrange(0,len(primes)-2): # prime 1
-	for j in xrange(i+1,len(primes)-1): # prime2 
-		prime1, prime2 = primes[i],primes[j]
-		other_primes = primes[j+1:] # Aggregate all other primes into one.
-		sumz += sum(other_primes) * (2 * prime1 * prime2 - prime1 - prime2) - len(other_primes) * prime1 * prime2
+    for j in xrange(i+1,len(primes)-1): # prime2 
+        prime1, prime2 = primes[i],primes[j]
+        other_primes = primes[j+1:] # Aggregate all other primes into one.
+        sumz += sum(other_primes) * (2 * prime1 * prime2 - prime1 - prime2) - len(other_primes) * prime1 * prime2
 
 print sumz
 print "Time Taken", time.time() - start

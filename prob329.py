@@ -31,18 +31,18 @@ for i in xrange(0,ROUND):
         for j in xrange(1,SIZE+1):
                 if seq[i] == primes[j]:
                         new[j] *= 2
-	#print new[1:], "prime multiply, aka croak" ####################
+    #print new[1:], "prime multiply, aka croak" ####################
 
         squares = new[:]
         new = [0]*(SIZE+1)
 
         new[1] = squares[2]
-	new[2] = squares[1]
-	new[SIZE-1] += squares[SIZE]
+    new[2] = squares[1]
+    new[SIZE-1] += squares[SIZE]
         new[SIZE] = squares[SIZE-1]
         for j in xrange(2,SIZE):
                 new[j] += squares[j-1] + squares[j+1]
-	#print new[1:], "redistributing, aka jump"  ########################
+    #print new[1:], "redistributing, aka jump"  ########################
 
 squares = new[:]
 a = sum(squares)

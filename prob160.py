@@ -3,17 +3,17 @@ START = time.time()
 from math import factorial as fact
 
 def fa(n, ignore = False):
-	if n == 0 or n == 1:
-		return 1
-	prod = 1
-	for i in xrange(2,n+1):
-		if ignore and i % 10 == 0:
-			continue
-		prod *= i
-		while prod % 10 == 0:
-			prod /= 10
-		prod = prod % (10**5)
-	return prod
+    if n == 0 or n == 1:
+        return 1
+    prod = 1
+    for i in xrange(2,n+1):
+        if ignore and i % 10 == 0:
+            continue
+        prod *= i
+        while prod % 10 == 0:
+            prod /= 10
+        prod = prod % (10**5)
+    return prod
 
 val = fa(10**5, True)
 #last 4 digits of factorial(10**5) are 2496

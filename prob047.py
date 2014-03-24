@@ -5,16 +5,16 @@ SIZE = 150000 # Arbitrary, would have increased if I didn't get an answer.
 
 num_prime_factors = [0] * SIZE 
 for i in xrange(2,SIZE):
-	if num_prime_factors[i] == 0:
-		for n in xrange(i*2,len(num_prime_factors),i):
-			num_prime_factors[n]+=1
+    if num_prime_factors[i] == 0:
+        for n in xrange(i*2,len(num_prime_factors),i):
+            num_prime_factors[n]+=1
 
 print "Time taken for first step:",time.time() -START
 
 for i in xrange(0,SIZE - 4):
-	if num_prime_factors[i:i+4] == [4,4,4,4]:
-		print "The answer is:", i
-		break
+    if num_prime_factors[i:i+4] == [4,4,4,4]:
+        print "The answer is:", i
+        break
 print "Time taken:",time.time() -START
 
 """

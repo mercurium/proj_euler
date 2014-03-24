@@ -9,15 +9,15 @@ penta_lst = [ i * (3*i-1)/2 for i in xrange(10000)]
 
 done = False
 for i in xrange(2,10000):
-	a = penta_lst[i] 
-	for j in xrange(1,i):
-		b = penta_lst[j] 
-		if a+b in pentagon_set and a-b in pentagon_set:
-			print a-b, a, b, a+b, '\n', i,j
-			done = True
-			break
-	if done:
-		break
+    a = penta_lst[i] 
+    for j in xrange(1,i):
+        b = penta_lst[j] 
+        if a+b in pentagon_set and a-b in pentagon_set:
+            print a-b, a, b, a+b, '\n', i,j
+            done = True
+            break
+    if done:
+        break
 
 
 print "The answer is:", a-b

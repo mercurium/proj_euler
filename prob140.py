@@ -7,17 +7,17 @@ mult = 1.9
 mult_old = 3.1
 
 for i in xrange(1,30):
-	val = values[-1]
-	num = int((val-1) * mult)
-	while True:
-		a = 5*num**2 - num * 16 + 4
-		if a > 0 and int(a**.5)**2 == a:
-			values.append(num)
-			print num, values[-1]/(1.0*values[-2])
-			mult,mult_old = mult_old, (values[-1]-2.)/(1.0*values[-2])
-			break
-		num+=1
-		count +=1
+    val = values[-1]
+    num = int((val-1) * mult)
+    while True:
+        a = 5*num**2 - num * 16 + 4
+        if a > 0 and int(a**.5)**2 == a:
+            values.append(num)
+            print num, values[-1]/(1.0*values[-2])
+            mult,mult_old = mult_old, (values[-1]-2.)/(1.0*values[-2])
+            break
+        num+=1
+        count +=1
 
 print count
 print sum(values[:32]) -93

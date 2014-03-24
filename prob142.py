@@ -19,21 +19,21 @@ so a,b, a+b are triangle numbers squared...
 found_ans = False
 x,y,z = 0,0,0
 for m in xrange(1,1000):
-	for n in xrange(1,m):
-		for k in xrange(1,20): #Generic method for generating pythagorean triples.
-			a,b = (m**2 - n**2)**2*k**2 , 4 * m**2 * n**2*k**2 #We want the squares of it, so we know that a+b is a square too.
-			for mult in xrange(2,10**6,2):
-				c = 4*m*n*mult * k + mult**2  #We guarentee that b+c is a square like this. c is explicitly constructed such that this is so.
-				if c/40 > b: #If c gets too big, it's probably not right.
-					break
-				if (a+b+c) in squares and (a+2*b+c) in squares:
-					c /=2
-					print a,b,c
-					x,y,z = a+b+c, b+c,c
-					found_ans = True
-			if found_ans: break
-		if found_ans: break
-	if found_ans: break
+    for n in xrange(1,m):
+        for k in xrange(1,20): #Generic method for generating pythagorean triples.
+            a,b = (m**2 - n**2)**2*k**2 , 4 * m**2 * n**2*k**2 #We want the squares of it, so we know that a+b is a square too.
+            for mult in xrange(2,10**6,2):
+                c = 4*m*n*mult * k + mult**2  #We guarentee that b+c is a square like this. c is explicitly constructed such that this is so.
+                if c/40 > b: #If c gets too big, it's probably not right.
+                    break
+                if (a+b+c) in squares and (a+2*b+c) in squares:
+                    c /=2
+                    print a,b,c
+                    x,y,z = a+b+c, b+c,c
+                    found_ans = True
+            if found_ans: break
+        if found_ans: break
+    if found_ans: break
 
 print "The three numbers are:", x,y,z #because i'm pretty darn curious what the three numbers are..
 print "Their sum is:", x+y+z

@@ -4,7 +4,7 @@ START = time.time()
 
 
 def ncr(n,r):
-	return fa(n)/(fa(r) * fa(n-r))
+    return fa(n)/(fa(r) * fa(n-r))
 
 
 x_n = [0]*33
@@ -12,10 +12,10 @@ x_n = [0]*33
 
 #The ncr/pow(2.,i) is the probability of getting a number that gets rid of j of the digits, and then we have i-j digits left to remove, which we know is x_n[i-j]
 for i in range(1,len(x_n)):
-	sumz = 0
-	for j in range(0,i+1):
-		sumz += ncr(i,j) *(x_n[j]+1) / pow(2.,i) 
-	x_n[i] = sumz * pow(2.,i) / (pow(2.,i) -1.)
+    sumz = 0
+    for j in range(0,i+1):
+        sumz += ncr(i,j) *(x_n[j]+1) / pow(2.,i) 
+    x_n[i] = sumz * pow(2.,i) / (pow(2.,i) -1.)
 print x_n[32]
 print "time elapsed", time.time() - START 
 

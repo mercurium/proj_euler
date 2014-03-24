@@ -4,39 +4,39 @@ from primes import *
 
 
 def get_divisors(n): # returns all divisors of n.
-	factors = factor(n)
-	divisors = set([1])
-	for f in factors:
-		new_set = set()
-		for d in divisors:
-			new_set.add(f*d)
-		for i in new_set:
-			divisors.add(i)
-	return sorted(list(divisors))
+    factors = factor(n)
+    divisors = set([1])
+    for f in factors:
+        new_set = set()
+        for d in divisors:
+            new_set.add(f*d)
+        for i in new_set:
+            divisors.add(i)
+    return sorted(list(divisors))
 
 
 
 sol = set()
 max_val = float('inf')
 for N in xrange(1,500000):
-	if 4*N**3 > max_val:
-		break
-	Nsqr = N*N+1
-	if m_r(Nsqr):
-		divisors = [1,Nsqr]
-	else:
-		divisors = get_divisors(N*N+1)
-	for a in divisors:
-		b = Nsqr/a
-		if max_val > N * (a+N) *(b+N):
-			sol.add( N * (a+N)*(b+N))
-		else:
-			continue
-		if len(sol) %1024 == 0 or N % 1024 == 0:
-			print len(sol), N
-			if len(sol) >= 150000:
-				max_val = sorted(sol)[150000 -1]
-				print max_val
+    if 4*N**3 > max_val:
+        break
+    Nsqr = N*N+1
+    if m_r(Nsqr):
+        divisors = [1,Nsqr]
+    else:
+        divisors = get_divisors(N*N+1)
+    for a in divisors:
+        b = Nsqr/a
+        if max_val > N * (a+N) *(b+N):
+            sol.add( N * (a+N)*(b+N))
+        else:
+            continue
+        if len(sol) %1024 == 0 or N % 1024 == 0:
+            print len(sol), N
+            if len(sol) >= 150000:
+                max_val = sorted(sol)[150000 -1]
+                print max_val
 print len(sol), sorted(sol)[150000-1]
 
 print "Time Taken:", time.time() - START
@@ -44,12 +44,12 @@ print "Time Taken:", time.time() - START
 
 
 """
-6: 1, -2, -3		[2,3] 		1
-42: 2, -3, -7		[2,3,7]		7
-120: 3, -5, -8		[2,2,2,3,5]	20
-156: 3, -4, -13		[2,2,3,13]	16
-420: 4, -5, -21		[2,2,3,5,7]	70
-630: 5, -7, -18		[2,3,3,5,7]	105
+6: 1, -2, -3        [2,3]         1
+42: 2, -3, -7        [2,3,7]        7
+120: 3, -5, -8        [2,2,2,3,5]    20
+156: 3, -4, -13        [2,2,3,13]    16
+420: 4, -5, -21        [2,2,3,5,7]    70
+630: 5, -7, -18        [2,3,3,5,7]    105
 
 need n/b + n/c = bc -1
 

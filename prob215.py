@@ -3,49 +3,49 @@ START = time.time()
 
 combinations = [1,0,1]
 for i in xrange(30):
-	combinations.append(combinations[-2] + combinations[-3])
+    combinations.append(combinations[-2] + combinations[-3])
 
 s = [""]*33
 s[2] = "2",
 s[3] = "3",
 
 for i in range(4,33):
-	s[i] = ["2" + x for x in s[i-2]] + ["3" + x for x in s[i-3]]
-	#s[i].sort()
+    s[i] = ["2" + x for x in s[i-2]] + ["3" + x for x in s[i-3]]
+    #s[i].sort()
 
 count = [1] * len(s[32])
 new_count = [0] * len(count)
 
 lst = []
 for x in s[32]:
-	new_lst = [int(i) for i in x]
-	lst.append( set(  [sum(new_lst[:j+1]) for j in range(len(new_lst) -1 ) ]))
+    new_lst = [int(i) for i in x]
+    lst.append( set(  [sum(new_lst[:j+1]) for j in range(len(new_lst) -1 ) ]))
 
 compat = set()
 
 for i in range(len(count)):
-	if count[i] == 0:
-		continue
-	for j in range(len(new_count)):
-		intersect = False
-		for k in lst[i]:
-			if k in lst[j]:
-				intersect = True
-				break
-		if not intersect:
-			new_count[j] += count[i]
-			compat.add((i,j))
+    if count[i] == 0:
+        continue
+    for j in range(len(new_count)):
+        intersect = False
+        for k in lst[i]:
+            if k in lst[j]:
+                intersect = True
+                break
+        if not intersect:
+            new_count[j] += count[i]
+            compat.add((i,j))
 
 count = new_count[:]
 new_count = [0]*len(count)
 print "finished iteration:", i, "count is at:", sum(count)
 
 for i in range(8):
-	for val in compat:
-		new_count[val[1]] += count[val[0]]
-	count = new_count[:]
-	new_count = [0]*len(count)
-	print "finished iteration:", i, "count is at:", sum(count)
+    for val in compat:
+        new_count[val[1]] += count[val[0]]
+    count = new_count[:]
+    new_count = [0]*len(count)
+    print "finished iteration:", i, "count is at:", sum(count)
 
 
 print sum(count)

@@ -6,7 +6,7 @@ START = time.time()
 
 S = [290797]
 for i in xrange(1000):
-	S.append( (S[-1] **2) % 50515093)
+    S.append( (S[-1] **2) % 50515093)
 
 T = [ (x %2000) - 1000 for x in S]
 points = [ (T[2*x-1], T[2*x]) for x in range(1,501)]
@@ -26,14 +26,14 @@ for i in xrange(0,SIZE):
   data[512,i] = [0,0,255]
 
 for i in range(len(points)):
-	p = points[i]
-	x,y = p
-	x,y = (x+1000)/2, (y+1000)/2
-	draw_pt(x,y, [0,255,0], 1)
-	if i <= 20:
-		draw_pt(x,y, [255,255,255], 4)
+    p = points[i]
+    x,y = p
+    x,y = (x+1000)/2, (y+1000)/2
+    draw_pt(x,y, [0,255,0], 1)
+    if i <= 20:
+        draw_pt(x,y, [255,255,255], 4)
 
-	
+    
 
 
 

@@ -12,21 +12,21 @@ vals = dict()
 count, sumz = 0,0
 
 for i in xrange(a):
-	if i%1024 == 0: print i
-	if count == 5:
-		break
-	for j in xrange(b):
-		if count == 5:
-			break
-		ij = sqs[i] + cus[j]
-		if str(ij) == str(ij)[::-1]:
-			if ij in vals:
-				vals[ij] +=1
-				if vals[ij] >= 4:
-					sumz += ij
-					count +=1
-			else:
-				vals[ij] = 1
+    if i%1024 == 0: print i
+    if count == 5:
+        break
+    for j in xrange(b):
+        if count == 5:
+            break
+        ij = sqs[i] + cus[j]
+        if str(ij) == str(ij)[::-1]:
+            if ij in vals:
+                vals[ij] +=1
+                if vals[ij] >= 4:
+                    sumz += ij
+                    count +=1
+            else:
+                vals[ij] = 1
 
 print sumz
 print "Finish Time:", time.time() -start

@@ -6,10 +6,10 @@ prime_lst = [2]
 is_prime = ([0,0,1] + [1,0]*(SIZE//2 -1))[:SIZE+1]
 
 for i in xrange(3,SIZE+1,2):
-	if is_prime[i]:
-		for j in xrange(i**2,SIZE+1,2*i):
-			is_prime[j] = False
-		prime_lst.append(i)
+    if is_prime[i]:
+        for j in xrange(i**2,SIZE+1,2*i):
+            is_prime[j] = False
+        prime_lst.append(i)
 prime_set = set(prime_lst)
 
 relatives = {2,3,5,7}  #Our set of answers
@@ -22,21 +22,21 @@ reach_lst.put(5)
 reach_lst.put(7)
 
 while not reach_lst.empty(): 
-	next_prime= reach_lst.get() 
-	for digit in xrange(0,len(str(next_prime) ) + 1):
-		# Zeroing out one of the digits of the prime.
-		num2 = (next_prime/ (10 ** (digit + 1)) ) * 10 ** (digit + 1) + next_prime% (10 ** digit)
+    next_prime= reach_lst.get() 
+    for digit in xrange(0,len(str(next_prime) ) + 1):
+        # Zeroing out one of the digits of the prime.
+        num2 = (next_prime/ (10 ** (digit + 1)) ) * 10 ** (digit + 1) + next_prime% (10 ** digit)
 
-		for next_test_num in xrange(num2,num2+10**(digit+1), 10**digit):
-			if next_test_num in prime_set and next_test_num not in relatives: # Forget it if it's not a prime (or too big), and if we've already seen it, skip it.
+        for next_test_num in xrange(num2,num2+10**(digit+1), 10**digit):
+            if next_test_num in prime_set and next_test_num not in relatives: # Forget it if it's not a prime (or too big), and if we've already seen it, skip it.
 
-				if next_test_num not in reachable:  # If we didn't see it before...
-					if next_test_num > reachable[next_prime]:  # If the next_test_number is bigger than all other primes in the chain...
-						relatives.add(next_test_num) #It's a relative of 2!
-						reachable[next_test_num] = next_test_num #We'll put it down as largest in the chain to use it.
-					else:
-						reachable[next_test_num] = reachable[next_prime]
-					reach_lst.put(next_test_num) #Add it to our queue of numbers to check.
+                if next_test_num not in reachable:  # If we didn't see it before...
+                    if next_test_num > reachable[next_prime]:  # If the next_test_number is bigger than all other primes in the chain...
+                        relatives.add(next_test_num) #It's a relative of 2!
+                        reachable[next_test_num] = next_test_num #We'll put it down as largest in the chain to use it.
+                    else:
+                        reachable[next_test_num] = reachable[next_prime]
+                    reach_lst.put(next_test_num) #Add it to our queue of numbers to check.
 
 
 print sum(prime_lst) - sum(relatives)

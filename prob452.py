@@ -5,35 +5,35 @@ SIZE = 10**9
 MOD = 1234567891
 
 def perm(n,r):
-	prod = 1
-	for i in xrange(0,r):
-		prod = (prod * (n-i))
-	return prod
+    prod = 1
+    for i in xrange(0,r):
+        prod = (prod * (n-i))
+    return prod
 
 def recurse_count(depth, min_num, size, DEPTH, num_count, prod ): #min num has to be at least 2.
-	if size < min_num**depth:
-		return 0
-	if depth == 1:
-		p = perm(SIZE,DEPTH)
-		n = ((size-min_num)*p)/ (prod * fa(num_count))
-		n += p/(prod * fa(num_count+1))
-		return n
+    if size < min_num**depth:
+        return 0
+    if depth == 1:
+        p = perm(SIZE,DEPTH)
+        n = ((size-min_num)*p)/ (prod * fa(num_count))
+        n += p/(prod * fa(num_count+1))
+        return n
 
-	sumz = 0
-	sumz += recurse_count(depth-1, min_num, size/min_num, DEPTH, num_count+1, prod)
-	for i in xrange(min_num+1, size/min_num+1):
-		if i > size/i:
-			break
-		sumz += recurse_count(depth-1,i, size/i, DEPTH, 1, prod * fa(num_count))
+    sumz = 0
+    sumz += recurse_count(depth-1, min_num, size/min_num, DEPTH, num_count+1, prod)
+    for i in xrange(min_num+1, size/min_num+1):
+        if i > size/i:
+            break
+        sumz += recurse_count(depth-1,i, size/i, DEPTH, 1, prod * fa(num_count))
 
-	return sumz
+    return sumz
 
 count = 1
 for depth in xrange(1,int(math.log(SIZE,2)+1)):
-	num = recurse_count(depth,2,SIZE, depth, 0, 1)
-	count += num
-	count %= MOD
-	print depth, count, num % MOD, time.time() - START
+    num = recurse_count(depth,2,SIZE, depth, 0, 1)
+    count += num
+    count %= MOD
+    print depth, count, num % MOD, time.time() - START
 
 
 print count

@@ -5,36 +5,36 @@ SIZE = 500500
 t = 0
 k = [0] * (SIZE)
 for i in xrange(len(k)):
-	t = (615949 * t + 797807) % (2**20)
-	k[i] = t-2**19
+    t = (615949 * t + 797807) % (2**20)
+    k[i] = t-2**19
 
 rows =[]
 
 for i in xrange(1,1001):
-	rows.append(k[ i*(i-1)/2: i*(i+1)/2])
+    rows.append(k[ i*(i-1)/2: i*(i+1)/2])
 
 row_sums = []
 for row in rows:
-	sumz = [0]
-	for i in range(0,len(row)):
-		sumz.append(sumz[-1] + row[i])
-	row_sums.append(sumz)
+    sumz = [0]
+    for i in range(0,len(row)):
+        sumz.append(sumz[-1] + row[i])
+    row_sums.append(sumz)
 
 def row_sum(row, start, end):
-	return row_sums[row][end] - row_sums[row][start]
+    return row_sums[row][end] - row_sums[row][start]
 
 min_sumz = 0
 for start_row in xrange(0, ROWS):
-	break
-	for start_index in xrange(0,start_row+1):
-		sumz = rows[start_row][start_index]
-		for h in xrange(1,1000-start_row):
-			sumz += row_sum(start_row+h, start_index, start_index+h+1)
-			if sumz < min_sumz:
-				min_sumz = sumz
-				print min_sumz
-	print start_row, min_sumz
-	
+    break
+    for start_index in xrange(0,start_row+1):
+        sumz = rows[start_row][start_index]
+        for h in xrange(1,1000-start_row):
+            sumz += row_sum(start_row+h, start_index, start_index+h+1)
+            if sumz < min_sumz:
+                min_sumz = sumz
+                print min_sumz
+    print start_row, min_sumz
+    
 print min_sumz
 print "Time Taken:", time.time() - START
 

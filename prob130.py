@@ -18,13 +18,13 @@ prime_lst = primes_less_than(size)
 count = 0
 sumz = 0
 for i in xrange(3,size,2):
-	if i%5 != 0 and prime_lst[i] != 0 and i%3 != 0:
-		if pow(10,i-1,i) == 1:
-			count += 1
-			print i, count
-			sumz +=  i 
-	if count == 25:
-		break
+    if i%5 != 0 and prime_lst[i] != 0 and i%3 != 0:
+        if pow(10,i-1,i) == 1:
+            count += 1
+            print i, count
+            sumz +=  i 
+    if count == 25:
+        break
 
 print sumz, count
 print "Time Taken:", time.time()-start

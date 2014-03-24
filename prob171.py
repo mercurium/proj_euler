@@ -6,37 +6,37 @@ DIGITS = 20
 vals = dict()
 sum_vals = dict()
 for i in xrange(10):
-	vals[i**2] = 1
-	sum_vals[i**2] = i
+    vals[i**2] = 1
+    sum_vals[i**2] = i
 squares = set([x**2 for x in range(1,41)])
 sumz = 0
 ############################### setup is before this point.
 
 for i in xrange(1,DIGITS):
-	sumz = 0
-	for key in vals.keys():
-		if key in squares:
-			sumz += sum_vals[key]
-	print sumz
-	
-	new_vals = dict()
-	new_sum_vals = dict()
-	for key in vals.keys():
-		for j in xrange(0,10):
-			if (key+j**2) in new_vals:
-				new_vals[key+j**2] += vals[key]
-				new_sum_vals[key+j**2] += 10**i*j*vals[key] +sum_vals[key]
-			else:
-				new_vals[key+j**2] = vals[key]
-				new_sum_vals[key+j**2] = 10**i*j*vals[key] +sum_vals[key]
-	vals = new_vals
-	sum_vals = new_sum_vals
+    sumz = 0
+    for key in vals.keys():
+        if key in squares:
+            sumz += sum_vals[key]
+    print sumz
+    
+    new_vals = dict()
+    new_sum_vals = dict()
+    for key in vals.keys():
+        for j in xrange(0,10):
+            if (key+j**2) in new_vals:
+                new_vals[key+j**2] += vals[key]
+                new_sum_vals[key+j**2] += 10**i*j*vals[key] +sum_vals[key]
+            else:
+                new_vals[key+j**2] = vals[key]
+                new_sum_vals[key+j**2] = 10**i*j*vals[key] +sum_vals[key]
+    vals = new_vals
+    sum_vals = new_sum_vals
 
 
 sumz = 0
 for key in vals.keys():
-	if key in squares:
-		sumz += sum_vals[key]
+    if key in squares:
+        sumz += sum_vals[key]
 print sumz
 
 print "Final answer is:", sumz %10**9

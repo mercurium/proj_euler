@@ -7,17 +7,17 @@ a = [1,1,3]
 count = 0
 rounds = 0
 while rounds < 124:
-	while a != [1,1,1]:
-		a[count%3] = (sum(a))%n
-		if a[count%3] == 0:
-			break
-		count+=1
-	if a == [1,1,1]:
-		rounds +=1
-		print n
-	n+=2
-	a = [1,1,3]
-	count = 0
+    while a != [1,1,1]:
+        a[count%3] = (sum(a))%n
+        if a[count%3] == 0:
+            break
+        count+=1
+    if a == [1,1,1]:
+        rounds +=1
+        print n
+    n+=2
+    a = [1,1,3]
+    count = 0
 
 print 'Time Taken:', time.time() - start
 

@@ -6,28 +6,28 @@ LAYERS = 100
 val_dict = dict()
 
 for i in xrange(1,SIZE):
-	for j in xrange(1,i+1):
-		if (i+1)*(j+1) + 1 > 25000: break
+    for j in xrange(1,i+1):
+        if (i+1)*(j+1) + 1 > 25000: break
 
-		for k in xrange(1,j+1):
-			a,b = 2*(i*j+j*k+k*i), 4*(i+j+k-1)
-			if a > 25000: break
+        for k in xrange(1,j+1):
+            a,b = 2*(i*j+j*k+k*i), 4*(i+j+k-1)
+            if a > 25000: break
 
-			for layer in range(LAYERS):
-				val = a + layer * b + 4*layer**2
-				if val > 25000: break
+            for layer in range(LAYERS):
+                val = a + layer * b + 4*layer**2
+                if val > 25000: break
 
-				if val in val_dict:
-					val_dict[val] +=1
-				else:
-					val_dict[val] = 1
-	print i
+                if val in val_dict:
+                    val_dict[val] +=1
+                else:
+                    val_dict[val] = 1
+    print i
 
 
 for key in sorted(val_dict.keys()):
-	if val_dict[key] == 1000:
-		print key
-		break
+    if val_dict[key] == 1000:
+        print key
+        break
 print "Time Taken:", time.time() - START
 
 
@@ -83,7 +83,7 @@ f'''           8,   8,   8
    6, 22, 46, 78,  118, 166,
       16, 24, 32,   40,  48
            8,  8,    8
-			   0,    0
+               0,    0
 
 
 2x2x2

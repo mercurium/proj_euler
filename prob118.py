@@ -10,30 +10,30 @@ prime_sets = [set() for i in range(10)]
 SIZE_LIM = 9
 
 for num_dig in range(1,SIZE_LIM):
-	for perm in permutations(digits,num_dig):
-		next_num = int(string.join(perm,''))
-		if mr(next_num):
-			prime_sets[num_dig].add(next_num)
-	print num_dig, len(prime_sets[num_dig])
+    for perm in permutations(digits,num_dig):
+        next_num = int(string.join(perm,''))
+        if mr(next_num):
+            prime_sets[num_dig].add(next_num)
+    print num_dig, len(prime_sets[num_dig])
 
 prime_lst = sorted(prime_sets)
 print "Time Taken:", time.time() - START
 
 def get_next(seen,max_size, last_seen):
-	if max_size == 0 and len(seen) == 9:
-		return 1
-	elif max_size == 0:
-		return 0
-	sumz = 0
-	for prime in prime_sets[max_size]:
-		if prime > last_seen:  #Since we're not requiring that the num_digs goes down, we still need some ordering to avoid double counting.
-			continue
-		new_set = set(seen) 
-		for dig in str(prime): new_set.add(dig) #Add all the new digits to the set 
-		if len(new_set) == len(seen) + len(str(prime)): #If there's a repeat of digits, this will be false.
-			sumz += get_next(new_set,min(max_size,9 - len(new_set)),prime)
-	sumz += get_next(seen,max_size-1,last_seen) #In case we want to decrement the number of digits we're considering.
-	return sumz
+    if max_size == 0 and len(seen) == 9:
+        return 1
+    elif max_size == 0:
+        return 0
+    sumz = 0
+    for prime in prime_sets[max_size]:
+        if prime > last_seen:  #Since we're not requiring that the num_digs goes down, we still need some ordering to avoid double counting.
+            continue
+        new_set = set(seen) 
+        for dig in str(prime): new_set.add(dig) #Add all the new digits to the set 
+        if len(new_set) == len(seen) + len(str(prime)): #If there's a repeat of digits, this will be false.
+            sumz += get_next(new_set,min(max_size,9 - len(new_set)),prime)
+    sumz += get_next(seen,max_size-1,last_seen) #In case we want to decrement the number of digits we're considering.
+    return sumz
 print "Answer is:", get_next(set(),8,9999999999) #999999999999 is an arbitrarily large number so that the next number will be smaller than it.
 
 print "Time Taken:", time.time() - START

@@ -10,8 +10,8 @@ START = time.time()
 permutation = permutations(['1','2','3','4','5','6','7'],7)
 maxz = 0
 for perm in permutation:
-	n = int(string.join(perm, ''))
-	if n > maxz and mr(n):
-		maxz = n
+    n = int(string.join(perm, ''))
+    if n > maxz and mr(n):
+        maxz = n
 print maxz
 print "Time Taken:", time.time() -START

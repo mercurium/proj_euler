@@ -12,7 +12,7 @@ def helper(n, tl):
   if (n,tl[0]) in val: return val[(n,tl[0])]
   val[(n,tl[0])] = helper(n-tl[0],tl[1:])+helper(n-2*tl[0],tl[1:]) + helper(n,tl[1:])
   return val[(n,tl[0])]
-	
+    
 def compute(n):
   if n in val: return val[n]
   val[n] = helper(n,twos)

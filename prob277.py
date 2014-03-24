@@ -14,31 +14,31 @@ ext_gcd = extended_gcd
 a,b,denom = 1,0,1
 
 def U(a,b,denom):
-	a = 4*a
-	b = denom*2+4*b
-	denom *= 3
-	return a,b,denom
+    a = 4*a
+    b = denom*2+4*b
+    denom *= 3
+    return a,b,denom
 
 def D(a,b,denom):
-	return a,b,denom*3
+    return a,b,denom*3
 
 def d(a,b,denom):
-	a=2*a
-	b = 2*b - denom
-	denom *= 3
-	return a,b,denom
+    a=2*a
+    b = 2*b - denom
+    denom *= 3
+    return a,b,denom
 
 
 seq =    "UDDDUdddDDUDDddDdDddDDUDDdUUDd"
 
 for letter in seq:
-	if letter == 'U':
-		a,b,denom = U(a,b,denom)
-	if letter == 'D':
-		a,b,denom = D(a,b,denom)
-	if letter == 'd':
-		a,b,denom = d(a,b,denom)
-	#print a,b,denom
+    if letter == 'U':
+        a,b,denom = U(a,b,denom)
+    if letter == 'D':
+        a,b,denom = D(a,b,denom)
+    if letter == 'd':
+        a,b,denom = d(a,b,denom)
+    #print a,b,denom
 
 print a,b,denom
 
@@ -46,7 +46,7 @@ vals = (ext_gcd(a,denom)[0] * -1*b) %denom
 print vals
 
 while vals < 10**15:
-	vals += denom
+    vals += denom
 print vals
 print "Time Taken:", time.time() - start
 

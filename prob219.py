@@ -5,10 +5,10 @@ size = 10**9
 minz = 1 #lst[0] has cost 1 right now, minz = cost of encoding lst[0]
 lst = [1,0,0,1] #encoding 2 items, one of cost 1, one of cost 4
 while sum(lst) +lst[0] < size: #transforming k -> (k+1) and (k+4)
-	a = lst.pop(0) 
-	lst[0] += a # adding (k+1)
-	lst.append(a) # adding (k+4)
-	minz += 1 #we're incrementing what lst[0] costs.
+    a = lst.pop(0) 
+    lst[0] += a # adding (k+1)
+    lst.append(a) # adding (k+4)
+    minz += 1 #we're incrementing what lst[0] costs.
 total = sum(lst)
 b = size - total  #we're not at the goal yet so we need to increment more
 lst[0] -= b       #but only partially since we don't need all of them.
@@ -19,7 +19,7 @@ print minz
 print lst, sum(lst)
 total_sum = size * minz
 for i in xrange(len(lst)):
-	total_sum += i * lst[i]
+    total_sum += i * lst[i]
 
 print total_sum
 print "Time Taken:", time.time() - start

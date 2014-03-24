@@ -7,13 +7,13 @@ vals[500] = 0
 valz = dict()
 valz[499] = 1
 def calc(v):
-	if v in vals: return vals[v]
-	vals[v] = ( (998.-2*v) * calc(v+1) + calc500(v) + 1000.) / ( 999.-v )
-	return vals[v]
+    if v in vals: return vals[v]
+    vals[v] = ( (998.-2*v) * calc(v+1) + calc500(v) + 1000.) / ( 999.-v )
+    return vals[v]
 def calc500(v): #You've seen the 500 plate
-	if v in valz: return valz[v]
-	valz[v] = ( (998-2*v) * calc500(v+1) + 1000. ) / (999.-v)
-	return valz[v]	
+    if v in valz: return valz[v]
+    valz[v] = ( (998-2*v) * calc500(v+1) + 1000. ) / (999.-v)
+    return valz[v]    
 
 print calc(0)
 print "Time Taken:", time.time() - start

@@ -5,22 +5,22 @@ R = 105
 
 points = []
 for x in xrange(-1 * R + 1, R):
-	for y in xrange(-1*R+1,R): #this could be optimized,but not worth it... 
-		if x**2+y**2 < R**2:
-			points.append((x,y))
+    for y in xrange(-1*R+1,R): #this could be optimized,but not worth it... 
+        if x**2+y**2 < R**2:
+            points.append((x,y))
 points.remove((0,0))
 
 lst1 = [] #points above the x axis
 lst2 = [] #points below the x axis
 for point in points:
-	if point[1] > 0:
-		lst1.append(point) 
-	elif point[1] < 0:
-		lst2.append(point)
-	elif point[0] > 0:
-		lst1.append(point)
-	else:
-		lst2.append(point)
+    if point[1] > 0:
+        lst1.append(point) 
+    elif point[1] < 0:
+        lst2.append(point)
+    elif point[0] > 0:
+        lst1.append(point)
+    else:
+        lst2.append(point)
 #Because the thing is symmetrical, we only need to do it for half of the points, not both sets... =D 
 
 def bsearch(lst,num, start=0,end=-1):

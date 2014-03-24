@@ -2,19 +2,19 @@ import time
 START = time.time()
 
 def gcd(a,b):
-	while a != 0:
-		a,b = b%a, a
-	return b
+    while a != 0:
+        a,b = b%a, a
+    return b
 
 k = 13
 for n in xrange(5,10**4):
-	a = gcd(k,n)
-	k += a
-	if a != 1:
-		if a != n:
-			print n,k,a
-		else:
-			print n,k,a, '\t\t OMG IT WORKS'
+    a = gcd(k,n)
+    k += a
+    if a != 1:
+        if a != n:
+            print n,k,a
+        else:
+            print n,k,a, '\t\t OMG IT WORKS'
 
 print "Time Taken:", time.time() - START
 
@@ -26,24 +26,24 @@ last_n = n = 5
 count = 0
 prev = 0
 while n < SIZE:
-	if count == 10**7/2 or (n < 16*10**11 and count >= 100000/2):
-		count = 0
-		if n < SIZE/2:
-			n = last_n = last_n * 2 -1
-			k = last_k = last_n * 3
-			print n, k, "RAWR!", n/2 - prev
-			prev = n
-			n+=1
-			continue
-		else:
-			break
-	a = gcd(k,n)
-	k += a
-	count +=1
-	if a != 1:
-		last_n = n
-		last_k = k
-	n += 1
+    if count == 10**7/2 or (n < 16*10**11 and count >= 100000/2):
+        count = 0
+        if n < SIZE/2:
+            n = last_n = last_n * 2 -1
+            k = last_k = last_n * 3
+            print n, k, "RAWR!", n/2 - prev
+            prev = n
+            n+=1
+            continue
+        else:
+            break
+    a = gcd(k,n)
+    k += a
+    count +=1
+    if a != 1:
+        last_n = n
+        last_k = k
+    n += 1
 
 print last_n, last_k, "answer seems related to this"
 

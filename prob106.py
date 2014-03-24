@@ -2,16 +2,16 @@ import time
 START = time.time()
 from primes import ncr
 def cat(n):
-	return ncr(2*n,n)/(n+1)
+    return ncr(2*n,n)/(n+1)
 SIZE = 12
 
 count = 0
 for i in xrange(1,SIZE//2+1):
-	a = ncr(SIZE,i)* ncr(SIZE-i,i)/2
-	b = ncr(2*i,i)/2
-	c = b - cat(i)
-	d = a * c / b
-	count +=d 
+    a = ncr(SIZE,i)* ncr(SIZE-i,i)/2
+    b = ncr(2*i,i)/2
+    c = b - cat(i)
+    d = a * c / b
+    count +=d 
 print "Answer is:", count 
 print "Time taken:", time.time() - START
 

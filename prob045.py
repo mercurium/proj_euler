@@ -2,11 +2,11 @@ import time
 START = time.time()
 
 for i in xrange(166,10**5): #Starting at 166 since we want the next one past 165
-	n = i*(3*i-1)/2 # The pentagonal number
-	m = int((n/2)**.5+1)  #Getting what the m would be if this were a hexagonal number
-	if m*(2*m-1) == n: #Checking that the m computed is actually for a hexagonal numbe = n
-		print "answer is:", n
-		break
+    n = i*(3*i-1)/2 # The pentagonal number
+    m = int((n/2)**.5+1)  #Getting what the m would be if this were a hexagonal number
+    if m*(2*m-1) == n: #Checking that the m computed is actually for a hexagonal numbe = n
+        print "answer is:", n
+        break
 
 print "Time taken:",time.time() -START
 

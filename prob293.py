@@ -9,19 +9,19 @@ old_set = set([1])
 new_set = set()
 admiss_set = set()
 for p in primes:
-	for j in xrange(1,int(log(SIZE,p)+1) ):
-		p_pow = p**j
-		for item in old_set:
-			if item * p_pow < SIZE:
-				new_set.add(item*p_pow)
+    for j in xrange(1,int(log(SIZE,p)+1) ):
+        p_pow = p**j
+        for item in old_set:
+            if item * p_pow < SIZE:
+                new_set.add(item*p_pow)
 
-	for item in old_set:
-		admiss_set.add(item)
-	old_set = new_set
-	new_set = set()
+    for item in old_set:
+        admiss_set.add(item)
+    old_set = new_set
+    new_set = set()
 
 for item in old_set:
-	admiss_set.add(item)
+    admiss_set.add(item)
 admiss_set.remove(1)
 print len(admiss_set), "is how many admissible numbers we need to deal with,"
 print "Time Taken:", time.time() - start
@@ -31,10 +31,10 @@ print "Time Taken:", time.time() - start
 fort_num = set() # the pseudo-fortunate numbers
 
 for num in admiss_set:
-	n = num+2
-	while not m_r(n):
-		n += 1
-	fort_num.add(n-num)
+    n = num+2
+    while not m_r(n):
+        n += 1
+    fort_num.add(n-num)
 
 print sum(fort_num), "is our final answer"
 print "Time Taken:", time.time() - start

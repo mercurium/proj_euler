@@ -4,8 +4,8 @@ START = time.time()
 MOD = 10**10
 sumz = 0 
 for i in xrange(1,1001):
-	sumz = sumz + pow(i,i, MOD)
-	
+    sumz = sumz + pow(i,i, MOD)
+    
 print sumz % MOD
 print "Time taken:",time.time() -START
 

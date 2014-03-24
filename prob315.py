@@ -7,32 +7,32 @@ LOWER_BOUND = 10**7
 
 
 def get_primes(size):
-	prime_lst = bitarray('000' + '01' * (size/2-1))
-	for i in xrange(3,size,2):
-		if prime_lst[i] == 0:
-			for j in xrange(i**2,size,2*i):
-				prime_lst[j] = 1
-	return prime_lst
+    prime_lst = bitarray('000' + '01' * (size/2-1))
+    for i in xrange(3,size,2):
+        if prime_lst[i] == 0:
+            for j in xrange(i**2,size,2*i):
+                prime_lst[j] = 1
+    return prime_lst
 
 def dig_root(num):
-	if num < 10:
-		return 0
-	return sum(int(x) for x in str(num))
+    if num < 10:
+        return 0
+    return sum(int(x) for x in str(num))
 
 def max_clock(old,new):
-	if new == 0: #if we're done, just turn off all numbers.
-		return sum([lc[int(x)] for x in str(old)])
-	old,new = str(old),str(new)
-	sumz = sum([ lc[int(x)] for x in old[:(len(old) -len(new))] ])
-	old = old[len(old)-len(new):]
-	for i in xrange(len(new)):
-		sumz += nd[int(old[i])][int(new[i])]
-	return sumz
+    if new == 0: #if we're done, just turn off all numbers.
+        return sum([lc[int(x)] for x in str(old)])
+    old,new = str(old),str(new)
+    sumz = sum([ lc[int(x)] for x in old[:(len(old) -len(new))] ])
+    old = old[len(old)-len(new):]
+    for i in xrange(len(new)):
+        sumz += nd[int(old[i])][int(new[i])]
+    return sumz
 
 def sam_clock(old,new):
-	if new == 0:
-		return sum([lc[int(x)] for x in str(old)])
-	return sum([ lc[int(x)] for x in (str(old)+str(new)) ])	
+    if new == 0:
+        return sum([lc[int(x)] for x in str(old)])
+    return sum([ lc[int(x)] for x in (str(old)+str(new)) ])    
 
 num_set = [0]*10
 num_set[0] = set([1,2,3,4,5,7])
@@ -51,9 +51,9 @@ lc = letter_count
 
 nd = [0]*10 #setting up the differences between changing numbers
 for i in range(len(nd)):
-	nd[i] = [0]*10
-	for j in xrange(len(nd[i])):
-		nd[i][j] = len(num_set[i].symmetric_difference(num_set[j]))
+    nd[i] = [0]*10
+    for j in xrange(len(nd[i])):
+        nd[i][j] = len(num_set[i].symmetric_difference(num_set[j]))
 
 #########################################################
 ############ABOVE THIS IS JUST SETUP ####################
@@ -62,20 +62,20 @@ for i in range(len(nd)):
 max_sum, sam_sum = 0,0
 plst = get_primes(SIZE)
 for i in xrange(LOWER_BOUND,SIZE):
-	if i %1024 == 0:
-		print i
- 	if plst[i] == 1:
- 		continue
-	old,new = i, dig_root(i)
-	max_sum += max_clock(old,0)
-	sam_sum += sam_clock(old,0)
-	while new != 0:
-		max_sum += max_clock(old,new)
-		sam_sum += sam_clock(old,new)
-		old,new = new, dig_root(new)
-	max_sum += max_clock(old,0)
-	sam_sum += sam_clock(old,0)
-	
+    if i %1024 == 0:
+        print i
+     if plst[i] == 1:
+         continue
+    old,new = i, dig_root(i)
+    max_sum += max_clock(old,0)
+    sam_sum += sam_clock(old,0)
+    while new != 0:
+        max_sum += max_clock(old,new)
+        sam_sum += sam_clock(old,new)
+        old,new = new, dig_root(new)
+    max_sum += max_clock(old,0)
+    sam_sum += sam_clock(old,0)
+    
 print "sam's sum is:", sam_sum
 print "max's sum is:", max_sum
 print "Diff is:", sam_sum - max_sum

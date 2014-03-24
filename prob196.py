@@ -5,36 +5,36 @@ from primes import m_r
 pos = [5678027, 7208785]
 
 def neighbors(n,row):
-	row_start = row*(row-1)/2 + 1
-	pos = n - row_start
-	if pos != 0:
-		if row % 2 == 0:
-			neighbors = [ n-row+2,n-row,n+row]
-		else:
-			neighbors = [n-row+1,n+row-1,n+row+1]
-	else:
-		neighbors = [n+row,n+row+1,n-row+1,n-row+2]
-	return neighbors	
+    row_start = row*(row-1)/2 + 1
+    pos = n - row_start
+    if pos != 0:
+        if row % 2 == 0:
+            neighbors = [ n-row+2,n-row,n+row]
+        else:
+            neighbors = [n-row+1,n+row-1,n+row+1]
+    else:
+        neighbors = [n+row,n+row+1,n-row+1,n-row+2]
+    return neighbors    
 
 sumz = 0
 for p in pos:
-	i = p*(p-1)/2+1
-	while i < p*(p+1)/2 - 1:
-		if m_r(i):
-			neigh = neighbors(i,p)
-			neigh_sum = sum([m_r(x) for x in neigh])
-			if neigh_sum >= 2:
-				sumz += i
-			else:
-				for num in neigh:
-					row = p-1 if num < i else p+1
-					if m_r(num):
-						neigh_sum = sum([m_r(x) for x in neighbors(num,row)]) 
-						if neigh_sum >= 2:
-							sumz +=i
-							break
-		i+=1
-	print sumz
+    i = p*(p-1)/2+1
+    while i < p*(p+1)/2 - 1:
+        if m_r(i):
+            neigh = neighbors(i,p)
+            neigh_sum = sum([m_r(x) for x in neigh])
+            if neigh_sum >= 2:
+                sumz += i
+            else:
+                for num in neigh:
+                    row = p-1 if num < i else p+1
+                    if m_r(num):
+                        neigh_sum = sum([m_r(x) for x in neighbors(num,row)]) 
+                        if neigh_sum >= 2:
+                            sumz +=i
+                            break
+        i+=1
+    print sumz
 print sumz
 print "Time Taken:", time.time() - START
 

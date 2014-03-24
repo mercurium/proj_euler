@@ -8,33 +8,33 @@ from primes import factor
 dummyP is a dumber implementation of finding P(f,r), which was my checker to make sure my program was functioning correctly.
 """
 def dummyP(f,r): 
-	if f == 1:
-		return r*(r+1)/2
-	if r <= 1:
-		return int(f**2/2)
-	if r == 2:
-		return (f+((f+1)%2))**2 - dummyP(f,r-1)
-	return (f+((f+1)%2) + r-2)**2 - dummyP(f,r-1)
+    if f == 1:
+        return r*(r+1)/2
+    if r <= 1:
+        return int(f**2/2)
+    if r == 2:
+        return (f+((f+1)%2))**2 - dummyP(f,r-1)
+    return (f+((f+1)%2) + r-2)**2 - dummyP(f,r-1)
 
 def sq_sum(n):
-	return n*(n+1)*(2*n+1)/6
+    return n*(n+1)*(2*n+1)/6
 
 def sum_sq(start,end):
-	return sq_sum(end) - sq_sum(start)
+    return sq_sum(end) - sq_sum(start)
 
 def P(f,r):
-	if f == 1: # not sure why we need to special case f = 1, but it's a bit glitchy 
-		return r*(r+1)/2
-	if r <= 1: # First number that begins each floor is the one that couldn't be place anywhere else.
-		return int(f**2/2)
-	start = f + (f+1)%2 -1
-	end =   f + r - 1 - (f%2)
-	if r % 2 == 0: #There's a similar formula for when it's odd, but it's cleaner when even, so I just recursed to an even one from odd starting points.
-		initial_sum = sum_sq(start,end)
-		part_removed = sum_sq(start/2,end/2) * 8
-		return initial_sum -  part_removed - P(f,1)
-	return (f+((f+1)%2)+r-2)**2 - P(f,r-1)   # was lazy only wanted to compute on case.
-	
+    if f == 1: # not sure why we need to special case f = 1, but it's a bit glitchy 
+        return r*(r+1)/2
+    if r <= 1: # First number that begins each floor is the one that couldn't be place anywhere else.
+        return int(f**2/2)
+    start = f + (f+1)%2 -1
+    end =   f + r - 1 - (f%2)
+    if r % 2 == 0: #There's a similar formula for when it's odd, but it's cleaner when even, so I just recursed to an even one from odd starting points.
+        initial_sum = sum_sq(start,end)
+        part_removed = sum_sq(start/2,end/2) * 8
+        return initial_sum -  part_removed - P(f,1)
+    return (f+((f+1)%2)+r-2)**2 - P(f,r-1)   # was lazy only wanted to compute on case.
+    
 """ These are the test cases to make sure I was getting the expected result:"""
 print "P(1,1) is:", P(1,1) == 1
 print "P(1,2) is:", P(1,2) == 3
@@ -50,15 +50,15 @@ print "factorized 71328803586048",  factors
 
 vals = {2:0,3:0,1:0}
 for i in factors:
-	vals[i] +=1
+    vals[i] +=1
 print vals
 
 sumz = 0
 for i in xrange(vals[2]+1):
-	for j in xrange(vals[3]+1):
-		n = 2**i*3**j
-		m = large_num/n
-		sumz += P(n,m)
+    for j in xrange(vals[3]+1):
+        n = 2**i*3**j
+        m = large_num/n
+        sumz += P(n,m)
 
 print "Final answer is:", sumz  % 10**8
 print "Time Taken:", time.time() - START

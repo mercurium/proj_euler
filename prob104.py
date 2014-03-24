@@ -35,19 +35,19 @@ vals = (1,1)
 a = (5**.5+1)/2
 
 def find_L(n):
-	approx_head = int(truncate(approx_pow(a,n,50)/(5**.5),8))
-	val = string.join(sorted(str(approx_head)),'')
-	return  (val  == '123456789', val, approx_head)
+    approx_head = int(truncate(approx_pow(a,n,50)/(5**.5),8))
+    val = string.join(sorted(str(approx_head)),'')
+    return  (val  == '123456789', val, approx_head)
 
 for i in xrange(3,5* 10**5):
-	vals = (vals[1],(vals[0]+vals[1])%mod)
-	if string.join(sorted(str(vals[1])), '') == "123456789":
-		L_works, value,junk = find_L(i)
-		if L_works: 
-			print i
-			break
-		else:
-			print "so close, but on:", i, value, junk
+    vals = (vals[1],(vals[0]+vals[1])%mod)
+    if string.join(sorted(str(vals[1])), '') == "123456789":
+        L_works, value,junk = find_L(i)
+        if L_works: 
+            print i
+            break
+        else:
+            print "so close, but on:", i, value, junk
 
 print "Time Taken: ", time.time()-start
 

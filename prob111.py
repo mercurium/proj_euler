@@ -6,38 +6,38 @@ mult = 1111111111
 successes = set()
 sumz = 0
 for big_dig in xrange(9,0,-1):
-	n = big_dig * mult
-	for dig in xrange(0,10):
-		for diff in xrange(big_dig-9,big_dig+1):
-			m = n - diff*10**dig
-			if mr(m) and m > 10**9:
-				successes.add(big_dig)
-				sumz += m
+    n = big_dig * mult
+    for dig in xrange(0,10):
+        for diff in xrange(big_dig-9,big_dig+1):
+            m = n - diff*10**dig
+            if mr(m) and m > 10**9:
+                successes.add(big_dig)
+                sumz += m
 print "Digits we've seen:", successes
 print "Time taken:", time.time() - START
 
 for big_dig in xrange(9,0,-1):
-	if big_dig in successes:
-		continue
-	n = big_dig * mult
-	for dig,dig2 in ((a,b) for a in xrange(10) for b in xrange(a)):
-		for diff,diff2 in ((d1,d2) for d1 in xrange(big_dig-9,big_dig+1) for d2 in xrange(big_dig-9,big_dig+1)):
-			m = n - diff*10**dig - diff2*10**dig2
-			if mr(m) and m > 10**9:
-				successes.add(big_dig)
-				sumz += m
+    if big_dig in successes:
+        continue
+    n = big_dig * mult
+    for dig,dig2 in ((a,b) for a in xrange(10) for b in xrange(a)):
+        for diff,diff2 in ((d1,d2) for d1 in xrange(big_dig-9,big_dig+1) for d2 in xrange(big_dig-9,big_dig+1)):
+            m = n - diff*10**dig - diff2*10**dig2
+            if mr(m) and m > 10**9:
+                successes.add(big_dig)
+                sumz += m
 
 print "Digits we've seen:", successes
 print "Time taken:", time.time() - START
 
 pow1, pow2 = 10**9, 0
 for dig1 in xrange(1,10):
-	n = dig1 * pow1 
-	for dig2 in xrange(10): 
-		m = n + dig2 * 10**pow2
-		if mr(m):
-			print m
-			sumz += m
+    n = dig1 * pow1 
+    for dig2 in xrange(10): 
+        m = n + dig2 * 10**pow2
+        if mr(m):
+            print m
+            sumz += m
 
 print sumz
 print "Time taken:", time.time() - START

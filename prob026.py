@@ -3,26 +3,26 @@ START = time.time()
 
 
 def rep_dig(n):
-	if n == 1:
-		return 0
-	j = 10
-	num_repeat = 1
-	while j%n != 1:
-		j*= 10
-		num_repeat+=1
-	return num_repeat
-	
-			
+    if n == 1:
+        return 0
+    j = 10
+    num_repeat = 1
+    while j%n != 1:
+        j*= 10
+        num_repeat+=1
+    return num_repeat
+    
+            
 largest_sol = 0
 largest_denom = 0
 for i in xrange(999,2,-2): #Start at the biggest point, then work your way down while you can.
-	if i < largest_sol:
-		break
-	if i%2!=0 and i%5 != 0: #the rep_dig method can't handle multiples of 2 or 5.
-		num_repeat = rep_dig(i)
-		if largest_sol < num_repeat:
-			largest_sol = num_repeat
-			largest_denom = i
+    if i < largest_sol:
+        break
+    if i%2!=0 and i%5 != 0: #the rep_dig method can't handle multiples of 2 or 5.
+        num_repeat = rep_dig(i)
+        if largest_sol < num_repeat:
+            largest_sol = num_repeat
+            largest_denom = i
 print largest_denom, largest_sol
 
 print "Time Taken:", time.time() - START
