@@ -3,8 +3,8 @@ from primes import m_r
 START = time.time()
 
 count = 0
-SIZE = 10**5
-mod = 10**9 +7
+SIZE = 10**7
+MOD = 10**9 +7
 
 
 def get_pfactor(SIZE):
@@ -17,10 +17,10 @@ def get_pfactor(SIZE):
 
 
 pfactor = get_pfactor(SIZE)
-print "Part 1 done!"
+print "Part 1 done!", time.time() - START
 
 val_dict = {2:5,5:5}
-for n in range(1,SIZE/2+1):
+for n in xrange(1,SIZE/2+1):
 	k = SIZE - n
 	while k != 1:
 		p = pfactor[k]
@@ -37,11 +37,12 @@ for n in range(1,SIZE/2+1):
 	prod = 1
 	for factor in val_dict.keys():
 		if val_dict[factor] == 0:
+			del val_dict[factor]
 			continue
-		prod = ((1 + pow(factor, val_dict[factor],mod)) * prod) % mod
+		prod = ((1 + pow(factor, val_dict[factor],MOD)) * prod) % MOD
 	count += prod*2
 	if n% 100 == 0:
-		print n
+		print n, time.time() - START
 count -= prod
-print (count - pow(2,SIZE,mod)+2) % mod
+print (count - pow(2,SIZE,MOD)+2) % MOD
 print "Time Taken:", time.time() - START

@@ -5,10 +5,6 @@ fa = factorial
 from primes import factor
 
 
-def log10(n):
-		return log(n) / log(10)
-
-
 def sum10(abc):
 		sumz = 10 ** (abc[0] / log_err)
 		sumz += 10 ** (abc[1] / log_err)
@@ -18,7 +14,7 @@ size = fa(20) #2 * 3 * 5 * 7 * 11
 log_err = 1000.
 vals = factor(size)[:-1]
 
-vals = [int(log_err * log10(val)) for val in vals]
+vals = [int(log_err * log(val,10)) for val in vals]
 total = sum(vals)
 prev = {}
 min_val = [10 ** 20]

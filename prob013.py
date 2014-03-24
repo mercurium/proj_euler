@@ -1,10 +1,8 @@
-import string
-temp = open('prob13number_list.txt','r')
-
-import time
+import string,time
+fileRead = open('prob13number_list.txt','r')
 START = time.time()
 
-strz = temp.read()
+strz = fileRead.read()
 number_list = string.split(strz.strip(), '\n')
 sumz = sum([ int(x) for x in number_list])
 	

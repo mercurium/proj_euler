@@ -1,11 +1,6 @@
 import time
-from primes import m_r
 START = time.time()
-
-count = 0
-SIZE = 10**7
-mod = 10**9 +7
-
+from primes import m_r
 
 def gcd(a,b):
 	while a != 0:
@@ -53,21 +48,15 @@ def factor(n):
 	return factor_lst
 
 
-for n in xrange(1,SIZE+1):
-	val_dict = dict()
-	a, b = n**2 - 2*n +2, n*n +2*n+2
-	factors = factor(a) + factor(b)
-	for p in factors:
-		if p in val_dict:
-			val_dict[p] +=1
-		else:
-			val_dict[p] = 1
-	prod = 1
-	for f in val_dict.keys():
-		prod = ((1 + pow(f, val_dict[f],mod)) * prod) % mod
-	count += prod - (n**4+4)% mod
-	if n% 1024 == 0:
-		print n, time.time() - START
+T = [1,10]
+for i in range(31):
+	T.append(T[-1] * 10 + T[-2])
 
-print count %mod
+sumz = 0
+for a in range(1,4):
+	for b in range(1,4):
+		for c in range(1,4):
+			sumz += gcd(T[c**a], T[c**b])
+print sumz
+
 print "Time Taken:", time.time() - START

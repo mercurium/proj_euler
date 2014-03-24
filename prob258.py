@@ -2,7 +2,7 @@ import time
 start = time.time()
 
 lst = [1]*20
-num_mod = 5
+num_mod = 20092010
 
 
 for i in xrange(20,1000):

@@ -1,64 +1,65 @@
 import time
-start = time.time()
+START = time.time()
 
 data = open('data185.txt','r')
 data = data.read()
 
-guesses = data.split()[::2]
-correct = data.split()[1::2]
+guesses = [[int(x) for x in g] for g in data.split()[::2]]
+correct = [int(x) for x in data.split()[1::2] ]
+count = [0]
 
-for i in range(len(correct)):
-  correct[i] = int(correct[i])
-  
-print guesses, correct
+c = [set() for x in range(16)]
+for g in guesses:
+    for i in range(16):
+        c[i].add(g[i])
+print [len(x) for x in c]
 
-a = [0]*16
-c = []
-found = False
 
+a = [-1] * 16
 def base_case():
-  for a[15] in range(0,10):
-    c.append(c[14][:])
-    for i in range(len(guesses)):
-      if guesses[i][15] == str(a[15]):
-        c[15][i] -= 1
-      if min(c[15]) >= 0:
-        print c[15]
-        found = True
-  c.pop(15)
-  return
+    count[0] +=1
+    num_correct = correct[:]
+    for g in xrange(len(guesses)):
+        for i in xrange(len(a)):
+            if guesses[g][i] == a[i]:
+                num_correct[g] -=1
+                if num_correct[g] < 0:
+                    return False
+    if min(num_correct) == max(num_correct) == 0:
+        print a
+        return True
+    return False
+
 
 def recurse(level):
-  if level == 8: print a
-  for a[level] in range(0,10):
-    if found == True:
-      return
-    c.append(c[level - 1][:])
-    for i in range(len(guesses)):
-      if guesses[i][level] == str(a[level]):
-       c[level][i] -= 1
-    if min(c[level]) >= 0:
-      if level < 15:
-        recurse(level+1)
-      else:
-        base_case()
-  c.pop(level)
+    count[0] +=1
+    if count[0] % 1024 == 0:
+        print count[0], a
+    while level != 14 and a[level] != -1:
+        level +=1
+    for g in xrange(len(guesses)):
+        num_correct = correct[g]
+        for i in xrange(level):
+            if guesses[g][i] == a[i]:
+                num_correct -=1
+                if num_correct < 0:
+                    return False
+        if (16-level) < num_correct:
+            return False
+    for a[level] in xrange(10):
+        if level != 15:
+            if recurse(level+1):
+                return True
+        else:
+            if base_case():
+                return True
+    a[level] = -1
+    return False
 
 
-for a[0] in range(0,10):
-  c.append(correct[:])
-  for i in range(len(guesses)):
-    if guesses[i][0] == str(a[0]): c[0][i] -= 1
-    
-  if min(c[0]) >= 0:
+for a[0] in xrange(0,10):
+    continue
     recurse(1)
-  c.pop(0)
 
-print "Time Taken:", time.time()-start
-  
-  
-  
-  
-  
-  
-  
+print "Time Taken:", time.time()-START
+    

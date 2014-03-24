@@ -5,9 +5,9 @@ SIZE = 4*10**6
 a,b = 1,1
 sumz = 0
 while a <SIZE:
-	a,b = b,a+b
-	if a % 2 == 0:
-		sumz+= a
+    a,b = b,a+b
+    if a % 2 == 0:
+        sumz+= a
 print sumz
 print "Time Taken:", time.time()-START 
 
