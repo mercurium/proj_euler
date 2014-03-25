@@ -1,5 +1,5 @@
 import time
-start = time.time()
+START = time.time()
 from primes import m_r
 
 rings = [1] + [3*x*(x-1)+2 for x in xrange(1,100000)]
@@ -25,7 +25,7 @@ print len(sol)
 if len(sol) > 2000:
     print sol[1999]
 print sol[:10]
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 
 """
 13:57 ~/Desktop/python_projects/proj_euler $ python prob128.py 

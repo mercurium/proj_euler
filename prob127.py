@@ -4,49 +4,48 @@
 #a+b =c ---> this makes GCD(a,c)=GCD(b,c) = 1 unnecessary.
 #rad(abc) < c
 #primes = set of primes
-#rad_lst = the radical of the element.
+#radLst = the radical of the element.
 #count = total count for how many elements work
 
 import time
-start = time.time()
+START = time.time()
 
 size = 20000
 count = 0
 sumz = 0
 
-
 def gcd(a,b):
-  if a == 0:
-    return b
-  return gcd(b%a,a)
+    if a == 0:
+        return b
+    return gcd(b%a,a)
 
 
-rad_lst = [1]*(size+1)
-for i in range(2,len(rad_lst)): #set-up of rad list
-  if rad_lst[i] == 1:
-    for j in range(i,len(rad_lst),i):
-      rad_lst[j]*=i
+radLst = [1]*(size+1)
+for i in range(2,len(radLst)): #set-up of rad list
+    if radLst[i] == 1:
+        for j in range(i,len(radLst),i):
+            radLst[j]*=i
 
 
 #if it's prime, then its radical is equal to itself.
 
-def rad_fail(n):
-    if rad_lst[n] *6 > n:
+def radFail(n):
+    if radLst[n] *6 > n:
         return True
-    if rad_lst[n] % 2 == 0 and rad_lst[n] * 15 > n:
+    if radLst[n] % 2 == 0 and radLst[n] * 15 > n:
         return True
-    if rad_lst[n] % 3 == 0 and rad_lst[n] * 10 > n:
+    if radLst[n] % 3 == 0 and radLst[n] * 10 > n:
         return True
-    if rad_lst[n] % 6 == 0 and rad_lst[n] * 35 > n:
+    if radLst[n] % 6 == 0 and radLst[n] * 35 > n:
         return True
     return False
 
     
 
 for c in xrange(size):
-    if rad_fail(c):
+    if radFail(c):
         b = c -1
-        if rad_lst[b]*rad_lst[c]< c:
+        if radLst[b]*radLst[c]< c:
             count +=1
             sumz+=c
             print c-b,b,c
@@ -55,9 +54,9 @@ for c in xrange(size):
         diff = -2 if c%2 == 0 else -1 
         for b in xrange(c-1,c//2,diff):
             #we want to avoid checking gcd as much as possible
-            if rad_lst[b] == b or gcd(rad_lst[b],rad_lst[c]) != 1: pass
+            if radLst[b] == b or gcd(radLst[b],radLst[c]) != 1: pass
             else:
-                if rad_lst[c] * rad_lst[b] * rad_lst[c-b] < c:
+                if radLst[c] * radLst[b] * radLst[c-b] < c:
                     count +=1
                     sumz += c
                     print c-b,b,c
@@ -66,7 +65,7 @@ for c in xrange(size):
 print ''
 print count
 print sumz
-print "Time Taken:", time.time()-start
+print "Time Taken:", time.time()-START
 
 
 """

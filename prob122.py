@@ -1,3 +1,4 @@
+#NOTE needs cleaning
 import time
 start = time.time()
 from Queue import PriorityQueue as pq

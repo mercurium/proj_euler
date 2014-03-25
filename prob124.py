@@ -1,27 +1,15 @@
 import time
-start = time.time()
-lst = [1]*100001
+START = time.time()
+numRad = [1]*100001
 
-for i in range(1,len(lst)):
-  if lst[i] == 1:
-    for j in range(i,len(lst),i):
-      lst[j] *= i
+for i in xrange(1,len(numRad)):
+    if numRad[i] == 1:
+        for j in xrange(i,len(numRad),i):
+            numRad[j] *= i
+    numRad[i] = (numRad[i],i)
 
+numRad = numRad[1:] #toss out 0th element
+numRad.sort()
+print numRad[9999][1]  #get answer 
 
-for i in range(1,len(lst)):
-  lst[i] = (lst[i],str(i))
-print lst[:10]
-lst = lst[1:]
-
-lst.sort()
-val = lst[9999][0]
-
-
-lst2 = []
-for j in range(9990,10010):
-  if lst[j][0] == val:
-    print j
-    lst2 += [int(lst[j][1])]
-lst2.sort()
-print lst2
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time() - START

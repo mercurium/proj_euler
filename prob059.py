@@ -1,29 +1,24 @@
-import string
-import time
+import string, time
 
-start = time.time()
-temp = open('prob59lst.txt','r')
-lst = string.split(temp.read(),',')
-
+START = time.time()
+fileRead = open('prob59lst.txt','r')
+charString = string.split(fileRead.read(),',')
 
 counter = {}
-for i in range(0, len(lst)):
-  lst[i] = int(lst[i]) #int-ifying all the entries
+charString = [int(char) for char in charString]
 
-sum = 0
-for i in range(0,len(lst)):
-  if i % 3 == 0:
-    lst[i] = lst[i]^103
-  if i % 3 == 1:
-    lst[i] = lst[i]^111
-  if i % 3 == 2:
-    lst[i] = lst[i]^100
-  sum = sum + lst[i]
+sumz = 0
+for i in xrange(0,len(charString)):
+    if i % 3 == 0:
+        charString[i] = charString[i]^103
+    if i % 3 == 1:
+        charString[i] = charString[i]^111
+    if i % 3 == 2:
+        charString[i] = charString[i]^100
+    sumz = sumz + charString[i]
 
-for i in range(0,len(lst)):
-  lst[i] = chr(lst[i])
+charString = string.join([chr(charString[i]) for i in range(len(charString))], '')
 
-print string.join(lst,'')
-print sum
-
-print "Time Taken:", time.time()-start
+print charString
+print sumz
+print "Time Taken:", time.time()-START

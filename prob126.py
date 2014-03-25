@@ -1,9 +1,10 @@
+#NOTE gotta fix this too...
 import time
 START = time.time() 
 
 SIZE = 10000
 LAYERS = 100
-val_dict = dict()
+layerCount = dict()
 
 for i in xrange(1,SIZE):
     for j in xrange(1,i+1):
@@ -17,28 +18,18 @@ for i in xrange(1,SIZE):
                 val = a + layer * b + 4*layer**2
                 if val > 25000: break
 
-                if val in val_dict:
-                    val_dict[val] +=1
+                if val in layerCount:
+                    layerCount[val] +=1
                 else:
-                    val_dict[val] = 1
+                    layerCount[val] = 1
     print i
 
 
-for key in sorted(val_dict.keys()):
-    if val_dict[key] == 1000:
+for key in sorted(layerCount.keys()):
+    if layerCount[key] == 1000:
         print key
         break
 print "Time Taken:", time.time() - START
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -114,6 +105,4 @@ c+w = x
 abc, abc+2(ab+bc+ac), abc+4(ab+bc+ac) + 4(a+b+c)
 
 2(ab+bc+ac) + (n-1)(4(a+b+c)) + 8t
-
-
 """

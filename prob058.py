@@ -1,24 +1,19 @@
-import string
-from primes import *
+from primes import mr
 import time
-start = time.time()
+START = time.time()
 #the four diagonals are 4n^2-2n+1, 4n^2+1,4n^2+2n+1,
 # and (2n+1)^2
 
 count = 0
-j = 1
-
-
 for i in range(1,100000):
-  a = 4 * i*i +1
-  j = 2* i
-  count += mr(a+j) + mr(a) + mr(a-j)
-  if count * 1.0 / (4*i+1) < .1:
-    print i, count, count / (i *4.0+1)
-    break
-    
+    a = 4 * i*i +1
+    j = 2* i
+    count += mr(a+j) + mr(a) + mr(a-j)
+    if count * 1.0 / (4*i+1) < .1:
+        break
+        
 print j+1, count / (j*2.0+1)
-print "Time taken: " + str(time.time() -start)
+print "Time taken:", time.time() - START
 
 
 """
@@ -29,4 +24,6 @@ Original time:
 Time taken: 31.7114129066
 New time:
 Time taken: 0.593687772751
+looks like I cleaned up my code a bit more since then haha... 3/25/14
+Time taken: 0.185644865036
 """
