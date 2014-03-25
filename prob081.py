@@ -1,31 +1,30 @@
-import string
-import time
-temp = open('matrix.txt','r')
-lst = string.split(temp.read(),'\n')
-start = time.time()
-def min(a,b):
-  if a > b:
-    return b
-  return a
+import string, time
+START = time.time()
 
-for i in range(0,len(lst)):
-  lst[i] = string.split(lst[i],',')
+fileRead = open('matrix.txt','r')
+matrix = string.split(fileRead.read(),'\n') #Reading in the matrix and splitting it into rows
 
-lst = lst[:-1] +lst[-1][:-1]
-for i in range(0,len(lst)):
-  for j in range(0, len(lst[i])):
-    lst[i][j] = int(lst[i][j])
+matrix = [string.split(row,",") for row in matrix] #Splitting the matrix rows into individual entries
+matrix = matrix[:-1] +matrix[-1][:-1] #Clean off junk at the ends
 
-for i in range(0,len(lst)):
-  for j in range(0, len(lst[i])):
-    if i == 0:
-      if j != 0:
-        lst[i][j] = lst[i][j] + lst[i][j-1]
-    else:
-      if j == 0:
-        lst[i][j] = lst[i][j] + lst[i-1][j]
-      else:
-        lst[i][j] = lst[i][j] + min(lst[i-1][j],lst[i][j-1])
+matrix = [ [int(x) for x in row ] for row in matrix] #int-ifying the matrix
 
-print lst[-1][-1]
-print "time taken: " + str(time.time()-start)
+for i in xrange(1,len(matrix)): #initializing the edges
+    matrix[0][i] += matrix[0][i-1]
+    matrix[i][0] += matrix[i-1][0]
+
+
+for i in xrange(1,len(matrix)):
+    for j in xrange(1, len(matrix[i])):
+        matrix[i][j] += min(matrix[i-1][j],matrix[i][j-1]) #come from the cheaper direction
+
+print matrix[-1][-1]
+print "Time taken:", time.time() - START
+
+"""
+Time taken: 0.00715804100037 
+Answer = 427377
+
+
+
+"""

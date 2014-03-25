@@ -1,38 +1,39 @@
 import time
-start = time.time()
 from math import log
 
-sq = [x**2 for x in range(2,10)]
+START = time.time()
+SIZE = 100
+sq = [x**2 for x in range(1,int(SIZE**.5))]
 
 def calc(m):
-  goal = m * 10**200
-  val = goal
-  sumz = int(m**.5)*10**100
-  digz = -1
-  for i in xrange(99,-1,-1):
-    for dig in xrange(0,10):
-      num = sumz + dig * 10**i
-      if num**2 > goal:
-        break
-      if goal - num**2 <= val:
-        val = goal - num**2
-        digz = dig
-    sumz += digz * 10**i
-  return sumz
-  
+    goalValue = m * 10**200
+    currentDiff = goalValue
+    sumz = int(m**.5)*10**100
+    errorFixDig = -1
+    for i in xrange(99,-1,-1):
+        for dig in xrange(0,10):
+            num = sumz + dig * 10**i
+            if num**2 > goalValue:
+                break
+            if goalValue - num**2 <= currentDiff:
+                currentDiff = goalValue - num**2
+                errorFixDig = dig
+        sumz += errorFixDig * 10**i
+    return sumz
+    
 
 sumz = 0
 for i in xrange(2,100):
-  if i not in sq:
-    sumz += sum([int(x) for x in str(calc(i))[:100]])
+    if i not in sq:
+        sumz += sum([int(x) for x in str(calc(i))[:100]])
 
 print sumz
-print "Time Taken: ", time.time() - start
+print "Time Taken: ", time.time() - START
 
 """
 ~/Desktop/python_projects/proj_euler $python -i prob80.py
 40886
-Time Taken:  0.280507087708 (on desktop)
+Time Taken:    0.280507087708 (on desktop)
 
 Method of attack: Since floats have limited precision, I went with the method of multiplying everything by 10^100 to turn the first 100 digits into integers. Then I went digit by digit and checked out which one gave the best result.
 

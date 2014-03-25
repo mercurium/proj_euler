@@ -1,40 +1,39 @@
-import string
-import time
+import string, time
+START = time.time()
 
-start = time.time()
-#I, II, III, IV, V, VI, VII, IIX, IX
-#I = 1, V = 5, X = 10, L = 50, C = 100, D = 500, M = 1000
-ones = [0,1,2,3,2,1,2,3,4,2]
-temp = open('roman.txt','r')
-lst = string.split(temp.read(),'\n')[:-1]
-roman = {'I':1, 'V':5, 'X': 10, 'L': 50, 'C': 100, 'D':500, 'M':1000}
+fileRead = open('roman.txt','r')
+romanNumbers = string.split(fileRead.read().strip(),'\n')
+roman = [('M',1000), ('CM', 900), ('D', 500), ('CD', 400), ('C', 100), ('XC', 90), ('L',50), ('XL', 40), ('X',10), ('IX', 9), ('V', 5), ('IV', 4), ('I', 1)]
 
+def romanToDec(Str):
+    sumz = 0
+    charPtr = 0
+    strPtr = 0
+    while strPtr < len(Str) and charPtr < len(roman):
+        currentLetter, currentVal = roman[charPtr]
+        if currentLetter == Str[strPtr:strPtr+len(currentLetter)]:
+            sumz += currentVal
+            strPtr += len(currentLetter)
+        else:
+            charPtr += 1
+    return sumz
 
-def roman_to_dec(strz):
-  sumz2=0
-  for i in range(0, len(strz) -1):
-    if roman[strz[i]] >= roman[strz[i+1]]:
-      sumz2 += roman[strz[i]]
-    else: sumz2 -= roman[strz[i]]
-  sumz2 += roman[strz[-1]]
-  return sumz2
+def decToRoman(val):
+    strz = ""
+    charPtr = 0
+    while val > 0:
+        currentLetter, currentVal = roman[charPtr]
+        if currentVal <= val:
+            strz += currentLetter
+            val -= currentVal
+        else:
+            charPtr += 1
+    return strz
+    
+charCountSaved = 0
+for romanNum in romanNumbers:
+    saved = len(romanNum) - len( decToRoman( romanToDec( romanNum ) ))
+    charCountSaved += saved
 
-def min_calc(intz):
-  sumz2 = 0
-  if intz > 1000:
-    sumz2 += intz//1000
-    intz = intz %1000
-  item = str(intz)
-
-  for letter in item:
-    sumz2 += ones[int(letter)]
-  return sumz2
-
-sumz = 0
-for i in range(0,len(lst)):
-  item = lst[i]
-  sumz = sumz +  len(item) - min_calc(roman_to_dec(item))
-
-  
-print sumz
-print "Time Taken: " + str(time.time() - start)
+print "The answer is:", charCountSaved
+print "Time Taken:", time.time() - START

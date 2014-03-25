@@ -1,25 +1,25 @@
 import time
-START = time.time()
 from bitarray import bitarray
+START = time.time()
 
 SIZE = 50000
 lim = 12000
 
-plst = range(SIZE)
-plst[2] = 2
-for i in xrange(2,len(plst)):
-    if plst[i] == i:
-        for j in xrange(i*i,len(plst),i):
-            plst[j] = i
+primalityList = range(SIZE)
+primalityList[2] = 2
+for i in xrange(2,len(primalityList)):
+    if primalityList[i] == i:
+        for j in xrange(i*i,len(primalityList),i):
+            primalityList[j] = i
 
 def factor(n):
-    if n == plst[n]:
+    if n == primalityList[n]:
         return [n]
     factors = []
     while n != 1:
-        factors.append(plst[n])
-        n /= plst[n]
-    return sorted(factors)
+        factors.append(primalityList[n])
+        n /= primalityList[n]
+    return factors
 
 def divisors(n):
     factors = factor(n)
@@ -41,28 +41,26 @@ def possible_divisor_sums(n):
             return [(count,sum_val)]
         if index == len(divs) or prod * divs[index] > n:
             return []
-        ans1 = helper(prod,index+1,count,sum_val)
-        ans2 = [] if n %(prod * divs[index]) != 0 else helper(prod*divs[index],index,count+1,sum_val + divs[index])
-        return ans1+ans2
+        ansDontIncludeFactor = helper(prod,index+1,count,sum_val)
+        ansInclueFactor = [] if n %(prod * divs[index]) != 0 \
+            else helper(prod*divs[index],index,count+1,sum_val + divs[index])
+        return ansDontIncludeFactor+ansInclueFactor
+
     return helper(1,0,0,0)
 pds = possible_divisor_sums
 
 solution = [-1] * (lim +1)
-
 for i in xrange(2,SIZE):
-    answers = pds(i)
-    for ans in answers:
-        count = ans[0] + i - ans[1]
+    minProdNumbers = pds(i)
+    for minProdNum in minProdNumbers:
+        count = minProdNum[0] + i - minProdNum[1]
         if count <= lim and solution[count] == -1:
             solution[count] = i
     if -1 not in solution[1:]:
         break
 
-uniq_solution = set()
-for i in xrange(2,lim):
-    uniq_solution.add(solution[i])
-
-print sum(uniq_solution)
+uniqSolution = set(solution[2:])
+print sum(uniqSolution)
 print "Time Taken:", time.time() - START
 
 

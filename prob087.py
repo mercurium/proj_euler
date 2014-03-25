@@ -1,31 +1,28 @@
-from primes import *
+from primes import primes
 from math import *
 import time
 
-start = time.time()
-
-lst = {}
-limit = 5*10**7
+START = time.time()
+setz = set()
+SIZE = 5*10**7
 
 
 count = 0
-for i in xrange(0,24):
-  if primes[i]**4 > limit:
+for fourthPow in xrange(0,int(SIZE**(1/4.))):
+  if primes[fourthPow]**4 > SIZE:
     break
-  for j in xrange(0, 100):
-    if primes[i]**4+primes[j]**3 > limit:
+  for thirdPow in xrange(0, int(SIZE**(1/3.))):
+    if primes[fourthPow]**4+primes[thirdPow]**3 > SIZE:
       break
-    for k in xrange(0,1000):
-      sumz = primes[i]**4+primes[j]**3+primes[k]**2
-      if sumz >= limit:
+    for secondPow in xrange(0,int(SIZE**(1/2.))):
+      sumz = primes[fourthPow]**4+primes[thirdPow]**3+primes[secondPow]**2
+      if sumz >= SIZE:
         break
-      elif lst.get(sumz,0) == 0:
-        lst[sumz] = 1
+      setz.add(sumz)
 
-print "time taken:" + str(time.time()-start)
+print "The answer is:", len(setz)
+print "Time Taken:", time.time() - START
 
-print len(lst)
-
-
-print "time taken:" + str(time.time()-start)
-
+"""
+Pretty simple solution here, just iterate through all possible combinations. There's not that many that satisfy it since prime fourth powers get pretty big pretty fast so it only takes ~.91 seconds to find all 1,097,343 of them.
+"""

@@ -1,49 +1,52 @@
-import string
-import time
+import string, time
 from heapq import *
 
-start = time.time()
+START = time.time()
 
 
-temp = open('matrix.txt','r')
-lst = string.split(temp.read(),'\n')
-for i in xrange(0,len(lst)):
-  lst[i] = string.split(lst[i],',')
+fileRead = open('matrix.txt','r')
+matrix = string.split(fileRead.read(),'\n') #Reading in the matrix and splitting it into rows
 
-lst = lst[:-1] +lst[-1][:-1]
-for i in xrange(0,len(lst)):
-  for j in xrange(0, len(lst[i])):
-    lst[i][j] = int(lst[i][j]) #this is just int-ifying stuff
+matrix = [string.split(row,",") for row in matrix] #Splitting the matrix rows into individual entries
+matrix = matrix[:-1] +matrix[-1][:-1] #Clean off junk at the ends
 
-size = len(lst)
+matrix = [ [int(x) for x in row ] for row in matrix] #int-ifying the matrix
 
-answer = []
-for i in xrange(0,size):
-  answer = answer+[[-1]*size]
+SIZE = len(matrix)
+
+# -1 to symbolize that the element has not been traversed before.
+answer = [ [-1]*SIZE for i in range(SIZE) ] #making the original solution matrix.
 
 heap =[]
 heapify(heap)
-for i in xrange(0,size):
-  heappush(heap, (lst[i][0],str(i),'0'))
+for i in xrange(0,SIZE):
+    heappush(heap, (matrix[i][0],i,0))
 
 
 while len(heap) > 0:
-  item = heappop(heap)
-  x,y= int(item[1]),int(item[2])
-  if x < size-1 and answer[x+1][y] == -1:
-    heappush(heap, (lst[x+1][y] +item[0],str(x+1),str(y)))
-  if y < size-1 and answer[x][y+1] == -1:
-    heappush(heap, (lst[x][y+1] +item[0],str(x),str(y+1)))
-  if x > 0 and answer[x-1][y] == -1:
-    heappush(heap, (lst[x-1][y] +item[0],str(x-1),str(y)))
-  if answer[x][y] == -1 or answer[x][y] > item[0]:
-    answer[x][y] = item[0]
+    nextVal = heappop(heap)
+    currentCost, x,y= nextVal
+
+    if x < SIZE-1 and answer[x+1][y] == -1:
+        heappush(heap, (matrix[x+1][y] +currentCost,x+1,y))
+    if y < SIZE-1 and answer[x][y+1] == -1:
+        heappush(heap, (matrix[x][y+1] +currentCost,x,y+1))
+    if x > 0 and answer[x-1][y] == -1:
+        heappush(heap, (matrix[x-1][y] +currentCost,x-1,y))
+
+    if answer[x][y] == -1 or answer[x][y] > currentCost:
+        answer[x][y] = currentCost
 
 
-ans_lst = [0]*size #getting the last column
-for i in range(0,size):
-  ans_lst[i] = answer[i][-1]
-print min(ans_lst)
-print "time taken: " + str(time.time()-start)
+print min([col[-1] for col in answer]) 
+print "Time Taken:", time.time() - START
 
 
+"""
+Basic idea behind this algorithm is to run Dijkstra's with a priority queue, and enter in new values based on which one costs the least to add at the moment. 
+Runtime is:
+time taken: 0.123919963837, which got better after I changed my previous foolishness of using string -> int -> string conversino. hehe. It's nice to improve xD;;
+answer was 260324
+
+
+"""
