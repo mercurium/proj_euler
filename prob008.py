@@ -1,6 +1,6 @@
 import string, time
 start = time.time()
-fileName = open('prob8input.txt','r')
+fileName = open('prob008lst.txt','r')
 
 number = fileName.read()
 maxz = max(reduce(lambda x,y: int(x) * int(y), number[i:i+5], 1) \
