@@ -1,15 +1,21 @@
-from primes import *
 import time
-start = time.time()
-#well... i brute forced it and it takes 14.6 seconds to run... :|
+START = time.time()
+
+def gcd(a,b):
+    while a!= 0:
+        a,b = b%a,a
+    return b
 
 count = 0
-for i in range(5,12001):
-  for j in range(i/3 +1, i/2+1):
-    if gcd(i,j) ==1: count +=1
+for d in xrange(5,12001):
+    for n in xrange(d/3 +1, d/2+1):
+        if gcd(d,n) ==1:
+            count +=1
 print count
+print "Time Taken:", time.time() - START
+
+"""
+Simple brute force iteration through all i = 5 to i = 12,000, and taking numerators where 1/3 < d/n < 1/2
 
 
-print "time elapsed = " + str(time.time()-start)
-
-
+"""

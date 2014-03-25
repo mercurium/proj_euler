@@ -1,25 +1,30 @@
-import string
-import time
-start = time.time()
-#run time of 42.229 second ;___;
-lst = range(0,10**7)
+import string, time
+START = time.time()
 
-for i in range(2, len(lst)):
-  if lst[i] == i:
-    for j in range(i,len(lst),i):
-      lst[j] *= (i-1.0)/i
+totient = range(0,10**7) #compute all the totients
+for i in xrange(2, len(totient)):
+    if totient[i] == i:
+        for j in xrange(i,len(totient),i):
+            totient[j] *= (i-1.0)/i
 
-print "Time Taken: " + str(time.time()-start)
+minVal = 500 
+minIndex = 0
+for i in xrange(2,len(totient)): #find the number with the lowest ratio
+    totient[i] = int(totient[i])
+    if i%2 !=0 and i%3 != 0 and i%5 != 0 and \
+      sorted( str(totient[i]) ) ==sorted( str(i) ) and \
+      i*1.0/totient[i] < minVal:
+        minVal = i*1.0/totient[i]
+        minIndex = i
 
-min = 500
-min_i = 0
-for i in range(2,len(lst)):
-  lst[i] = int(lst[i])
-  if i%2 !=0  and i%3 != 0 and i%5 != 0:
-    if sorted( str(lst[i]) ) ==sorted( str(i) ):
-      if i*1.0/lst[i] < min:
-        min = i*1.0/lst[i]
-        min_i = i
-        print i, lst[i], i*1.0/lst[i]
-print min_i, min
-print "Time Taken: " + str(time.time()-start)
+print "The number with the lowest ratio was:", minIndex, "with a ratio of", minVal
+print "Time Taken:", time.time() - START
+
+"""
+Main idea of the problem, compute all of the totients of each number. You can do this quickly using a modification of the sieve.
+
+Then, check if totient values are permutations by using sorted(num) == sorted(totient(num))
+
+Then compute the ratio and voila, you get the answer
+
+"""

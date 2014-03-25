@@ -1,35 +1,29 @@
 import time
-start = time.time()
+START = time.time()
 
-size = 1500
+SIZE = 1500
+rightTriangle = dict()
 
-vals = dict()
+for m in xrange(2,SIZE):
+    if m**2 > 1500000: break
+    for n in xrange(1,m):
+        val = 2*m*(m+n)
 
-for m in xrange(2,size):
-  if m**2 > 1500000: break
-  for n in xrange(1,m):
-    val = 2*m*(m+n)
-
-    if val > 1500000: break
-    for k in xrange(1,125001):
-      valz = k * val
-      if valz > 1500000: break
-      a,b = m*m*k - n*n*k, 2*m*n*k
-      if a > b: a,b = b,a
-      try:
-        vals[valz].add((a,b))
-      except:
-        vals[valz] = set()
-        vals[valz].add((a,b))
-     
-count = 0
-for i in vals.keys():
-  if len(vals[i]) == 1:
-    count +=1
+        if val > 1500000: break
+        for k in xrange(1,125001):
+            valz = k * val
+            if valz > 1500000: break
+            a,b = m*m*k - n*n*k, 2*m*n*k
+            if a > b:
+                a,b = b,a
+            if valz not in rightTriangle:
+                rightTriangle[valz] = set()
+            rightTriangle[valz].add((a,b))
+         
+count = sum([ (len(rightTriangle[perim]) == 1) for perim in rightTriangle.keys()])
 
 print count
-  
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time()-START
 
 #http://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple
 #161667

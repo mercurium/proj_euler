@@ -1,40 +1,37 @@
 import time
-start = time.time()
+START = time.time()
 
 size = 10**6
-vals = {0:1,1:1,2:2,3:3,4:5}
+partCount = {0:1,1:1,2:2,3:3,4:5}
 
 def partitions(n):
-  if n in vals:
-    return vals[n]
-  sumz = 0
-  k = 1
-  while (n-(k*(3*k-1)/2)) >= 0:
-    sumz+= (-1)**(k%2-1)* vals[(n- k*(3*k-1)/2)]
-    k+=1
+    if n in partCount:
+        return partCount[n]
+    sumz = 0
+    k = 1
+    while (n-(k*(3*k-1)/2)) >= 0:
+        sumz+= (-1)**(k%2-1)* partCount[(n- k*(3*k-1)/2)]
+        k+=1
+        
+    k = -1
+    while (n-(k*(3*k-1)/2)) >= 0:
+        sumz+= (-1)**(k%2-1)* partCount[(n- k*(3*k-1)/2)]
+        k-=1
+    partCount[n] = sumz %10**6
+    return partCount[n]
     
-  k = -1
-  while (n-(k*(3*k-1)/2)) >= 0:
-    sumz+= (-1)**(k%2-1)* vals[(n- k*(3*k-1)/2)]
-    k-=1
-  vals[n] = sumz %10**6
-  return vals[n]
-  
 
 part = 1
 i = 4
 while part % size != 0:
-  i+=1
-  part = partitions(i)
-  print i
-print i, "DONE!!! :D :D :D"
-print "Time Taken: " + str(time.time()-start)
+    i+=1
+    part = partitions(i)
+print "The answer is:", i
+print "Time Taken:", time.time() - START
 
-for i in range(1,10):
-  print i, vals[i]
 
-#19, 74, 449, 599
-#P(n) = sum(P(n,k) for k = 1 to n) = P(n-1) + sum(P(n-k,k) for k = 1 to n)
+
+
 
 
 """
