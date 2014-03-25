@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time
 START = time.time()
 from primes import m_r

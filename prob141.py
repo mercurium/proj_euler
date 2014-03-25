@@ -1,3 +1,5 @@
+#NOTE TODO solve it... 
+
 import time
 START = time.time()
 

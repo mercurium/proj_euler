@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time
 start = time.time()
 from math import pi

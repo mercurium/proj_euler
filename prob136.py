@@ -1,16 +1,14 @@
 import time
-start = time.time()
+START = time.time()
 
-size = 10**6
-
+SIZE = 10**6 * 50
 vals = dict()
 iterations = 0
 
-
-for a in xrange(1,size):
+for a in xrange(1,SIZE):
     for b in xrange(a//4+1,a):
         n = a*(4*b-a)
-        if n > size:
+        if n > SIZE:
             break
         iterations +=1
         if n in vals:
@@ -18,17 +16,16 @@ for a in xrange(1,size):
         else:
             vals[n] = 1
 
-print "Time Taken:", time.time() - start
-
+print "Time Taken:", time.time() - START
 
 count = 0
-for i in xrange(1,size):
+for i in xrange(1,SIZE):
     if i in vals and vals[i] == 1:
         count +=1
 
-print "count =", count
-print "num of iterations= ", iterations
-print "Time Taken:", time.time() - start
+print "count:", count
+print "num of iterations:", iterations
+print "Time Taken:", time.time() - START
 
 """
 

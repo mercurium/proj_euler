@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import numpy as np
 import scipy.misc as smp
 from math import *

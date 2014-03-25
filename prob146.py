@@ -1,16 +1,12 @@
 import time
-start = time.time()
+START = time.time()
 from primes import mr
-import sys
 
 sumz = 0
 count = 0
-size = 10**6
+SIZE = 150 * 10**6
 
 not_p = [11,17,19,21,23]
-
-if len(sys.argv) > 1:
-    size = int(sys.argv[1])
 
 for i in xrange(3,28):
     a = i**2
@@ -19,7 +15,7 @@ for i in xrange(3,28):
         sumz += i
         print i
 
-for i in xrange(30,size,10):
+for i in xrange(30,SIZE,10):
     if i%3==0 or i%7 == 0 or i%13 == 0:
         continue
     a = i**2
@@ -35,7 +31,7 @@ for i in xrange(30,size,10):
             print i
 
 print sumz, count
-print "Time Taken:", time.time() -start
+print "Time Taken:", time.time() -START
 
 '""
 676333270 12

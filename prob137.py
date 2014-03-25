@@ -1,10 +1,9 @@
 import time
-start = time.time()
+START = time.time()
 
-values = [2,15]#,15,104,714,4895,33552,229970,1576239]
-count = 0
+values = [2,15]
 mult = 13/2.
-for i in xrange(1,15):
+for i in xrange(1,14):
     val = values[-1]
     num = int(val * mult)
     while True:
@@ -15,10 +14,9 @@ for i in xrange(1,15):
             print num, values[-1]/(1.0*values[-2])
             break
         num+=1
-        count +=1
 
-print count
-print "Time Taken:", time.time() - start
+print num
+print "Time Taken:", time.time() - START
 """
 I just need to find the 15th solution where 5n^2+2n+1 is a square...
 

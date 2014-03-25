@@ -1,32 +1,34 @@
 import time
-start = time.time()
+START = time.time()
 
-
-size =  4*10**7
+SIZE = 4*10**7
 prime_set = set()
-totient_val = [x for x in range(size+1)]
-for i in xrange(2,size):
-  if totient_val[i] == i:
-    for j in xrange(i,size,i):
-      totient_val[j] = (i-1)*totient_val[j]/i
-    prime_set.add(i)
-  totient_val[i] = int(totient_val[i])
-totient_count = [0] * (size+1)
 
-print "Time Taken:", time.time() - start
-
-for i in xrange(2,size):
-  totient_count[i] = totient_count[totient_val[i]] +1
+totient_val = [x for x in range(SIZE+1)]
+for i in xrange(2,SIZE):
+    if totient_val[i] == i:
+        for j in xrange(i,SIZE,i):
+            totient_val[j] = (i-1)*totient_val[j]/i
+        prime_set.add(i)
+    totient_val[i] = int(totient_val[i])
 
 
-print "Time Taken:", time.time() - start
+totient_count = [0] * (SIZE+1)
+
+print "Time Taken:", time.time() - START
+
+for i in xrange(2,SIZE):
+    totient_count[i] = totient_count[totient_val[i]] +1
+
+
+print "Time Taken:", time.time() - START
 sumz = 0
 for i in prime_set:
-  if totient_count[i] == 24: sumz += i
+    if totient_count[i] == 24: sumz += i
 
 print sumz
 
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 
 
 """~/Desktop/python_projects/proj_euler $python -i prob214.py

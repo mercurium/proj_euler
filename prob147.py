@@ -1,3 +1,4 @@
+#NOTE TODO solve it... 
 import string
 from primes import *
 

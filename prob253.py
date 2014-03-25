@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time, string
 from itertools import permutations as perm
 START = time.time()

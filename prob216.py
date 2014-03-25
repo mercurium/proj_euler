@@ -4,7 +4,7 @@ from bitarray import bitarray
 from primes import factor, mr
 import sys
 
-size = 10**2
+size = 10**6
 if len(sys.argv) > 1:
     size = int(sys.argv[1])
 

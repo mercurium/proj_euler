@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 from bitarray import bitarray
 import sys
 import time

@@ -1,20 +1,20 @@
 import time
-start = time.time()
 from primes import mr
+start = time.time()
 
 lst = [i**3 for i in xrange(1,578)]
 
 candidates = set()
 for i in xrange(1,len(lst)):
-  for j in xrange(i-1,-1,-2):
-    candidates.add(lst[i]-lst[j])
-    if lst[i] -lst[j] > 10**6:
-      break
+    for j in xrange(i-1,-1,-2):
+        candidates.add(lst[i]-lst[j])
+        if lst[i] -lst[j] > 10**6:
+            break
 print len(candidates)
 count = 0
 for val in candidates:
-  if mr(val):
-    count+= 1
+    if mr(val):
+        count+= 1
 print count
 print "Time Taken: ", time.time() - start
 
@@ -22,7 +22,7 @@ print "Time Taken: ", time.time() - start
 ~/Desktop/python_projects/proj_euler $python prob131.py
 4527
 173
-Time Taken:  0.131557941437
+Time Taken:    0.131557941437
 
 We only need to go up to 577
 

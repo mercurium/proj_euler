@@ -1,16 +1,10 @@
 from math import *
 import time
-start = time.time()
-import sys
+START = time.time()
+SIZE = 64*10**6
 
-size = 10**5
-if len(sys.argv) > 1:
-    size = int(sys.argv[1])
-
-lst = [1]*size
+lst = [1]*SIZE
 for i in xrange(2,len(lst)):
-    if i%1024 == 0:
-        print i
     a = i**2
     for j in xrange(i,len(lst),i):
         lst[j] += a
@@ -24,6 +18,4 @@ for i in xrange(1,len(lst)):
         sumz +=i
 print count
 print sumz
-print "time elapsed = " + str(time.time()-start)
-
-
+print "Time Taken:", time.time() - START

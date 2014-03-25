@@ -1,49 +1,40 @@
-import math
-import time
-start = time.time()
+import math, time
+from bitarray import bitarray
+
+START = time.time()
+SIZE = 20
+
+#Find the number of semiprimes less than size. 
+def findNumSemiprimes(size):
+    numSemiprimes = 0 
+    isPrime1 = bitarray(SIZE) #(0,0) = untouched. (0,1) = one prime so far
+    isPrime2 = bitarray(SIZE) #(1,0) = two primes, (1,1) = more than two distinct prime factors
+
+    for i in xrange(SIZE): #sadly, need to do this to avoid running low on memory
+        isPrime1[i] = 0
+        isPrime2[i] = 0 
+
+    def getVal(i):
+        return isPrime1[i]*2+isPrime2[i]
+    def setVal(i, val):
+        if val > 3:
+            val = 3
+        isPrime1[i] = val/2
+        isPrime2[i] = val%2
+
+    for i in xrange(2,SIZE):
+        if getVal(i) == 2:
+            numSemiprimes+=1
+        elif getVal(i) == 0:
+            for j in xrange(2*i,SIZE,i):
+                setVal(j, getVal(j)+1)
+        else:
+            pass #We don't care about the number if it's not a semiprime or a prime
+    return numSemiprimes
+
+answer = findNumSemiprimes(SIZE)
+print "The answer is:", answer
+print "Time Taken:", time.time() - START
 
 
-return 0
-
-
-n2 = 3001134
-n3 = 2050943
-n5 = 1270607
-n7 = 927432
-n11= 608113
-n13= 520415
-n17= 405279
-n19= 365552
-
-size = 10**7/2
-primes = [0] * 348513
-sumz = n2+n3+n5+n7+n11+n13+n17+n19
-if True:
-  #here's the actual start of the program
-    start = time.time()
-    lst = [0]*size
-
-    count = 0
-    for i in range(2,len(lst)):
-      if lst[i] == 0:
-        for j in range(i, len(lst), i):
-          lst[j] += 1
-        primes[count] = i
-        count += 1
-    
-    print "Time Taken: " + str(time.time()-start)
-    primes = primes[9:]
-    for i in range(0,len(primes)):
-      if primes[i] > 10**4:
-        break
-      est = size * 20.0/ primes[i]
-      p_fac = int(est/math.log(est) *1.1)
-      for j in range(p_fac,-1,-1):
-        if primes[j] * primes[i] < 10**8:
-          sumz+= j
-          break
-
-
-    print "Total number: ",sumz
-
-print "Time Taken: " + str(time.time()-start)
+#Since we have four states to deal with, prime, notseen yet, 2 distinct factors, and more than two distinct factors, we need two bits per number to store them. This unfortunately requires two bitarrays instead of one, but at least the memory cost is relatively cheap.

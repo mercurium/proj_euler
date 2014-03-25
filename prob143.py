@@ -1,3 +1,5 @@
+#NOTE unsolved TODO
+
 import time
 from math import *
 START = time.time()
