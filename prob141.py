@@ -1,4 +1,4 @@
-#NOTE TODO solve it... 
+#NOTE TODO need to solve it
 
 import time
 START = time.time()

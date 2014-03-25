@@ -1,4 +1,4 @@
-#NOTE unsolved TODO
+#NOTE TODO need to solve it
 
 import time
 from math import *
