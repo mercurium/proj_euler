@@ -26,7 +26,9 @@ def draw_line(x0,y0, direct):
         x1,y1 = x0, y0-1
     draw_pt(x0,y0,RED,0)
 
-    
+for i in xrange(1024):
+    for j in xrange(1024): 
+        draw_line(i,j,0)
 
 a = 'aRbFR'
 b = 'LFaLb'
@@ -35,6 +37,7 @@ start = 'Fa'
 endplaces = []
 
 for i in xrange(18):
+    break
     start_array = list(start)
     for j in xrange(len(start_array)):
         if start_array[j] == 'a':

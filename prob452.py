@@ -52,6 +52,7 @@ So the algorithm I used for this problem was, for each int s < log(SIZE,2), figu
 
 Answer: 345558983
 Time Taken: 475.002918005
+Time Taken: 403.300715208 (on desktop)
 
 
 ~/proj_euler $python prob452.py 
