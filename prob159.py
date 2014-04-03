@@ -1,8 +1,8 @@
-#NOTE TODO need to solve it
+#NOTE TODO need to solve it TURNITIN
 import time
-start = time.time()
+START = time.time()
 
-size = 10**3
+size = 10**6
 pfactor = [0] + [1,2]*(size//2)
 for i in xrange(3,size,2):
     if pfactor[i] == 1:
@@ -10,8 +10,8 @@ for i in xrange(3,size,2):
         for j in xrange(i**2,size,i*2):
             pfactor[j] = i
 
-def factor(n):
-    if n == 0 or n == 1:
+def factors(n):
+    if n <= 1:
         return []
     facts = []
     while n > 1:
@@ -19,21 +19,32 @@ def factor(n):
         n /= pfactor[n]
     return sorted(facts)
 
+def divisors(n):
+    factorList = factors(n)
+    if len(factorList) == 0:
+        print "ERROR"
+        return "ABBAIOIRJER"
+    divs = set([factorList[0]])
+    for factor in factorList:
+        newSet = set()
+        for elt in divs:
+            newSet.add(factor * elt)
+        divs = divs.union(newSet)
+    return sorted(divs)
+
+drsStored = dict()
 def drs(n):
+    if n in drsStored: #don't redo work
+        return drsStored[n]
     if n < 10:
         return n
-    sumz = 0
-    r = 9
-    while n > 1 and r > 1:
-        while n% r == 0:
-            sumz += r
-            n /= r
-        r -= 1
-    val = factor(n)
-    for i in xrange(len(val)):
-        val[i] = sum([int(x) for x in str(val[i])])
-    sumz += sum(val)
-    return sumz
+    maxVal = drs(sum([int(x) for x in str(n)]))
+    for div in divisors(n):
+        newVal = drs(n/div) + drs(sum([int(x) for x in str(div)]))
+        if maxVal < newVal:
+            maxVal = newVal
+    drsStored[n] = maxVal
+    return maxVal
 
 def main():
     sumz = 0
@@ -43,8 +54,9 @@ def main():
             print i
     return sumz
 print main() 
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 """
-Never mind, this method is not going to work....
+Answer: 54216812
+Time Taken: 52.1227741241
 
 """
