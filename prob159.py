@@ -1,18 +1,18 @@
 #NOTE TODO need to solve it TURNITIN
-import time
+import time, sys
 START = time.time()
+sys.setrecursionlimit(100)
 
-size = 10**6
-pfactor = [0] + [1,2]*(size//2)
-for i in xrange(3,size,2):
-    if pfactor[i] == 1:
+
+SIZE = 10**6
+pfactor = [0] * (SIZE+1)
+for i in xrange(2,SIZE+1):
+    if pfactor[i] == 0:
         pfactor[i] = i
-        for j in xrange(i**2,size,i*2):
+        for j in xrange(i**2,SIZE,i):
             pfactor[j] = i
 
 def factors(n):
-    if n <= 1:
-        return []
     facts = []
     while n > 1:
         facts += [pfactor[n]]
@@ -21,16 +21,20 @@ def factors(n):
 
 def divisors(n):
     factorList = factors(n)
-    if len(factorList) == 0:
-        print "ERROR"
-        return "ABBAIOIRJER"
-    divs = set([factorList[0]])
+    divs = set([1])
     for factor in factorList:
         newSet = set()
         for elt in divs:
             newSet.add(factor * elt)
         divs = divs.union(newSet)
+    divs.remove(n)
+    divs.remove(1)
     return sorted(divs)
+
+def sumDig(n):
+    while n > 9:
+        n = sum([int(x) for x in str(n)])
+    return n
 
 drsStored = dict()
 def drs(n):
@@ -38,9 +42,9 @@ def drs(n):
         return drsStored[n]
     if n < 10:
         return n
-    maxVal = drs(sum([int(x) for x in str(n)]))
+    maxVal = sumDig(n)
     for div in divisors(n):
-        newVal = drs(n/div) + drs(sum([int(x) for x in str(div)]))
+        newVal = drs(n/div) + drs(div)
         if maxVal < newVal:
             maxVal = newVal
     drsStored[n] = maxVal
@@ -48,15 +52,21 @@ def drs(n):
 
 def main():
     sumz = 0
-    for i in xrange(2,size):
+    for i in xrange(2,SIZE):
         sumz += drs(i)
         if i %1024 == 0:
             print i
     return sumz
+
 print main() 
 print "Time Taken:", time.time() - START
 """
-Answer: 54216812
-Time Taken: 52.1227741241
+For this problem, find all possible factorizations, then compute the maxiumum digital root sum for each number. Like for example, if 24 pops up, we just return 11 since we know that 3x8 is the largest it can be. Therefore we recursively check all the possible factorizations and memoize results and reuse them.
 
+Answer: 14489159
+Time Taken: 20.2730100155
+
+Congratulations, the answer you gave to problem 159 is correct.
+
+You are the 1800th person to have solved this problem.
 """
