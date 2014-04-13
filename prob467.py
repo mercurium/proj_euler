@@ -3,7 +3,7 @@ from bitarray import bitarray
 from math import log
 START = time.time()
 
-SIZE = 10
+SIZE = 10**1
 
 def digitalRoot(n):
     while n >= 10:
@@ -37,21 +37,26 @@ def findShortestInt(primeIndex, compositeIndex):
     if (primeIndex, compositeIndex) in cachedResult: 
         return cachedResult[primeIndex, compositeIndex]
 
+    if primeIndex == SIZE and compositeIndex == SIZE:
+        return 0
+
     """If we've put all the prime digits down, put the composite digits now"""
     if primeIndex == SIZE: 
-        answer = 0
-        for i in xrange(compositeIndex, SIZE):
-            answer *= 10
-            answer += composites[i]
+        answer = findShortestInt(primeIndex, compositeIndex+1) 
+        if answer == 0:
+            answer = composites[compositeIndex]
+        else:
+            answer += composites[compositeIndex] * 10**int(log(answer,10)+1)
         cachedResult[primeIndex, compositeIndex] = answer
         return answer
 
     """If we've put all the composite digits down, put the prime digits down now"""
     if compositeIndex == SIZE: 
-        answer = 0
-        for i in xrange(primeIndex, SIZE):
-            answer *= 10
-            answer += primes[i]
+        answer = findShortestInt(primeIndex+1, compositeIndex) 
+        if answer == 0:
+            answer = primes[primeIndex]
+        else:
+            answer += primes[primeIndex] * 10** int(log(answer,10)+1)
         cachedResult[primeIndex, compositeIndex] = answer
         return answer
 
@@ -61,7 +66,7 @@ def findShortestInt(primeIndex, compositeIndex):
         answer += primes[primeIndex] * 10**(int(log(answer,10)+1))
 
         cachedResult[primeIndex, compositeIndex] = answer
-        return cachedResult[primeIndex, compositeIndex]
+        return answer
 
     """Otherwise, we should use dynamic programming to return the result with the lowest cost"""
     goPrime = findShortestInt(primeIndex+1, compositeIndex) 
@@ -70,13 +75,17 @@ def findShortestInt(primeIndex, compositeIndex):
     goComposite = findShortestInt(primeIndex, compositeIndex+1) 
     goComposite += composites[compositeIndex] * 10**int(log(goComposite,10)+1)
 
-    cachedResult[primeIndex, compositeIndex] =  min(goPrime, goComposite)
-    return cachedResult[primeIndex, compositeIndex]
+    answer = min(goPrime, goComposite)
+    cachedResult[primeIndex, compositeIndex] =  answer
+    return answer
 
 for primeIndex in xrange(SIZE,0,-1):
-    print primeIndex
     for compositeIndex in xrange(SIZE,0,-1):
         findShortestInt(primeIndex, compositeIndex)
+    if SIZE - primeIndex >= 2: #To make sure we don't run out of memory...
+        for compositeIndex in xrange(SIZE,0,-1):
+            if (primeIndex+2, compositeIndex) in cachedResult:
+                del cachedResult[primeIndex+2, compositeIndex]
 
 print findShortestInt(0,0) #% (10**9+7)
 
