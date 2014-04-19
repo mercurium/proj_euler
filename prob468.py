@@ -1,6 +1,8 @@
 import time
+from bitarray import bitarray
 START = time.time()
 SIZE = 11
+MOD = 10**9 + 993
 
 import operator as op
 def ncr(n, r):
@@ -10,27 +12,37 @@ def ncr(n, r):
     denom = reduce(op.mul, xrange(1, r+1))
     return num//denom
 
-primeChecker = [True] * (SIZE+1)
-primes = []
-for i in xrange(2,SIZE+1):
-    if primeChecker[i] == True:
-        primes.append(i)
-        for j in xrange(i**2,SIZE+1,i):
-            primeChecker[j] = False
-primeChecker[1] = False
+pfactor = range(SIZE+1)
 
-sumz = 0
-for r in xrange(0,SIZE+1):
-    cnr = ncr(SIZE,r)
+for i in xrange(2,SIZE+1):
+    if pfactor[i]==i:
+        for j in xrange(i**2,SIZE+1,i):
+            pfactor[j] = i
+pfactor[1] =0
+
+def factor(n):
+    factors = []
+    while n != 1 and pfactor[n] != n:
+        factors.append(pfactor[n])
+        n /= pfactor[n]
+    return factors
+
+sumz = SIZE
+cnr = 1
+for r in xrange(0,SIZE/2):
+    cnr = (cnr * (SIZE-r))/(r+1)
     prod = 1
-    for i in range(1,SIZE+1):
-        if not primeChecker[i]:
+    c = cnr
+    for i in xrange(1,SIZE+1):
+        if pfactor[i] != i:
             sumz += prod
             continue
-        while cnr  % i == 0:
+        while c  % i == 0:
             prod *= i
-            cnr /= i
+            c /= i
         sumz += prod
+    sumz %= MOD
+    print r
             
-print sumz
+print (sumz*2) % MOD
 print "Time Taken:", time.time() - START
