@@ -4,45 +4,50 @@ START = time.time()
 SIZE = 11
 MOD = 10**9 + 993
 
-import operator as op
-def ncr(n, r):
-    r = min(r, n-r)
-    if r == 0: return 1
-    num = reduce(op.mul, xrange(n, n-r, -1))
-    denom = reduce(op.mul, xrange(1, r+1))
-    return num//denom
-
 pfactor = range(SIZE+1)
-
 for i in xrange(2,SIZE+1):
     if pfactor[i]==i:
         for j in xrange(i**2,SIZE+1,i):
             pfactor[j] = i
-pfactor[1] =0
 
-def factor(n):
+def factor(n): #return all the factors of n
     factors = []
-    while n != 1 and pfactor[n] != n:
+    while n > 1 and pfactor[n] != n:
         factors.append(pfactor[n])
         n /= pfactor[n]
+    if n > 1:
+        factors.append(n)
     return factors
 
 sumz = SIZE
-cnr = 1
-for r in xrange(0,SIZE/2):
-    cnr = (cnr * (SIZE-r))/(r+1)
+ncrDict = dict()
+for r in xrange(0,SIZE/2): #Since ncr is symmetrical, only do half of the work
+    """ Adding in the new factors of the next number"""
+    for f in factor(SIZE-r):
+        if f not in ncrDict:
+            ncrDict[f] = 1
+        else:
+            ncrDict[f] +=1
+    """ Removing the factors of the denominator"""
+    for f in factor(r+1):
+        ncrDict[f] -= 1
+        if ncrDict[f] == 0: #We don't want to iterate over lots of 0's
+            del ncrDict[f] 
+
     prod = 1
-    c = cnr
     for i in xrange(1,SIZE+1):
-        if pfactor[i] != i:
+        if pfactor[i] != i or i not in ncrDict:
             sumz += prod
+            if i == 2:
+                print "RAWR", i, prod
             continue
-        while c  % i == 0:
-            prod *= i
-            c /= i
+        prod *= pow(i, ncrDict[i], MOD)
         sumz += prod
+        if i == 2:
+            print "RAWR", i, prod
+        print SIZE, r, i, prod
     sumz %= MOD
-    print r
+    print r, ncrDict
             
 print (sumz*2) % MOD
 print "Time Taken:", time.time() - START

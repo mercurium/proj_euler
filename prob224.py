@@ -40,7 +40,6 @@ print "Time Taken:", time.time() - START
 
 
 """
-<<<<<<< Updated upstream
 We want to solve:
 a^2 +1 = 2bk+k^2
 and this is satisfied when k%4 = 1
@@ -109,7 +108,6 @@ k = 1
 b = 1800
 
 k(2b+k) = 4x^2 + 1
-=======
 c^2 = b^2 + a^2+1
 c = (b+k)
 c^2 = b^2 + 2bk+k^2
@@ -122,11 +120,5 @@ c = b+k
 
 a+b+c = a+(a^2+1-k^2)/2k + (a^2+1-k^2)/k + k
 a+b+c = a+(a^2+1)/k
-
-
-
-
-
->>>>>>> Stashed changes
 
 """
