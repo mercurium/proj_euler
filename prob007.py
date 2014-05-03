@@ -2,12 +2,12 @@ import time
 start = time.time()
 
 SIZE = 15*10**4
-lst = [0] * SIZE 
-count = 0
+numbers = [True] * SIZE 
+count = 1 #starts at 1 since we're skipping 2 later
 for i in xrange(3,SIZE,2):
-    if lst[i] == 0:
+    if numbers[i]:
         for n in xrange(i**2,SIZE,i*2):
-            lst[n]=1
+            numbers[n]=False
         count+=1
     if count == 10001:
         print i

@@ -13,8 +13,8 @@ def factor(val):
 
     if val == 1:
         return [1]
-    temp = factor_rec(val, 2)
-    return [temp] + factor(val/temp) 
+    nextFactor = factor_rec(val, 2)
+    return [nextFactor] + factor(val/nextFactor) 
 
 print factor(num_to_factor)[:-1]
 print "Time Taken:", time.time()-START 
