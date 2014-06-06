@@ -1,17 +1,19 @@
 #NOTE TODO need to solve it
 import time
-from math import e, log
-start = time.time()
-size = 100
+START = time.time()
+height = 1
 
-total_sum = 0;
+triangle = [ [-1] * (2*x+1) for x in range(0,height)]
 
-for i in range(5,size+1):
-  guess = int(i/e + .5)
-  if i * (2**(int(log(size,2))) * 5**(int(log(size,5)))) % guess == 0:
-    total_sum += i
-  else: total_sum -= i
-  
-print total_sum
+for i in xrange(0, 3**(height**2)):
+    for h in range(height):
+        for col in range(len(triangle[h])):
+            triangle[h][col] = i/(3**(h+col)) % 3
+            if triangle[h][col] == 
 
-print "Time Taken: " + str(time.time()-start)
+print "Time Taken:", time.time() - START
+
+"""
+
+
+"""

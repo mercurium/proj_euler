@@ -1,6 +1,8 @@
 #NOTE TODO need to solve it
 import time
 START = time.time()
+SIZE = 16
+NUMDIG = 10
 
 data = open('data185.txt','r')
 data = data.read()
@@ -9,58 +11,44 @@ guesses = [[int(x) for x in g] for g in data.split()[::2]]
 correct = [int(x) for x in data.split()[1::2] ]
 count = [0]
 
-c = [set() for x in range(16)]
-for g in guesses:
-    for i in range(16):
-        c[i].add(g[i])
-print [len(x) for x in c]
-
-
-a = [-1] * 16
-def base_case():
-    count[0] +=1
-    num_correct = correct[:]
-    for g in xrange(len(guesses)):
-        for i in xrange(len(a)):
-            if guesses[g][i] == a[i]:
-                num_correct[g] -=1
-                if num_correct[g] < 0:
-                    return False
-    if min(num_correct) == max(num_correct) == 0:
-        print a
-        return True
-    return False
-
-
-def recurse(level):
-    count[0] +=1
-    if count[0] % 1024 == 0:
-        print count[0], a
-    while level != 14 and a[level] != -1:
-        level +=1
-    for g in xrange(len(guesses)):
-        num_correct = correct[g]
-        for i in xrange(level):
-            if guesses[g][i] == a[i]:
-                num_correct -=1
-                if num_correct < 0:
-                    return False
-        if (16-level) < num_correct:
-            return False
-    for a[level] in xrange(10):
-        if level != 15:
-            if recurse(level+1):
-                return True
-        else:
-            if base_case():
-                return True
-    a[level] = -1
-    return False
-
-
-for a[0] in xrange(0,10):
-    continue
-    recurse(1)
-
-print "Time Taken:", time.time()-START
+def recurse(pos, vals, appendedVals):
+    if pos != 0:
+        for g in sameSet[(pos-1,appendedVals[-1])]:
+            vals[g] -=1
+            if vals[g] < 0:
+                return -1
+    if pos == SIZE and vals == [0]*(len(guesses)):
+        print pos, appendedVals, vals, "ANSWER"
+        return appendedVals
+    elif pos == SIZE:
+        return -1
+    for i in range(NUMDIG):
+        if (pos,i) in sameSet:
+            ans = recurse(pos+1, vals[:], appendedVals + [i])
+            if ans != -1:
+                return ans
+    if pos < 6:
+        print pos, appendedVals, vals
+    return -1
     
+
+
+sameSet = dict()
+for g in range(len(guesses)):
+    for index in range(SIZE):
+        if (index, guesses[g][index]) in sameSet:
+            sameSet[(index,guesses[g][index])].add(g)
+        else:
+            sameSet[(index,guesses[g][index])] = set([g])
+for i in range(SIZE):
+    for j in range(NUMDIG):
+        if (i,j) in sameSet:
+            print i,j, sameSet[(i,j)]
+
+entries = sameSet.keys()
+for entry in entries:
+    if len(sameSet[entry]) < 2:
+        del sameSet[entry]
+
+#print recurse(0,correct[:], [])
+print "Time Taken:", time.time()-START

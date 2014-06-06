@@ -9,15 +9,15 @@ MOD_POW = 5
 MOD = 10**MOD_POW
 SIZE = 10**POWER
 
-#second parameter is for if we want to ignore the multiples of 10. 1=ignore,0 = don't ignore.
-def fa(n, ignore_10=0): 
+#second parameter is for if we want to ignore the multiples of 10.
+def fa(n, ignore10=False): 
 	if n == 0 or n == 1:
 		return 1
 	prod = 1
 	two_count = 0
 	for i in xrange(2,n+1):
 		a = i
-		if i%10==0 and ignore_10:
+		if not ignore10 and i%10==0:
 			continue
 		while a%2 == 0:
 			a /= 2
@@ -30,14 +30,14 @@ def fa(n, ignore_10=0):
 	return prod
 
 
-val = fa(MOD,1)
+val = fa(MOD,True)
 print val
 
-POWER_NECS = sum(10**x for x in xrange(POWER-MOD_POW+1))
+POWER_NECS = sum(10**x for x in xrange(POWER-MOD_POW+1)) -1
 print POWER_NECS
 vals_after = fa(MOD/10)
 print (pow(val,POWER_NECS,MOD) * vals_after)%MOD 
-print "Time Taken:", time.time() -start
+print "Time Taken:", time.time() -START
 
 
 
