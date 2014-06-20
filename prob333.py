@@ -2,6 +2,7 @@ import time
 from math import log
 START = time.time()
 SIZE = 10**6
+END_CASE = int(math.log(SIZE,3))
 
 def prime_gen(size): #Find all primes < the input size
     primes = [2]
@@ -14,29 +15,31 @@ def prime_gen(size): #Find all primes < the input size
             primes.append(i)
     return primes
 
-primes = prime_gen(SIZE)
 
-values = dict()
-def recurse(threePow, twoPow, runningSum):
-    if threePow == 13:
-        if runningSum in values:
-            values[runningSum] += 1
+prevComputedValues = dict()
+def recurse(threePow, twoPow, runningSum): # Int, Int, Int
+    if threePow == END_CASE:
+        if runningSum in prevComputedValues:
+            prevComputedValues[runningSum] += 1
         else:
-            values[runningSum] = 1
+            prevComputedValues[runningSum] = 1
         return
 
     for i in range(0, twoPow):
-        if 2**i * 3**threePow + runningSum > SIZE:
+        nextPartitionItem = 2**i * 3**threePow
+        if nextPartitionItem + runningSum > SIZE:
             break
-        recurse( threePow +1, i, runningSum + 2**i * 3**threePow)
+        recurse( threePow +1, i, runningSum + nextPartitionItem)
     recurse(threePow +1, twoPow, runningSum)
 
 
+
+primes = prime_gen(SIZE)
 recurse(0, int(math.log(SIZE, 2) + 1), 0)
 
 sumz = 0
 for p in primes:
-    if p in values and values[p] == 1:
+    if p in prevComputedValues and prevComputedValues[p] == 1:
         sumz += p
 
 print sumz

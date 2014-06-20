@@ -3,9 +3,9 @@ from fractions import Fraction as Fr
 START = time.time()
 SIZE = 9
 
-def concat(lst): #Turns something like [1,2,3,4,5] -> 12345
+def turnDigListIntoInt(lst): #Turns something like [1,2,3,4,5] -> 12345
     sumz = lst[0]
-    for i in range(1,len(lst)):
+    for i in xrange(1,len(lst)):
         sumz *= 10
         sumz += lst[i]
     return sumz
@@ -20,9 +20,7 @@ def countPossibilities(start, stop):
         return answers[(start, stop)]
 
     currentAnswer = set()
-    for index in range(start, stop):
-        if stop - start >= 4: # This is just for me to see progress
-            print stop-start, index, start, stop
+    for index in xrange(start, stop):
         frontSet = countPossibilities(start,index)
         backSet  = countPossibilities(index+1,stop)
         for a in frontSet: #For each pair a,b try all four possible actions.
@@ -33,8 +31,8 @@ def countPossibilities(start, stop):
                 if b != 0:
                     currentAnswer.add(Fr(a,b))
 
-    #Don't forget the possibility of concatenating digits.
-    currentAnswer.add(concat(range(start,stop+1))) 
+    #Don't forget the possibility of turnDigListIntoIntenating digits.
+    currentAnswer.add(turnDigListIntoInt(range(start,stop+1))) 
     answers[(start,stop)] = currentAnswer
     return answers[(start,stop)]
 

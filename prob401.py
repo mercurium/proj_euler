@@ -9,19 +9,27 @@ count = 0  #Our accumulator variable
 def sumSq(n): 
     return n*(n+1) *(2*n+1)/6
 
-for d in xrange(1,10**7*2+1):
-    n = SIZE/d
-    count += sumSq(n)
-print count % 10**9
-print "Time Taken:", time.time()-START
+def accountForLargeNumbers(size, lim):
+    count = 0
+    for d in xrange(1,lim+1):
+        n = size/d
+        count += sumSq(n)
+    return count
 
+def accountForSmallNumbers(size,lim):
+    count = 0 
+    numbersAlreadyCounted = size/lim
+    for d in xrange(1, lim):
+        count += (size/d - numbersAlreadyCounted ) * d**2
+    return count
 
-for d in xrange(1, 10**7*5):
-    count += (SIZE/d - 10**7*2) * d**2
+def main():
+    largeNumSum = accountForLargeNumbers(SIZE, 10**7*2)
+    smallNumSum = accountForSmallNumbers(SIZE, 10**7*5)
+    print "The answer is:", (largeNumSum + smallNumSum) % MOD
+    print "Time Taken:", time.time()-START
 
-print count % 10**9
-print "Time Taken:", time.time()-START
-
+main()
 
 """
 Congratulations, the answer you gave to problem 401 is correct.
@@ -48,7 +56,8 @@ And after removing the %MOD, and removing the function call, I get
 Time Taken: 31.6589548588
 but it's not worth keeping since it makes the code less readable and not that much faster
 
-
-
+Okay, I'm not sure what I did but I somehow managed to get:
+Time Taken: 20.8848359585
+after I refactored / cleaned up the code a bit. So weird...
 
 """

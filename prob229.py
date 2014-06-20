@@ -1,4 +1,3 @@
-#NOTE TODO need to solve it
 import time
 from bitarray import bitarray
 START = time.time()
