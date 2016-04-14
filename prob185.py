@@ -30,7 +30,7 @@ def recurse(pos, vals, appendedVals):
     if pos < 6:
         print pos, appendedVals, vals
     return -1
-    
+
 
 
 sameSet = dict()

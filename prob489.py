@@ -2,8 +2,8 @@ import time
 
 START    = time.time()
 SIZE_LIM = 10**5
-A_LIM    = 5
-B_LIM    = 5
+A_LIM    = 10
+B_LIM    = 10
 
 def gcd(a,b):
   while b:
@@ -18,11 +18,12 @@ def getRoughEst(a,b):
   maxVal = 1
   n      = 0
 
-  while n < SIZE_LIM:
+  while n < SIZE_LIM * (1 if (a < 6 ) else 3*10**3):
     num = GD(a,b,n)
     if num > maxVal:
       maxN   = n
       maxVal = num
+      #print n, num
     n += maxVal
   return { 'maxN' : maxN, 'maxVal' : maxVal }
 
@@ -50,6 +51,7 @@ for a in xrange(1,A_LIM + 1):
     sumz += maxN
 
     print a,'\t', b,'\t', maxN,'\t', maxVal
+    #print '==============================='
 
 print sumz
 print "Time Taken:", time.time() - START

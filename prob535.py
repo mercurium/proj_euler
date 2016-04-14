@@ -19,6 +19,14 @@ countArr = [0] * (max(arr) + 1)
 for i in xrange(len(arr)):
   countArr[arr[i]] += 1
 
+countVal = 1
+for i in xrange(max(countArr)-1,0,-1):
+  if i in countArr:
+    countVal = max(countArr.index(i) - 1,1)
+  print "Value for", i+1, ":", countVal
+print "Value for 1 :", len(countArr) -1
+print countArr[:50]
+
 
 print sum(arr[:SIZE])
 print "Time taken:", time.time() - START

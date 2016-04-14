@@ -15,10 +15,6 @@ primes_set = set(primes)
 temp = open('primenum10000.txt','r')
 primes_few = [int(i) for i in string.split(temp.read(),',')]
 
-carmichael = [561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341, 41041, 46657, 52633, 62745, 63973, 75361, 101101, 115921, 126217, 162401, 172081, 188461, 252601, 278545, 294409, 314821, 334153, 340561, 399001, 410041, 449065, 488881, 512461, 530881, 552721, 656601, 658801, 670033, 748657, 825265, 838201, 852841, 997633, 1024651, 1033669, 1050985, 1082809, 1152271, 1193221, 1461241, 1569457, 1615681, 1773289, 1857241, 1909001, 2100901, 2113921, 2433601, 2455921, 2508013, 2531845, 2628073, 2704801, 3057601, 3146221, 3224065, 3581761, 3664585, 3828001]
-
-
-
 def factor(val): #dumb factoring method, use the other one instead...
     if mr(val):
         return [val]
@@ -38,7 +34,7 @@ def factor(val): #dumb factoring method, use the other one instead...
     if val != 1:
         factors.append(val)
     return factors
-    
+
 def totient(n): #dumb version, don't use this...
     lst = [-1] + factor(n)[:-1]
     result = 1.0
@@ -56,7 +52,7 @@ def get_totient(size):  #gives you the totients of all numbers i <= size
     for i in xrange(2,len(lst)):
         if lst[i] == i:
             for j in xrange(i,len(lst),i):
-                lst[j] = (lst[j] * (i-1))/i 
+                lst[j] = (lst[j] * (i-1))/i
     return lst
 
 
@@ -79,7 +75,7 @@ def factor_given_pfactor(n): #simple factoring method, put one of the factors of
     while pfactor[n] != 1:
         factors.append(pfactor[n])
         n /= pfactor[n]
-    return factors    
+    return factors
 
 
 def legendre(a,p): # http://en.wikipedia.org/wiki/Legendre_symbol
@@ -108,7 +104,7 @@ def cipolla(p): # http://en.wikipedia.org/wiki/Cipolla%27s_algorithm
         a = random.randint(int(p**.5)+1,p-1)
     val = rep_sq_sqrt((a,1,(a**2-n)%p), (p+1)/2, p)
     return val[0]
-        
+
 
 def rep_sq_sqrt(n, powz, mod): #NOTE, n is a tuple... a,b,c so that we had a + b * sqrt(c)
     def mult(a,b,mod): #multiplying numbers which share a square root (sqrt)
@@ -117,17 +113,17 @@ def rep_sq_sqrt(n, powz, mod): #NOTE, n is a tuple... a,b,c so that we had a + b
         return (full%mod,frac%mod,a[2])
     if powz == 0: return 1
     if powz == 1: return (n[0] % mod,n[1] % mod, n[2])
-    
+
     val = int(math.log(powz,2))
     lst = [1,n] + [0] * val
     for i in range(2,len(lst)):
         lst[i] = mult(lst[i-1],lst[i-1],mod)
-    
+
     pows = [0] * (val+1)
     power = powz
     for i in range(0,len(pows)):
         pows[i] = power % 2
-        power = power //2 
+        power = power //2
     product = (1,0,n[2])
     for i in range(0,len(pows)):
         if pows[i] == 1:
@@ -138,7 +134,7 @@ def extended_gcd(a, b): #returns c,d such that ac+bd =1
 	if b == 0:
 		return (1, 0)
 	else:
-		q, r = a/b, a%b 
+		q, r = a/b, a%b
 		s, t = extended_gcd(b, r)
 		return (t, s - q * t)
 ext_gcd = extended_gcd
@@ -148,10 +144,10 @@ ext_gcd = extended_gcd
 #x = a2 mod b2
 #... and so on for any number of bases
 
-def crt(bases, vals):    
-    big_base = 1 
-    sumz = 0 
-    for val in bases: big_base *= val 
+def crt(bases, vals):
+    big_base = 1
+    sumz = 0
+    for val in bases: big_base *= val
     for i in range(0,len(bases)):
         curr_base = big_base / bases[i]
         inverse = ext_gcd(bases[i],curr_base)[1]
@@ -160,20 +156,20 @@ def crt(bases, vals):
 
 
 #http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
-def miller_rabin(n): 
+def miller_rabin(n):
     if n == 1: return False
     if n in primes_set: return True #doesn't work for n < 3
-    
+
     for i in range(0,100): #save us some excessive calculations
         if n%primes[i] == 0:
             return False
-    
+
     d,r = n-1, 0
     while d %2 == 0:
-        r+=1 
+        r+=1
         d/= 2 #We'll have n-1 = 2^r * d
-    
-    
+
+
     if n >= 3825123056546413051: return -1 #too large of an input for us
     if n < 1373653: lstz = [2,3]
     elif n < 9080191: lstz = [31,73]
@@ -182,7 +178,7 @@ def miller_rabin(n):
     elif n < 3474749660383: lstz = [2,3,5,7,11,13]
     elif n < 341550071728321:    lstz = [2,3,5,7,11,13,17]
     elif n < 3825123056546413051: lstz = [2,3,5,7,11,13,17,19,23]
-    
+
     def try_composite(a):
         val = pow(a,d,n)
         if val == 1:
@@ -192,13 +188,13 @@ def miller_rabin(n):
                 return False
             val = pow(val,2,n)
         return True # n is definitely composite
- 
+
     for a in lstz:
         if try_composite(a):
             return False
- 
-    return True 
-    
+
+    return True
+
 mr = m_r = miller_rabin
 
 def is_prime(n):
@@ -207,17 +203,17 @@ def is_prime(n):
 def rep_sq(n, powz, mod):
     if powz == 0: return 1
     if powz == 1: return n % mod
-    
+
     val = int(math.log(powz,2))
     lst = [1,n] + [0] * val
     for i in range(2,len(lst)):
         lst[i] = lst[i-1]**2 % mod
-    
+
     pows = [0] * (val+1)
     power = powz
     for i in range(0,len(pows)):
         pows[i] = power % 2
-        power = power //2 
+        power = power //2
     product = 1
     for i in range(0,len(pows)):
         if pows[i] == 1:
@@ -229,7 +225,7 @@ def gcd(a,b):
     while b:
         a,b = b, a%b
     return a
-    
+
 import operator as op
 def ncr(n, r):
     r = min(r, n-r)
