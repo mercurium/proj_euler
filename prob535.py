@@ -1,70 +1,72 @@
-import time, math
+import time, math, sys
+sys.setrecursionlimit(500)
+
+SIZE  = 10**18
 START = time.time()
-SIZE  = 10**3
 
-arr            = [1,1]
-nextCircledInt = 2
-
-for arrIndex in xrange(1,SIZE):
-  if len(arr) > SIZE:
-    break
-  nextNum = arr[arrIndex]
-  arr.extend(xrange(nextCircledInt, nextCircledInt+int(math.sqrt(nextNum))))
-  nextCircledInt += int(math.sqrt(nextNum))
-  arr.append(nextNum)
-
-arr = arr[:SIZE]
-
-countArr = [0] * (max(arr) + 1)
-for i in xrange(len(arr)):
-  countArr[arr[i]] += 1
-
-countVal = 1
-for i in xrange(max(countArr)-1,0,-1):
-  if i in countArr:
-    countVal = max(countArr.index(i) - 1,1)
-  print "Value for", i+1, ":", countVal
-print "Value for 1 :", len(countArr) -1
-print countArr[:50]
-
-
-print sum(arr[:SIZE])
-print "Time taken:", time.time() - START
-
-"""
-Sum of floored square roots from 1 to n, where m = int(sqrt(n)) is:
-  1 * (2 * 1 + 1) + 2 * (2 * 2 + 1) + ... + m * (2*m +1) + (m+1) * (leftovers)
-  = sum(i=1 to m)( 2m^2 + m) + leftovers
-  -> 2 * (m * (m+1) * (2*m+1))/6 + m(m+1)/2 + leftovers
-  -> m * (m+1) * (2m+1)/3 + m(m+1)/2 + leftovers
-"""
+# Technically unused, but it's useful for computing an approximation for how high the next number in the recursion would be.
 def getNum(n):
   sqrtN  = int(math.sqrt(n))
   return (sqrtN * (sqrtN-1) * (sqrtN * 2 - 1))/ 3 \
          + (sqrtN * (sqrtN - 1 )) / 2 \
          + max(0,(n + 1 - sqrtN**2)) * sqrtN
+gn = getNum
 
-target   = 10**18
-upperLim = int((target * 3/2.) ** (2/3.) * 1.15)
-lowerLim = int((target * 3/2.) ** (2/3.))
-m = (upperLim + lowerLim)/2
-prevGuess = getNum(m)
-while prevGuess > target or prevGuess + int(math.sqrt(m+1)) < target:
-  if prevGuess > target:
-    upperLim = m
-    m        = (m + lowerLim) / 2
+# Super simple binary search function
+def binSearch(func, lowerBound, upperBound, target):
+  mid = (lowerBound + upperBound) / 2
+  result = func(mid)
+  if result > target:
+    return binSearch(func, lowerBound, (lowerBound + upperBound)/2, target)
+  elif func(mid+1) < target:
+    return binSearch(func, (lowerBound + upperBound)/2, upperBound, target)
   else:
-    lowerLim = m
-    m        = (m + upperLim) / 2
-  prevGuess = getNum(m)
+    return mid
 
-print m, prevGuess, prevGuess + int(math.sqrt(m+1)), upperLim, lowerLim
-print "Time taken:", time.time() - START
+def createApproxAnswerArray(size):
+  arr = [size]
+  for i in xrange(20):
+    m = arr[-1]
+    if m == 1:
+      break
+    arr.append(binSearch(lambda x: x + gn(x), 0, m, m))
+
+  arr[0] = gn(arr[1])
+  arr.append(1)
+  arr = arr[::-1]
+  return arr
+
+def fixUpAnswerArray(arr, size):
+  for k in xrange(10):
+    for j in xrange(len(arr)):
+      for i in xrange(1,len(arr)-1):
+        getPastNumSum = lambda x: sum([gn(elem) for elem in arr[:i]]) + gn(x)
+        arr[i]        = binSearch(getPastNumSum, 0, arr[i+1], arr[i+1])
+
+        while arr[i] > sum([gn(x) for x in arr[:i-1]]) + gn(arr[i-1]+1):
+          arr[i-1] +=1
+        while arr[i] < sum([gn(x) for x in arr[:i]]):
+          arr[i-1] -=1
+
+    arr[-1] = size - sum(arr[:-1])
+  return arr
+
+def mainFunc(size):
+  arr = createApproxAnswerArray(size)
+  return fixUpAnswerArray(arr, size)
+
+answer = sum([ x*(x+1)/2 for x in mainFunc(SIZE)])
+print answer % 10**9
+print "Time Taken:", time.time() - START
+
 
 """
-
-
 We can sort of use "sum(int(math.sqrt(x)) for x in xrange(1,12926)) -> 973269 (actual # is 986231)"
+
+Answer: 611778217
+Time Taken: 0.133980989456
+
+I feel like I sort of cheated... I mean, I got the right answer, and this code is solely my own, but it doesn't necessarily give the right answer for some sizes... :x
 
 
 """
