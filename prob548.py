@@ -4,7 +4,7 @@ from primes import factor
 
 START      = time.time()
 SIZE       = 10**16
-prime_num  = [2,3,5,7,11,13,17,23,29,31,37,41,43]
+prime_num  = [2,3,5,7,11,13,17,19,23,29,31,37,41,43]
 answer     = 0
 # I don't get why (0,0,0,....) = .5, but it makes the answer consistent
 seenBefore = { (): 0.5, (1,) : 1, (1,1): 3 }
