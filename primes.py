@@ -36,14 +36,14 @@ def factor(val): #dumb factoring method, use the other one instead...
     return factors
 
 def totient(n): #dumb version, don't use this...
-    lst = [-1] + factor(n)[:-1]
-    result = 1.0
+    lst = factor(n)
+    result = lst[0] - 1
     for i in xrange(1,len(lst)):
         if lst[i] != lst[i-1]:
             result = result * (lst[i]-1)
         else:
             result = result * lst[i]
-    return result
+    return int(result)
 
 
 def get_totient(size):  #gives you the totients of all numbers i <= size
@@ -55,6 +55,15 @@ def get_totient(size):  #gives you the totients of all numbers i <= size
                 lst[j] = (lst[j] * (i-1))/i
     return lst
 
+def get_primes(size):  #gives you the totients of all numbers i <= size
+    lst = [1] * (size+1)
+    primes = [2]
+    for i in xrange(3,len(lst), 2):
+        if lst[i] == 1:
+            primes.append(i)
+            for j in xrange(i**2,len(lst),2 * i):
+                lst[j] = 0
+    return primes
 
 def pfactor_gen(size): #for each number n, return some factor of it.
     stuff = [0,1,2] + [1,2] *(size/2-1)

@@ -7,12 +7,19 @@ for i in xrange(2, len(totient)):
         for j in xrange(i,len(totient),i):
             totient[j] *= (i-1.0)/i
 
-minVal = 500 
-minIndex = 0
-for i in xrange(2,len(totient)): #find the number with the lowest ratio
+totient = [int(x) for x in totient]
+
+print "Time Taken:", time.time() - START
+minVal   = 500 # starting seed
+minIndex = 0   # keep track of index with largest ratio
+
+# find the number with the lowest ratio
+# The number with the smallest ratio is not divisible by 2,3,or 5.
+# because otherwise it would be too small. 2|n -> 2*phi(n) <= n
+for i in xrange(3,len(totient), 2):
     totient[i] = int(totient[i])
-    if i%2 !=0 and i%3 != 0 and i%5 != 0 and \
-      sorted( str(totient[i]) ) ==sorted( str(i) ) and \
+    if i%3 != 0 and i%5 != 0 and \
+      sorted( str(totient[i]) ) == sorted( str(i) ) and \
       i*1.0/totient[i] < minVal:
         minVal = i*1.0/totient[i]
         minIndex = i
