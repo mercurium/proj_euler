@@ -1,71 +1,45 @@
-#NOTE TODO need to solve it
 import time
-START = time.time()
+from fractions import Fraction as Fr
 
-#dieT = [0,1,1,1,1]
-#
-#dieC = dict()
-#for i in range(1,7): dieC[(i,1)] = 1
-#dieClst = [0] * (4*6+1)
-#
-#dieO = dict()
-#for i in range(1,9): dieO[(i,1)] = 1
-#dieOlst = [0] * (4*6*8+1)
-#
-#dieD = dict()
-#for i in range(1,13): dieD[(i,1)] = 1
-#dieDlst = [0] * (4*6*8*12+1)
-#
-#sumI = [0] * (4*6*8*12*20+1)
-#
-#dieDict = [dieC, dieO, dieD]
-#countLst = [dieT, dieClst, dieOlst, dieDlst, sumI]
-#diceLen = [6,8,12,20]
-#
-#for iteration in range(5):
-#	for numDie in xrange(2,len(countLst[iteration])): #computing the values for the cube
-#		for i in xrange(numDie,numDie * (diceLen[iteration]) + 1):
-#			dieC[(i,numDie)] = 0
-#			start = max(numDie-1, i-6)
-#			end = min(i, numDie*6-5)
-#			for j in xrange(start, end):
-#				dieC[(i,numDie)] += dieC[(j,numDie-1)]
-#	
-#	for i in dieC.keys(): #this is the spread for the cubes
-#		dieClst[i[0]] += dieT[i[1]] * dieC[i]
+START  = time.time()
 
+dieSides = [1,4,6,8,12,20]
 
+numStart = 1
 
-diceDistr = [[1,1,1,1,1], \
-			[0, 1,1,1,1], \
-			[0] * (4*6+1), \
-			[0] * (4*6*8+1),\
-			[0] * (4*6*8*12+1),  \
-			[0] * (4*6*8*12*20+1)]
-diceProb = [{(1,1):1}, {(1,1):1, (2,1):1, (3,1):1,(4,1):1}, dict(), dict(), dict(), dict()]
-iterSize = [2,5, 4*6+1, 4*6*8+1, 4*6*8*12+1, 4*6*8*12*20+1]
-dieSize = [1,4,6,8,12,20]
+nextArr  = [0] + [Fr(1,numStart)] * numStart
 
-for i in xrange(1,6):
-	for j in range(1,dieSize[i]+1):
-		diceProb[i][(j,1)] = 1
+iterSize = [1,4*numStart+1, 4*6+1, 4*6*8+1, 4*6*8*12+1, 4*6*8*12*20+1]
 
-for iterat in xrange(2,6):
-	sizeOfDice = dieSize[iterat]
-	for numDie in xrange(2, iterSize[iterat-1]):
-		for i in xrange(numDie, sizeOfDice*numDie+1):
-			diceProb[iterat][(i,numDie)] = 0
-			
-			start = max(numDie-1, i-sizeOfDice)
-			end = min((numDie-1) * sizeOfDice+1, i)
-			for j in xrange(start, end):
-				diceProb[iterat][(i,numDie)] += diceProb[iterat][(j,numDie-1)]
-			#print numDie, i, diceProb[iterat][(i,numDie)], start, end
+# die size iteration: 4,6,8,12,20
+for i in xrange(1,5):#len(iterSize)):
+  prevArr  = nextArr
+  nextArr  = [0] * iterSize[i]
+  dieSize  = dieSides[i]
 
-	for i in diceProb[iterat].keys():
-		diceDistr[iterat][i[0]] += diceProb[iterat][i] * diceDistr[iterat-1][i[1]]
-	print iterat
+  countArr = [0,1]
+  # total number of dice being rolled
+  for numDieRoll in xrange(1,len(prevArr)):
+    print i, numDieRoll, len(prevArr)
+    newCountArr = [0] * (dieSize * numDieRoll + 1)
 
+    # The entry that we want to fill in for a spot
+    for slot in xrange(1,len(newCountArr)-numDieRoll + 1):
+      newCountArr[slot]           = sum(countArr[max(slot+1 - dieSize, 0): slot +1])
+      nextArr[slot+numDieRoll-1] += newCountArr[slot] * prevArr[numDieRoll] / dieSize**numDieRoll
+    countArr = newCountArr
+  sqEV = sum( [j**2 * nextArr[j] for j in xrange(len(nextArr))] )
+  EVsq = sum( [j * nextArr[j] for j in xrange(len(nextArr))] ) **2
+  print i, sqEV, EVsq, sqEV - EVsq
 
+sqEV = sum( [i**2 * nextArr[i] for i in xrange(len(nextArr))] )
+EVsq = sum( [i * nextArr[i] for i in xrange(len(nextArr))] ) **2
 
-print "Time Taken:", time.time() - START
+print "Answer:", sqEV, EVsq, sqEV - EVsq
+print "Time taken:", time.time() - START
+
+"""
+should just need to find expected value, and expected value of squaring the final die's value.
+E[x^2] - E[x]^2
+
+"""

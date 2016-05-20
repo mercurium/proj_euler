@@ -8,7 +8,7 @@ f(1000) = 1177848
 
 size = 10**8
 arr = [0]*(size+1)
-sumz = 0 
+sumz = 0
 for i in xrange(2,size+1):
   if i > size/2: break
   if arr[i] == -1: #number isn't squarefree, we don't want it.
@@ -30,15 +30,15 @@ for i in xrange(2,size+1):
   #if it has an odd # of factors, add it back on
   elif arr[i]%2 == 1:
     sumz += a*(a-1)/2
-  
+
   #even number of prime divisors, want to subtract it off
   elif arr[i]%2 == 0:
     sumz -= a*(a-1)/2
-  
+
 
 
 #Since we're only computing it for each little triangle, multiply result by 6 to get answer, then add the edges.
-print "actual sum:", sumz*6+(size-1)*6
+print "actual sum:", sumz*6+(size-2)*6
 print "Time Taken:", time.time() - start
 
 
@@ -57,7 +57,7 @@ So we want to add up # of points in size/2 + size/3 + size/5 + size/7 + ...etc.
 
 HOWEVER, numbers like 6 = 2*3 get counted twice, so we need to subtract them off. Also numbers like 4 = 2*2 don't need to be counted.
 
-So if odd # of prime factors, add it, if even: subtract it, though ignore if not squarefree. 
+So if odd # of prime factors, add it, if even: subtract it, though ignore if not squarefree.
 
 Using idea of P(A or B) = P(A) + P(B) - P(A and B)
 

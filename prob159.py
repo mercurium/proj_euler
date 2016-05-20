@@ -1,4 +1,3 @@
-#NOTE TODO need to solve it TURNITIN
 import time, sys
 START = time.time()
 sys.setrecursionlimit(100)
@@ -58,13 +57,15 @@ def main():
             print i
     return sumz
 
-print main() 
+print main()
 print "Time Taken:", time.time() - START
 """
 For this problem, find all possible factorizations, then compute the maxiumum digital root sum for each number. Like for example, if 24 pops up, we just return 11 since we know that 3x8 is the largest it can be. Therefore we recursively check all the possible factorizations and memoize results and reuse them.
 
 Answer: 14489159
+Time Taken: 3.96521806717 # Used pypy
 Time Taken: 20.2730100155
+
 
 Congratulations, the answer you gave to problem 159 is correct.
 

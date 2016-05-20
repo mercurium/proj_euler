@@ -1,17 +1,24 @@
 import time,math
-START = time.time()
-from primes import *
-SIZE = 30
+from primes import get_primes
 
-sumz = 0
-val = [1]
-for i in primes:
-    if i> SIZE:
-        break
-    val.append( (  i,i**int( math.log(SIZE,i) )  ))
+START = time.time()
+SIZE  = 100
+
+primes = get_primes(SIZE)
+sumz   = 0
+val    = [1]
+
+for i in primes[::-1]:
+  if i > SIZE / 2:
+    val.append(i)
+    continue
+  val.append( i**int( math.log(SIZE,i)))
 
 print len(val)
+print sum(val)
+print val
 
+print "Time taken:", time.time() - START
 
 
 

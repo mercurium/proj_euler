@@ -80,10 +80,7 @@ print "Time taken:", time.time() - START
 
 
 """
-Answer: 162619462356610313
-Time taken: 104.634049892 (Palantir work laptop)
-
-Turns out that the part I was missing from the previous solution was the a! part that falls out after you take factorials... had to have Matt point it out to me T.T
+Getting 162590298313536289... it's a bit off... o.O
 
 
 """

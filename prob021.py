@@ -1,5 +1,5 @@
 import time
-start = time.time()
+START = time.time()
 
 size = 10**4
 divisor_sum = [0]*size

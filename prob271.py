@@ -1,4 +1,5 @@
 import time
+from primes import factor
 start = time.time()
 
 def slow_comp(n):
@@ -22,7 +23,7 @@ ext_gcd = extended_gcd
 #x = a2 mod b2
 #... and so on for any number of bases
 
-def crt(bases, vals):  
+def crt(bases, vals):
   big_base = 1
   sumz = 0
   for val in bases: big_base *= val
@@ -34,24 +35,23 @@ def crt(bases, vals):
 
 
 fixed_val = 153416670
-changers = [7,13,19,31,37,43]
-change_val = [[1,2,4],[1,3,9],[1,7,11],[1,5,25],[1,10,26],[1,6,36]]
+changers  = [7,13,19,31,37,43, fixed_val]
+cv        = [[1,2,4],[1,3,9],[1,7,11],[1,5,25],[1,10,26],[1,6,36]]
+sumz      = [0]
 
+def func(depth, array):
+  if depth == 5:
+    for i in xrange(3):
+      val = crt(changers, array + [cv[5][i]] + [1])
+      if val != 1:
+        sumz[0] += val
+  else:
+    for i in xrange(3):
+      func(depth+1, array + [cv[depth][i]])
 
-fixed_val = 153416670
-changers = [7,13,19,31,37,43, fixed_val]
-cv = [[1,2,4],[1,3,9],[1,7,11],[1,5,25],[1,10,26],[1,6,36]]
+func(0,[])
+print sumz[0]
 
-sumz = 0
-for a in xrange(3):
-  for b in xrange(3):
-    for c in xrange(3):
-      for d in xrange(3):
-        for e in xrange(3):
-          for f in xrange(3):
-            val = crt(changers, [cv[0][a],cv[1][b],cv[2][c],cv[3][d],cv[4][e],cv[5][f],1])
-            if val != 1: sumz += val
-print sumz
 
 print "Time Taken:", time.time() -start
 
