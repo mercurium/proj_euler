@@ -1,47 +1,50 @@
-#NOTE TODO need to solve it
 import time
 START = time.time()
 from math import factorial as fact
 
-
-POWER = 12 
+POWER   = 12
 MOD_POW = 5
-MOD = 10**MOD_POW
-SIZE = 10**POWER
+MOD     = 10**MOD_POW
+MOD5    = 5 **MOD_POW
+SIZE    = 10**POWER
 
-#second parameter is for if we want to ignore the multiples of 10.
-def fa(n, ignore10=False): 
-	if n == 0 or n == 1:
-		return 1
-	prod = 1
-	two_count = 0
-	for i in xrange(2,n+1):
-		a = i
-		if not ignore10 and i%10==0:
-			continue
-		while a%2 == 0:
-			a /= 2
-			two_count += 1
-		while a%5 == 0:
-			a /= 5
-			two_count -= 1
-		prod = (prod * a)% MOD
-	prod = (pow(2,two_count,MOD) * prod)% MOD
-	return prod
+def fa(num, ignore10=False, ignore2Pow=False):
+  prod      = 1
+  twoCount  = 0
+  for i in xrange(1, num + 1):
+    if ignore10 and i % 10 == 0:
+      continue
+    number = i
+    while number % 5 == 0:
+      number    /= 5
+      twoCount  -= 1
+    while number % 2 == 0:
+      number    /= 2
+      twoCount  += 1
+    prod = prod * number % MOD
 
+  if not ignore2Pow:
+    prod = prod * 2**twoCount % MOD
+  return prod
 
-val = fa(MOD,True)
-print val
+#second parameter is for if we want to ignore the multiples of 5
+def fa5(n, ignore5=False):
+  if n == 0 or n == 1:
+    return 1
+  prod = 1
+  for i in xrange(2,n+1):
+    number = i
+    while number % 5 == 0:
+      number    /= 5
+    prod = prod * number % MOD5
+  return prod
 
-POWER_NECS = sum(10**x for x in xrange(POWER-MOD_POW+1)) -1
-print POWER_NECS
-vals_after = fa(MOD/10)
-print (pow(val,POWER_NECS,MOD) * vals_after)%MOD 
+print fa5(5**3)
+print fa5(5**2,True)**5 * fa5(5**2, False) % MOD5
+
 print "Time Taken:", time.time() -START
 
 
 
 """
-ahh, dammit >.>;; The reason for the incongrinuity... is because if we have like... 12300000000, it becomes 123, not another random number we cancel out... T___T
-okay, so I'm going to test first ignoring all numbers that are divisible by 10, then move up to ignoring those divisible by 100, then 1000, etc.
 """

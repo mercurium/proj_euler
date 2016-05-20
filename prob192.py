@@ -35,20 +35,10 @@ for d in xrange(2,SIZE):
     nextVals  = transformTuples(inputs[-1], d)
     nextDenom = computeDenom(inputs + [nextVals])
     if nextDenom > LIM:
-      currentDenom = nextDenom
-      inputs[-1][2] += 200
-      while nextDenom > LIM:
-        inputs[-1][2] -=  1
-        nextDenom = computeDenom(inputs)
       break
     inputs.append(nextVals)
 
-  nextDiff    = int(nextDenom * math.sqrt(d) + .1) * 1.0 / nextDenom - math.sqrt(d)
-  currentDiff = int(currentDenom * math.sqrt(d) + .1) * 1.0 / currentDenom - math.sqrt(d)
-
-  if abs(nextDiff) < abs(currentDiff):
-    print d
-    currentDenom = nextDenom
+  currentDenom = computeDenom(inputs)
 
   denom_sum += currentDenom
 
@@ -68,7 +58,5 @@ answer to 1 to 1000 is
 561480917932597
 I'm getting:
 428383607390799
-5426051998674302
-
 
 """

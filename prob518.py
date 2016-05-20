@@ -1,6 +1,6 @@
 import time, math
 START = time.time()
-SIZE  = 10**4*6
+SIZE  = 10**8
 # Problem size = 10^8
 
 def get_primes_less_than(size):
@@ -38,8 +38,6 @@ def getAllSquareFactors(n):
 
 
 def slowSolution(size):
-  pfactorList, primesList = get_primes_less_than(SIZE)
-  primeSet                = set(primesList)
   primesSum               = 0
   answers                 = set()
 
@@ -54,8 +52,6 @@ def slowSolution(size):
   return answers
 
 def fastExperimentalSolution(size):
-  pfactorList, primesList = get_primes_less_than(SIZE)
-  primeSet                = set(primesList)
   primesSum               = 0
   answers                 = set()
 
@@ -76,13 +72,27 @@ def fastExperimentalSolution(size):
         if b in primeSet and c in primeSet:
           primesSum += p+b+c
           answers.add(tuple(sorted([p,b,c])))
-  print primesSum
   return answers
 
-print answers2.difference(answers)
-print answers.difference(answers2)
+pfactorList, primesList = get_primes_less_than(SIZE)
+primeSet                = set(primesList)
+print "Time Taken:", time.time() - START
 
-primesSum = sum([x[0] + x[1] + x[2] for x in answers2])
+
+slowAnswer              = slowSolution(SIZE)
+print "Slow answer:", sum([x[0] + x[1] + x[2] for x in slowAnswer])
+print "Time Taken:", time.time() - START
+
+
+fastAnswer              = fastExperimentalSolution(SIZE)
+print "Fast answer:", sum([x[0] + x[1] + x[2] for x in fastAnswer])
+print "Time Taken:", time.time() - START
+
+
+print fastAnswer.difference(slowAnswer)
+print slowAnswer.difference(fastAnswer)
+
+primesSum = sum([x[0] + x[1] + x[2] for x in fastAnswer])
 print primesSum
 print "Time Taken:", time.time() - START
 

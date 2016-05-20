@@ -1,5 +1,13 @@
 import time
+from primes import factor
 start = time.time()
+
+def slow_comp(n):
+  lst = [1]
+  for i in range(2,n):
+    if i**3 % n == 1:
+      lst += [i]
+  return lst
 
 def extended_gcd(a, b): #returns c,d such that ac+bd =1
   if b == 0:
@@ -29,7 +37,7 @@ def crt(bases, vals):
 fixed_val = 153416670
 changers  = [7,13,19,31,37,43, fixed_val]
 cv        = [[1,2,4],[1,3,9],[1,7,11],[1,5,25],[1,10,26],[1,6,36]]
-sumz = [0]
+sumz      = [0]
 
 def func(depth, array):
   if depth == 5:
@@ -40,8 +48,9 @@ def func(depth, array):
   else:
     for i in xrange(3):
       func(depth+1, array + [cv[depth][i]])
+
 func(0,[])
-print sumz
+print sumz[0]
 
 
 print "Time Taken:", time.time() -start
