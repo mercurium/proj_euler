@@ -5,6 +5,9 @@ START = time.time()
 primeFactors = { 2: 10, 3: 5, 5: 2, 7: 1, 11: 1, 13: 1}
 primes       = [13,11,7,5,3,2]
 primeSets    = [set() for i in xrange(6)]
+baseDict     = {1 : 0, 2 : 0, 3 : 0, 5 : 0, 7 : 0, 11 : 0, 13 : 0}
+TOTIENT_VAL  = math.factorial(13)
+INDEX        = 150000 -1
 
 possiblePrimes   = set()
 possibleTotients = set([1])
@@ -38,75 +41,67 @@ def checkPrimePowers(valDict, func):
   return True
 
 answers = set()
-iterations = [0]
 def computePossibilites(index, currentVals, product=1):
 
-  if index >= len(primeFactors):
-    if not checkPrimePowers(currentVals, lambda x,y : x != y):
+  # if at the end of the iteration, return
+  if index == len(primes):
+    if checkPrimePowers(currentVals, lambda x,y: x != y):
       answers.add(product)
     return
 
-  prime = primes[index]
-
-  # if we have more powers than we should, it's an invalid number
-  if currentVals[prime] > primeFactors[prime]:
-    return
-  # if we have exactly the right number of powers for that factor, skip this part
-  elif currentVals[prime] == primeFactors[prime]:
-    return computePossibilites(index + 1, currentVals, product)
-
-  elif index >= len(primes) - 1:
-    twoPow = primeFactors[2] - currentVals[2]
-    if m_r(2**twoPow +1):
-      answers.add((2**twoPow + 1) * product)
+  # if we have too many powers in our product, quit.
+  elif not checkPrimePowers(currentVals, lambda x,y: x < y):
     return
 
-  for num in primeSets[index]:
-    iterations[0] += 1
-    dictClone = currentVals.copy()
-    factorAndAddToDict(num - 1, dictClone)
-    if checkPrimePowers(dictClone, (lambda x,y : x > y)):
+  # if we have too few powers...
+  elif any(currentVals[prime] != primeFactors[prime] for prime in primes[:index]):
+    return
+  currentPrime = primes[index]
+
+  if currentVals[currentPrime] == primeFactors[currentPrime]:
+    computePossibilites(index+1, currentVals, product)
+    return
+
+  for primeNum in primeSets[index]:
+    # don't want the same large prime twice
+    if product % primeNum  == 0:
       continue
-    computePossibilites(index + 1, dictClone, product * num)
+    dictClone = currentVals.copy()
+    factorAndAddToDict(primeNum - 1, dictClone)
+    if checkPrimePowers(dictClone, (lambda x,y: x < y)):
+      computePossibilites(index+1, dictClone, product * primeNum)
+      computePossibilites(index, dictClone, product * primeNum)
 
-baseDict = {1 : 0, 2 : 0, 3 : 0, 5 : 0, 7 : 0, 11 : 0, 13 : 0}
+  powerDiff = primeFactors[currentPrime] - currentVals[currentPrime]
+  for power in xrange(0,powerDiff+1):
+    dictClone = currentVals.copy()
+    factorAndAddToDict((currentPrime - 1) *currentPrime**power, dictClone)
+    computePossibilites(index+1, dictClone, product * currentPrime**(power+1))
+
 computePossibilites(0, baseDict, 1)
-
 for answer in list(answers):
   if answer % 2 == 1:
     answers.add(answer*2)
 
-count    = 0
-badCount = 0
-for answer in answers:
-  if totient(answer) == math.factorial(13):
-    count += 1
-  else:
-    print math.factorial(13) / totient(answer), totient(answer) / math.factorial(13)
-    badCount += 1
-
-print count, badCount
+print "Answer:", sorted(answers)[INDEX]
 print "Time Taken:", time.time() -START
 
 
 """
-totient(n) = 8 for n  = 15, 16, 20, 24, 30
+Congratulations, the answer you gave to problem 248 is correct.
 
-totient(3) = 2
-totient(5) = 4
-totient(17) = 16
-totient(4) = 2
+You are the 883rd person to have solved this problem.
 
-totient(n) = 16 for n  = 17, 32, 34, 40, 48, 60
 
-totient(n) = 12 for n = 13, 21, 26, 28, 36, 42
+jchen@jchen-mbp 20:23:25 ~/Developer/proj_euler(master) % pypy prob248.py
+Answer     : 23507044290
+Time Taken : 16.700619936
 
-totient(n) = 6 for n  = 7, 9
+For this problem, the main thing to realize is that if n = m x k, where gcd(m,k) = 1, then:
+  totient(n) = totient(m) * totient(k)
+Then, from that, we can build up all numbers where totient(n) = 13! by looking at the primes that have a totient in the form 2^a x 3^b x 5^c x 7^d x 11^e x 13^f.
 
-6 x 2
-2 x 2 x 3
-4 x 3
-
+Anyways, need to cook for dinner then game of thrones. I solved the problem. WHOO! xD
 
 
 

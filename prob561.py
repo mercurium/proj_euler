@@ -18,7 +18,7 @@ Congratulations, the answer you gave to problem 561 is correct.
 You are the 34th person to have solved this problem.
 
 
-jchen@jchen-mbp 20:28:20 ~/Developer/proj_euler(master|✚1…) % pypy prob561.py
+jchen@jchen-mbp 20:28:20 ~/Developer/proj_euler(master) % pypy prob561.py
 452480999988235494
 Time Taken: 0.000141143798828
 
