@@ -1,18 +1,21 @@
 import string
 import math
+import os
+import commands
 
 #methods in file: is_prime(num), factor(val), totient(n), repeated_squaring(n,pow,mod), reverse_num(n), mergesort(list), gcd(a,b), ncr(n,r)
 
 # While not all of these methods are as optimial as they should be, this is a sort of file for me to keep my old algorithms that I wrote at one point in case I would like to use a variant later.
 # Afte all, it's much easier to modify code that's already there (this only holds for my own code) than dealing with off by one errors with a new algorithm :)
 
-temp = open('primenum.txt','r')
-primes = [int(i) for i in string.split(temp.read()[:-2],', ')]
+filePath = os.path.dirname(os.path.abspath(__file__))
+temp     = open(filePath + '/primenum.txt','r')
+primes   = [int(i) for i in string.split(temp.read()[:-2],', ')]
 del primes[primes.index(9999)]
 primes_set = set(primes)
 
 
-temp = open('primenum10000.txt','r')
+temp = open(filePath + '/primenum10000.txt','r')
 primes_few = [int(i) for i in string.split(temp.read(),',')]
 
 def factor(val): #dumb factoring method, use the other one instead...
@@ -34,6 +37,15 @@ def factor(val): #dumb factoring method, use the other one instead...
     if val != 1:
         factors.append(val)
     return factors
+
+def get_prime_count(n):
+  fileName = 'tempVal1s34af44'
+  os.system('primecount ' + str(n) + ' > ' + fileName)
+  dataFile = open(fileName, 'r')
+  value    = int(dataFile.read().strip())
+  dataFile.close()
+
+  return value
 
 def totient(n): #dumb version, don't use this...
     lst = factor(n)

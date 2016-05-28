@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time
 start = time.time()
 
@@ -64,7 +65,7 @@ sumz = 0
 count = 0
 for item in items:
 	n = item
-	if pc(n-8) and pc(n-4) and pc(n+4) and pc(n+8) and pc(n): 
+	if pc(n-8) and pc(n-4) and pc(n+4) and pc(n+8) and pc(n):
 		count +=1
 		sumz +=item
 		print item
