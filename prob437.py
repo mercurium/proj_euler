@@ -1,115 +1,33 @@
-from bitarray import bitarray
-import time,random,math
+import time
+from primes import get_totient, pfactor_gen, cipolla, legendre
 START = time.time()
 
 SIZE = 10**8
 
-
-def get_totient(size):  #gives you the totients of all numbers i <= size
-    lst = range(size+1)
-    lst[0] = 1
-    for i in xrange(2,len(lst)):
-        if lst[i] == i:
-            for j in xrange(i,len(lst),i):
-                lst[j] = (lst[j] * (i-1))/i 
-    return lst
 totient = get_totient(SIZE)
 print "totients found!", time.time() - START
 
-def pfactor_gen(size): #for each number n, return some factor of it.
-    stuff = [0,1,2] + [1,2] *(size/2-1)
-    for i in xrange(3,size,2):
-        if stuff[i] == 1:
-            for j in xrange(i**2,size,i*2):
-                stuff[j] = i
-            stuff[i] = i
-    return stuff
 pfactor = pfactor_gen(SIZE)
 print "pfactors found!", time.time() - START
-
-def factor(n): #simple factoring method, put one of the factors of n onto the list until we run out of factors
-    if n == 1:
-        return []
-    if pfactor[n] == n:
-        return [n]
-    factors = []
-    while pfactor[n] != 1:
-        factors.append(pfactor[n])
-        n /= pfactor[n]
-    return factors    
-
-def legendre(a,p): # http://en.wikipedia.org/wiki/Legendre_symbol
-    if a <= 1:
-        return 1
-    if a == 2:
-        if (p**2 -1)% 16 == 0:
-            return 1
-        return  -1
-    factors = factor(a)
-    product = 1
-    for f in factors:
-        if f == 2:
-            if (p**2 -1) % 16 != 0:
-                product *= -1
-        else:
-            product *= legendre(p%f,f) * pow(-1,(f-1)*(p-1)/4)
-    return product
-lg = legendre
-
-
-def cipolla(p): # http://en.wikipedia.org/wiki/Cipolla%27s_algorithm
-    n = 5
-    a = random.randint(int(p**.5)+1,p-1)
-    while legendre((a**2-n)%p,p) == 1:
-        a = random.randint(int(p**.5)+1,p-1)
-    val = rep_sq_sqrt((a,1,(a**2-n)%p), (p+1)/2, p)
-    return val[0]
-        
-
-def rep_sq_sqrt(n, powz, mod): #NOTE, n is a tuple... a,b,c so that we had a + b * sqrt(c)
-    def mult(a,b,mod): #multiplying numbers which share a square root (sqrt)
-        full = a[0] * b[0] + a[1] * b[1] * a[2]
-        frac = a[1] * b[0] + a[0] * b[1]
-        return (full%mod,frac%mod,a[2])
-    if powz == 0: return 1
-    if powz == 1: return (n[0] % mod,n[1] % mod, n[2])
-    
-    val = int(math.log(powz,2))
-    lst = [1,n] + [0] * val
-    for i in range(2,len(lst)):
-        lst[i] = mult(lst[i-1],lst[i-1],mod)
-    
-    pows = [0] * (val+1)
-    power = powz
-    for i in range(0,len(pows)):
-        pows[i] = power % 2
-        power = power //2 
-    product = (1,0,n[2])
-    for i in range(0,len(pows)):
-        if pows[i] == 1:
-            product = mult(product,lst[i+1], mod)
-    return product
 
 sumz = 5
 count = 1
 for p in xrange(7,SIZE):
-    if p% 1024 == 0: #counter to see how far the program is.
+    if p% 2**20 == 0: #counter to see how far the program is.
         print p, count, sumz
     if pfactor[p] != p: #it's not prime, ignore it.
         continue
     if p % 10 != 1 and p% 10 != 9 and p != 5: #x^2 = 5 mod p does not have a solution
         continue
-    
+
     if p%4 == 3:
         num = pow(5,(p+1)/4,p)
-        ab = ( (num+1)*(p+1)/2 % p), ((1 - num)*(p+1)/2) % p 
     else:
-        num = cipolla(p)
-        ab = ( (num+1)*(p+1)/2 % p), ((1 - num)*(p+1)/2) % p 
-
+        num = cipolla(p,5)
+    ab  = ( (num+1)*(p+1)/2 % p), ((1 - num)*(p+1)/2) % p
 
     for a in ab:
-        tot = totient[p]
+        tot     = totient[p]
         factor1 = pfactor[tot]
         while tot % factor1 == 0:
             tot /= factor1
@@ -127,9 +45,6 @@ for p in xrange(7,SIZE):
             break
 
 
-
-
-print 
 print "total sum:", sumz
 print "total number of primes for which this works:", count
 print "Time taken:", time.time() - START
