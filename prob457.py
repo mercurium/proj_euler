@@ -1,5 +1,5 @@
 import time
-from primes import m_r, get_primes, ext_gcd, cipolla
+from primes import get_primes, ext_gcd, cipolla
 
 START = time.time()
 SIZE  = 10**7
