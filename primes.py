@@ -1,7 +1,4 @@
-import string
-import math
-import os
-import commands
+import string, math, os, random, commands
 
 #methods in file: is_prime(num), factor(val), totient(n), repeated_squaring(n,pow,mod), reverse_num(n), mergesort(list), gcd(a,b), ncr(n,r)
 
@@ -67,7 +64,7 @@ def get_totient(size):  #gives you the totients of all numbers i <= size
                 lst[j] = (lst[j] * (i-1))/i
     return lst
 
-def get_primes(size):  #gives you the totients of all numbers i <= size
+def get_primes(size):  #gives you all the primes < size
     lst = [1] * (size+1)
     primes = [2]
     for i in xrange(3,len(lst), 2):
@@ -118,8 +115,7 @@ def legendre(a,p): # http://en.wikipedia.org/wiki/Legendre_symbol
 lg = legendre
 
 
-def cipolla(p): # http://en.wikipedia.org/wiki/Cipolla%27s_algorithm
-    n = 5
+def cipolla(p, n): # http://en.wikipedia.org/wiki/Cipolla%27s_algorithm
     a = random.randint(int(p**.5)+1,p-1)
     while legendre((a**2-n)%p,p) == 1:
         a = random.randint(int(p**.5)+1,p-1)

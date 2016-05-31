@@ -1,64 +1,90 @@
-#NOTE TODO need to solve it
-
 import time
+from primes import m_r, get_primes, ext_gcd, cipolla
+
 START = time.time()
-SIZE = 10**3
-from primes import m_r
+SIZE  = 10**7
+
+def solveForPSquared(prime, m):
+  a  = (m*(m-3) - 1) / prime
+  k  = ext_gcd( 2*m-3, prime)[0] * (-1 * a)
+
+  n  = (m + prime * k) % (prime**2)
+  n2 = prime**2 + 3 - n
+  return min(n,n2)
+
+primes = get_primes(SIZE)
+
+# need to skip 2,3,5,7,11,13 for this
+
+# solution for p = 3 is 5, 2,7,11,13 have no solution
+sumz = 5
+
+# 4(n^2 - 3n - 1) = (2n-3)^2 - 13
+# --> Cipolla's algorithm on (2n-3)^2 = 13 mod p
+for prime in sorted(primes)[6:]:
+  val = cipolla(prime, 13)
+  if val == 0:
+    continue
+  elif val %2 == 0:
+    m = (val+prime+3) / 2
+  else:
+    m = (val+3) / 2
+  sumz += solveForPSquared(prime, m)
+
+print "Answer:", sumz
+print "Time Taken:", time.time() - START
 
 
-pfactor = range(0,SIZE+1)
-for i in xrange(2,len(pfactor)):
-    if pfactor[i] == i:
-        for j in xrange(i*2,len(pfactor),i):
-            pfactor[j] = i
+"""
+Congratulations, the answer you gave to problem 457 is correct.
 
-sumz,count = 0, 0
-answer = [0] * (SIZE+1)
+You are the 428th person to have solved this problem.
 
 
+Answer: 2647787126797397063
+Time Taken: 22874.3746512 <-- ...6.6 hours -_-;;
+Time Taken: 86.7825520039 <-- after reading the forums and realiziing I need to use cipolla's algorithm... which i had already coded up before anyways. Derp lol
 
-for i in xrange(len(answer)):
-    if answer[i] != 0:
-        print i, answer[i]
 
+4(n^2 - 3n - 1) = 4n^2 - 12n - 4 = (2n-3)^2 -13
+-> (2n-3)^2 = 13
 
-iterCount1,iterCount2 = 0,0
-primeCount = 0
-worksCount = 0
-notWorking = []
-for p in xrange(2,SIZE):
-    if p% 1024 == 0:
-        print p, sumz, iterCount1, iterCount2, worksCount, primeCount
-    if pfactor[p] == p:
-        primeCount +=1
-        x = -1
-        for i in xrange(1,p/2+5):
-            iterCount1+=1
-            if (i**2-3*i-1) % p == 0:
-                x = i
-                break
-        if x == -1:
-            notWorking.append(p)
-            continue
-        y = p-x+3
-        worksCount +=1
-        for j in xrange(0,p/2+2):
-            iterCount2 +=1
-            a,b = j*p+x, j*p+y
-            if (a**2-3*a-1) % p**2 == 0:
-                if (p**2-a+3 < a):
-                    a = p**2-a +3
-                sumz += a
-                print p, a,x,y, sumz, a * 1.0 / p**2
-                break
-            if (b**2-3*b-1) % p**2 == 0:
-                sumz += b
-                print p, b,x,y, sumz, b * 1.0/p**2
-                break
-print sumz
-print "Time Taken: ", time.time() - START
-print "took", iterCount1, iterCount2, "iterations"
-print "Only", worksCount, "out of ", primeCount, "had this work"
-print "The ones we should have skipped were:", notWorking
+Applying Cipolla's algorithm to that, we get a value, 'val', where 2n-3 = m (mod p), which we can solve pretty darn easily.
+After that, we have:
+  m^2 - 3m - 1 = 0 mod p
+  -> m^2 - 3m - 1 = a*p (for some a)
 
+So, if we let n = m + kp, we get:
+  n^2 - 3n - 1
+  = (m+kp)^2 - 3(m+kp) - 1
+  = m^2 + 2mkp + k^2p^2 - 3m - 3kp - 1
+  = (m^2 - 3m - 1) + kp(2m-3) + k^2p^2
+  = ap + kp(2m-3) + k^2p^2
+  -> p | (a + k(2m-3))   (last term falls off since it is divisible by p^2)
+
+Since we know a and m at this point, we just need to solve for k. Ex:
+  p = 17, m = 6
+  -> 6^2 - 3(6) - 1 = 17
+  -> (6^2 - 3*6 - 1) = 1 * 17
+  -> a = 1
+  -> 1 + k(2(6) - 3) = 0 mod 17
+  -> 9k = -1 mod 17
+  -> use extended_gcd algorithm to solve:
+      c(17) + d(9) = 1
+  (This solves to -1 * 17 + 2*9 = 1 -> k = 2 * -a -> k = 15 mod 17)
+  -> n = m + kp = 6 + 15 * 17 = 261
+
+Plugging in 261 and checking, we get:
+  261^2 - 3*261 - 1 = 67337 = 233 * 289, which works!
+
+Also, since n^2 - 3n - 1 = (n-1)(n-2) - 1, we get that:
+  (p+3-n-1)(p+3-n-2) - 1
+  = p^2 + 6p - 2pn + 9 - 6n + n^2 -3p - 9 + 3n - 1
+  = (n^2 -3n -1) + p(3-2n)
+  = (n^2 -3n -1) mod p
+
+We get that if 'n' is a solution, then so is 'p+3-n' for the mod p part. For the mod p^2 part,
+  n being a solution <=> `p^2+3-n` is a solution
+
+"""
 
