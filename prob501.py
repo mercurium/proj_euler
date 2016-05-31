@@ -25,6 +25,8 @@ print "Part 1 is:", count
 print "Time Taken:", time.time() - START
 START = time.time()
 
+# Part 2, i^3*j < SIZE
+
 i = 0
 while primes[i]**3*2 <= SIZE:
   maxLim     = int(SIZE * 1.0 / primes[i]**3)
@@ -41,18 +43,16 @@ print "Part 2 is:", count
 print "Time Taken:", time.time() - START
 START = time.time()
 
+# Part 3, p*q*r < SIZE
+
 i = 0
-iterations = 0
-iterations2 = 0
 while i < primeLen and primes[i] < SIZE**(1/3.):
   print i
   j = i + 1
   while j < primeLen and primes[j] < SIZE**.5:
-    iterations += 1
     val       = SIZE / (primes[i] * primes[j])
     if val < len(numPrimesLessThanN):
       numPrimes = numPrimesLessThanN[val]
-      iterations2 += 1
     else:
       numPrimes = get_prime_count(val)
     if numPrimes <= j:
@@ -60,9 +60,6 @@ while i < primeLen and primes[i] < SIZE**(1/3.):
     count    += numPrimes - j - 1
     j += 1
   i += 1
-
-print "Part 3 is:", count
-print "num iterations:", iterations, iterations2
 
 
 print "Answer is:", count
