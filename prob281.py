@@ -1,50 +1,43 @@
-#NOTE TODO need to solve it
-import time
-start = time.time()
-from math import factorial as fa, log
-from primes import ncr
+import time, math
+from primes import divisors, totient
 
-lim = 10**15
+START = time.time()
+LIM   = 10**15
 
-def fat(n):
-    if n == 0 or n==1:
-        return 0
-    return fa(n)
+sumz  = 0
+for m in xrange(2,20):
+  for n in xrange(1,30):
+    num_sum = 0
+    for d in divisors(n):
+      num_sum += totient(n/d) * math.factorial(m*d) / math.factorial(d)**m
+    num_sum /= m*n
+    if num_sum < LIM:
+      sumz += num_sum
+    else:
+      break
+  if n == 1:
+    break
 
-def f(m,n):
-    val = (ncr(m*n,n-1)+n-1)/n
-    val2 = fa(n*m-n)/(fa(n)**(m-1))
-    val3 = fa(m-1)
-    print m,n, 'hii', val,val2,val3, round(log(val*val2-val3,10),2), val*val2-val3
-    return val*val2-val3
+print "Answer:", sumz
+print "Time Taken:", time.time() - START
 
-#really only meant for n = 2, testing if f(m,n) performs as I want it to
-def test(m,n): 
-    return m* fa(2*m-2)/(2**(m-1)) - fa(m-1)
-
-def main():
-    sumz = 0
-    m,n = 2,2
-    
-    a = f(m,n)
-    while a < lim:
-        while a < lim:
-            sumz += a
-            m+=1
-            a = f(m,n)
-        print m,n, 'failed'
-        m = 2
-        a = f(m,n)
-        n+=1
-    for i in xrange(0,40):
-        if fa(i) < lim:
-            sumz += fa(i)
-        else:
-            break
-    return sumz        
 
 """
-Okay, I didn't solve it but my reasoning for the formula in f(m,n) is that I noticed 
+Congratulations, the answer you gave to problem 281 is correct.
+
+You are the 611th person to have solved this problem.
+
+
+t(1,n) = 1
+t(2,n) = OEIS series here: https://oeis.org/A003239
+t(3,n) = OEIS series here: https://oeis.org/A118644
+
+
+jchen@jchen-mbp 16:40:33 ~/Developer/proj_euler(master) % pypy prob281new.py
+Answer: 1485776387445623
+Time Taken: 0.00566101074219
+
+...I don't really feel like I solved this. I used OEIS and that pretty much solved it for me...
 
 
 """

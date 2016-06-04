@@ -11,9 +11,11 @@ primes   = [int(i) for i in string.split(temp.read()[:-2],', ')]
 del primes[primes.index(9999)]
 primes_set = set(primes)
 
-
 temp = open(filePath + '/primenum10000.txt','r')
 primes_few = [int(i) for i in string.split(temp.read(),',')]
+
+
+
 
 def factor(val): #dumb factoring method, use the other one instead...
     if mr(val):
@@ -35,6 +37,14 @@ def factor(val): #dumb factoring method, use the other one instead...
         factors.append(val)
     return factors
 
+
+def divisors(n): # don't use for larger numbers...
+  factors  = factor(n)
+  divisors = set([1])
+  for f in factors:
+    divisors = divisors.union(set([x*f for x in divisors]))
+  return sorted(divisors)
+
 def get_prime_count(n):
   fileName = 'tempVal1s34af44'
   os.system('primecount ' + str(n) + ' > ' + fileName)
@@ -45,6 +55,8 @@ def get_prime_count(n):
   return value
 
 def totient(n): #dumb version, don't use this...
+    if n == 1:
+      return 1
     lst = factor(n)
     result = lst[0] - 1
     for i in xrange(1,len(lst)):
