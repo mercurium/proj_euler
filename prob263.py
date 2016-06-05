@@ -1,79 +1,52 @@
 #NOTE TODO need to solve it
 import time
-start = time.time()
+from primes import pfactor_gen, factor_given_pfactor, get_divisors_given_pfactor
+START = time.time()
 
 SIZE = 10**6
+pfactor = pfactor_gen(SIZE)
 
-def get_plst(size):
-	lst = range(size+1)
-	lst[0] = 1
-	for i in xrange(2,len(lst),2):
-		lst[i] = 2
-	for i in xrange(3,len(lst),2):
-		if lst[i] == i:
-			for j in xrange(i**2,len(lst),2*i):
-				lst[j] = i
-	return lst
-
-plst = get_plst(SIZE)
-
-def pfactor(n):
-	factors = []
-	while n > 1:
-		factors += [plst[n]]
-		n /= plst[n]
-	return sorted(factors)
+def factor(n):
+  return factor_given_pfactor(n, pfactor)
 
 def get_divisors(n):
-	factors = pfactor(n)
-	divisors = set([1])
-	for f in factors:
-		new_set = set()
-		for d in divisors:
-			new_set.add(f*d)
-		for i in new_set:
-			divisors.add(i)
-
-	return sorted(list(divisors))
+  return get_divisors_given_pfactor(n, pfactor)
 
 # This function is currently very slow for numbers with lots of factors =/
 def practical_check(n):
-	divs = get_divisors(n)
-	div_sums = set([0])
-	for val in divs:
-		new_set = set()
-		for i in div_sums:
-			new_set.add(val+i)
-		for i in new_set:
-			div_sums.add(i)
-	div_sums = sorted(list(div_sums))[:n+1]
-	print "On item:", n, "Time up to now:", time.time() - start
-	return div_sums == range(n+1)
+  divs     = get_divisors(n)
+  div_sums = set([0])
+  for val in divs:
+    div_sums.update(set([ val + num for num in div_sums]))
+
+  div_sums = sorted(div_sums)[:n+1]
+  print "On item:", n, "Time up to now:", time.time() - START
+  return div_sums == range(n+1)
 pc = practical_check
 
 
 items = []
 for i in xrange(21,SIZE-18,2):
-	if plst[i] == i and plst[i+6] == i+6 and \
-	plst[i+12] == i+12 and plst[i+18] == i+18:
-		items += [i+9]
-		#print i,i+6,i+12,i+18
+  if pfactor[i] == i and pfactor[i+6] == i+6 and \
+  pfactor[i+12] == i+12 and pfactor[i+18] == i+18:
+    items += [i+9]
+    #print i,i+6,i+12,i+18
 
 print "Out of", SIZE, "items, there were", len(items), "which were prime-triples"
 
 sumz = 0
 count = 0
 for item in items:
-	n = item
-	if pc(n-8) and pc(n-4) and pc(n+4) and pc(n+8) and pc(n):
-		count +=1
-		sumz +=item
-		print item
-	if count == 4:
-		break
+  n = item
+  if all([pc(k) for k in xrange(n-8,n+9,4)]):
+    count += 1
+    sumz  += item
+    print item
+  if count == 4:
+    break
 
 print sumz
-print "Time Taken:", time.time() - start
+print "Time Taken:", time.time() - START
 
 
 
