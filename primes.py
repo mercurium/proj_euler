@@ -37,7 +37,6 @@ def factor(val): #dumb factoring method, use the other one instead...
         factors.append(val)
     return factors
 
-
 def divisors(n): # don't use for larger numbers...
   factors  = factor(n)
   divisors = set([1])
@@ -66,7 +65,6 @@ def totient(n): #dumb version, don't use this...
             result = result * lst[i]
     return int(result)
 
-
 def get_totient(size):  #gives you the totients of all numbers i <= size
     lst = range(size+1)
     lst[0] = 1
@@ -94,7 +92,6 @@ def pfactor_gen(size): #for each number n, return some factor of it.
                 stuff[j] = i
             stuff[i] = i
     return stuff
-
 
 def factor_given_pfactor(n): #simple factoring method, put one of the factors of n onto the list until we run out of factors
     if n == 1:
@@ -262,4 +259,26 @@ def ncr(n, r):
     num = reduce(op.mul, xrange(n, n-r, -1))
     denom = reduce(op.mul, xrange(1, r+1))
     return num//denom
+
+def findNumLessThan(lst, num):
+  if lst[-1] <= num:
+    return len(lst)
+  if lst[0] > num:
+    return 0
+
+  start = 0
+  end   = len(lst)
+  index = (start+end)/2
+
+  def helper(index, start,end):
+    if lst[index] <= num and lst[index+1] > num:
+      return index
+    elif lst[index] > num:
+      start = index
+    else:
+      end = index
+    index = (start+end)/2
+    return helper(index, start, end)
+  return helper(start, end, index)
+
 
