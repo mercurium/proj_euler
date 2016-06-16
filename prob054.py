@@ -72,8 +72,7 @@ def twoP(hand):
         return True, hand[1], hand[3]
     return False, 0
 
-def max(hand):
-    hand = sort(hand)
+def getHandValue(hand):
     f = flush(hand)
     s = straight(hand)
     four = fourOK(hand)
@@ -99,6 +98,20 @@ def max(hand):
     else:
         return 2, hand[4] #single, returns highest card
 
+def playerOneWon(player1, player2):
+    if val1[0] > val2[0]: #check who has the higher type of hand 
+        return True
+    elif val1[0] < val2[0]:
+        return False
+    elif getOrder(val1[1][0]) > getOrder(val2[1][0]): #equivalent hand type, check number
+        return True
+    elif getOrder(val1[1][0]) < getOrder(val2[1][0]):
+        return False
+    elif getOrder(val1[1][1]) > getOrder(val2[1][1]):
+        return True
+    elif getOrder(val1[1][1]) < getOrder(val2[1][1]):
+        return False
+    
 
 fileRead = open('poker.txt', 'r')
 hands = string.split(fileRead.read().strip(),'\n')
@@ -110,22 +123,12 @@ i = 0
 for hand in hands:
     hand1 = sort(hand[:5])
     hand2 = sort(hand[5:])
-    val1 = max(hand1)
-    val2 = max(hand2)
-    print val1,val2
-    if val1[0] > val2[0]: #check who has the higher type of hand 
-        wins = wins + 1
-    elif val1[0] < val2[0]:
-        losses = losses + 1
-    elif getOrder(val1[1][0]) > getOrder(val2[1][0]): #equivalent hand type, check number
-        wins = wins + 1
-    elif getOrder(val1[1][0]) < getOrder(val2[1][0]):
-        losses =losses +1
-
-    elif getOrder(val1[1][1]) > getOrder(val2[1][1]):
-        wins = wins + 1
-    elif getOrder(val1[1][1]) < getOrder(val2[1][1]):
-        losses =losses +1
+    val1 = getHandValue(hand1)
+    val2 = getHandValue(hand2)
+    if playerOneWon(val1,val2):
+        wins += 1
+    else:
+        losses +=1
 
 print wins, losses
 print "Time Taken:", time.time() - START

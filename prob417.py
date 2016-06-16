@@ -8,10 +8,12 @@ def gcd(a,b):
     if a == 0:
         return b
     return gcd(b%a,a)
+
 def lcm(a,b):
     return a*b/gcd(a,b)
 
-def get_plst(size):  #returns a list of numbers, each of which are a prime factor of the ith element in the list.
+#returns a list of numbers, each of which are a prime factor of the ith element in the list.
+def get_plst(size):  
     lst = range(size+1)
     lst[0] = 1
     for i in xrange(2,len(lst),2):
@@ -21,7 +23,6 @@ def get_plst(size):  #returns a list of numbers, each of which are a prime facto
             for j in xrange(i**2,len(lst),2*i):
                 lst[j] = i
     return lst
-plst = get_plst(SIZE)
 
 def get_totient(size):  #gives you the totients of all numbers i <= size
     lst = range(size+1)
@@ -31,7 +32,6 @@ def get_totient(size):  #gives you the totients of all numbers i <= size
             for j in xrange(i,len(lst),i):
                 lst[j] = (lst[j] * (i-1))/i 
     return lst
-totient = get_totient(SIZE)
 
 
 def pfactor(n): #returns the entire list of prime factors of n
@@ -58,6 +58,8 @@ def rep_dig(n): #Gives the first power of 10 such that 10^k = 1 mod n.
         if pow(10,powz,n) == 1:
             return powz
 
+plst = get_plst(SIZE)
+totient = get_totient(SIZE)
 values = [0] * SIZE
 values[3] = 1
 for i in xrange(5,SIZE,2): #Evens are easy to compute, do it later

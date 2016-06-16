@@ -5,9 +5,9 @@ from bitarray import bitarray
 # This is made for larger sizes, so it might return weird results for n < 30
 def prime_sum(size):
 
-  primes            = [2,3,5,7,11,13,17,19,23,29]
-  next_to_check     = primes[:]#[30,30,30,49,121,169,289, 361, 529, 841]
-  running_prime_sum = sum(primes)
+  primes            = [7,11,13,17,19,23,29]
+  next_to_check     = [49,121,169,289, 361, 529, 841]
+  running_prime_sum = sum(primes) + 10
 
   max_prime_size_to_append = int(size**0.5)
 
@@ -23,25 +23,25 @@ def prime_sum(size):
 
     for prime_index in xrange(len(primes)):
       # went past the limit here
-
       prime = primes[prime_index]
 
       while next_to_check[prime_index] < thirty_i + 30:
-        while next_to_check[prime_index] < thirty_i:
-          next_to_check[prime_index] += primes[prime_index]
         spot = next_to_check[prime_index] % 30
         nums_to_check[spot] = 1
-        next_to_check[prime_index] += primes[prime_index]
+        next_to_check[prime_index] += 2 * prime
 
     # Updating our list of primes with the new ones we've discovered.
     for j in indices_to_check:
       new_prime = thirty_i + j
-      if nums_to_check[j] == 0 and new_prime < size:
+      if new_prime >= size:
+        break
+      if nums_to_check[j] == 0:
         if new_prime <= max_prime_size_to_append:
           primes.append(new_prime)
           next_to_check.append(new_prime ** 2)
         running_prime_sum += new_prime
 
+  # Only a problem for small n
   while len(primes) > 0 and primes[-1] > size:
     overly_large_prime = primes.pop()
     running_prime_sum -= overly_large_prime
