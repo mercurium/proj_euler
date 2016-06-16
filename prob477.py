@@ -1,3 +1,5 @@
+#NOTE TODO need to solve it
+
 import time, math
 from itertools import combinations as comb
 START = time.time()

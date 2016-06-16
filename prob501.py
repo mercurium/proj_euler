@@ -1,59 +1,65 @@
 import time
-from bitarray import bitarray
+from primes import get_prime_count, get_primes
 
-
-SIZE  = 10**6
+SIZE  = 10**12
 START = time.time()
 
-def prime_gen(size):
-  temp = bitarray(size)
-  for i in xrange(1,len(temp),2):
-    temp[i] = 0
-  primeLst = []
-  for i in xrange(3,len(temp),2):
-    if temp[i] == 0:
-      for j in xrange(i**2, len(temp),2*i):
-        temp[j] = 1
-      primeLst.append(i)
-  return primeLst
-
-
-primes   = prime_gen(SIZE/6)
-primeLen = len(primes)
+primes    = get_primes(int(SIZE**.5)*100)
+primeLen  = len(primes)
 print "Time Taken:", time.time() - START
+
+numPrimesLessThanN  = [0] * (int(SIZE**.5) * 100)
+primeIndex = 0
+while primeIndex < len(primes)-1:
+  for index in xrange(primes[primeIndex], primes[primeIndex+1]):
+    numPrimesLessThanN[index] = primeIndex + 1
+  primeIndex += 1
+numPrimesLessThanN[primes[-1]:] = [len(primes)] * (len(numPrimesLessThanN) - primes[-1])
 
 count = 0
 
-index = 0
-LIM   = SIZE**(1/7.)
-while primes[index] <= LIM:
-  index +=1
-count += index
+# Part 1, p^7 < SIZE
 
-i,j = 0,0
-while primes[i]*8 <= SIZE:
-  while primes[j]**3*primes[i] <= SIZE:
-    if i != j:
-      count +=1
-    j+=1
-  j = 0
+count += get_prime_count(int(SIZE**(1/7.)))
+print "Part 1 is:", count
+print "Time Taken:", time.time() - START
+START = time.time()
+
+# Part 2, i^3*j < SIZE
+
+i = 0
+while primes[i]**3*2 <= SIZE:
+  maxLim     = int(SIZE * 1.0 / primes[i]**3)
+  if maxLim < len(numPrimesLessThanN):
+    numPrimes = numPrimesLessThanN[maxLim]
+  else:
+    numPrimes  = get_prime_count(maxLim)
+  count     += numPrimes
+  if numPrimes >= i:
+    count -= 1
   i+= 1
 
 print "Part 2 is:", count
+print "Time Taken:", time.time() - START
+START = time.time()
 
-i,j,k = range(3)
-while i < primeLen and primes[i] * 6 < SIZE:
+# Part 3, p*q*r < SIZE
+
+i = 0
+while i < primeLen and primes[i] < SIZE**(1/3.):
+  print i
   j = i + 1
-  while j < primeLen and primes[i]*primes[j]* 5 < SIZE:
-    val = primes[i] * primes[j]
-    k = j+1
-    while k < primeLen and val * primes[k] <= SIZE:
-      count += 1
-      k     += 1
+  while j < primeLen and primes[j] < SIZE**.5:
+    val       = SIZE / (primes[i] * primes[j])
+    if val < len(numPrimesLessThanN):
+      numPrimes = numPrimesLessThanN[val]
+    else:
+      numPrimes = get_prime_count(val)
+    if numPrimes <= j:
+      break
+    count    += numPrimes - j - 1
     j += 1
   i += 1
-
-print "Part 3 is:", count
 
 
 print "Answer is:", count
@@ -72,4 +78,15 @@ p x q x r
 p^7 case is super easy to handle. p^3 x q should also not be too bad to handle.
 
 p x q x r might be a bit more annoying
+
+Congratulations, the answer you gave to problem 501 is correct.
+
+You are the 662nd person to have solved this problem.
+
+
+Part 3 is: 197912312715
+num iterations: 2372370 2369770
+Answer is: 197912312715
+Time Taken: 21.1627089977
+
 """

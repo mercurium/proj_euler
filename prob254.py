@@ -1,10 +1,7 @@
-#NOTE TODO need to solve it
-import time
+import time, string
 START = time.time()
 from math import factorial as fa
-import string
 
-min_val = dict()
 SIZE = 150
 
 def f(n):
@@ -13,48 +10,79 @@ def f(n):
 def sf(n):
     return sum([int(i) for i in str(f(n))])
 
-def g(n):
-    if n in min_val:
-        return min_val[n]
-    valz = 0
-    lim = max([0] + [min_val[x] for x in min_val]) 
-    while valz != n:
-        lim +=1
-        test = str(lim)
-        if len(test) > 4 and (ord(test[0]) > ord(test[1]) or ord(test[1])> ord(test[2]) or ord(test[2]) > ord(test[3]) or ord(test[3]) > ord(test[4]) ):
-            lim += 10**(len(test)-5)
-            continue
-        if len(test) > 6 and (ord(test[4]) > ord(test[5]) or ord(test[5]) > ord(test[6]) ):
-            lim += 10**(len(test)-7)
-            continue
+def backsolveFnDigSum(n):
+  numSum = 0
+  for i in xrange(9,0,-1):
+    numOccur  = n/fa(i)
+    numSum   += i * numOccur
+    n         = n % fa(i)
+  return numSum
 
-        valz = sf(lim)
+def insert(dictStore, value):
+  if len(value) == 0:
+    return
+  value = int(string.join([str(x) for x in value], ""))
+  key   = sf(value)
+  putInDict(dictStore, key, value)
 
-        if valz not in min_val:
-            min_val[valz] = lim
-        if lim %65536== 0:
-            print "RAAAH", lim, n
-    return lim
+def putInDict(dictStore, key, value):
+  if key in dictStore:
+    dictStore[key] = min(value, dictStore[key])
+  else:
+    # gets awfuly boring when you don't have some progress messages
+    print "New key acquired!", key, f(value), value
+    dictStore[key] = value
 
-def sg(n):
-    ans = g(n)
-    return sum( [int(i) for i in str(ans)]),ans
+answers = dict()
+def computeNums(digit, digLeft, digUsed):
+  insert(answers, digUsed)
+  if digLeft == 0 or digit == 10:
+    return
+  computeNums(digit+1, digLeft, digUsed)
+  if digit == 9 or digit != digUsed.count(digit):
+    computeNums(digit, digLeft-1, digUsed + [digit])
 
-lim = 1
+maxNumDig = 42
+computeNums(1,maxNumDig, [])
 sumz = 0
-for i in range(1,SIZE+1):
-    ans, next_val = sg(i)
-    print i, ans, next_val
-    sumz += ans
-print sumz
 
+# Part 1
+for key in sorted(answers.keys()):
+  sumz += sum([int(x) for x in str(answers[key])])
+
+# Part 2: see explanation below
+for i in xrange(max(answers.keys())+1, SIZE+1):
+  sfVal = int(str(i%9) + '9' * (i/9))
+  sumz += backsolveFnDigSum(sfVal)
+
+print "Answer:", sumz
 print "Time Taken:", time.time() - START
 
+
+
 """
-My current approach isn't working... it's not worth it to run it on this problem iteratively brute focring... should find better solution...
 
-These are the solutions for 1 to 46:
-{1: 1, 2: 2, 3: 5, 4: 15, 5: 25, 6: 3, 7: 13, 8: 23, 9: 6, 10: 16, 11: 26, 12: 44, 13: 144, 14: 256, 15: 36, 16: 136, 17: 236, 18: 67, 19: 167, 20: 267, 21: 349, 22: 1349, 23: 2349, 24: 49, 25: 149, 26: 249, 27: 9, 28: 19, 29: 29, 30: 129, 31: 229, 32: 1229, 33: 39, 34: 139, 35: 239, 36: 1239, 37: 13339, 38: 113599, 39: 4479, 40: 14479, 41: 2355679, 42: 344479, 43: 1344479, 44: 2378889, 45: 12378889, 46: 133378889}
+Congratulations, the answer you gave to problem 254 is correct.
+You are the 666th person to have solved this problem.
 
+Answer: 8184523820510
+Time Taken: 112.573365927
+
+Okay, cool. For this problem, we can semi-brute force the problem until ~ g(45) = 12378889 (or maybe g(50) with 14 digits, but really...), but this isn't good enough for g(150), which has ~192901234580 digits (+/- 50ish).
+  However, we know that with digits a,b,c,d, with a <= b <= c <= d,
+    -we know that f(abcd) = f(dcba) = f(abdc) = ...etc, because we're just summing up the factorial of the digits. However, abcd is the minimal amount for these.
+    - With that information, if we know f(n) and want to find the minimal n, f(n) is simply a sum of factorials of digits, and thus we can find it by modding out the factorials.
+      Ex: 12345 = 2fa(7) + 3fa(6) + 4fa(4) + fa(3) + fa(2) + fa(1), and thus the minimal f(n) = 12345 is 123444466677.
+
+    (Part 2)
+    - Since we can easily compute sf(n) from f(n), and can find a f(n) for a sf(n),
+      - Ex: sf(n) = 13, f(n) = 49 satisfies this, so n could be 144
+    if we can find the smallest f(n) for each sf(n), then we're done.
+
+    Thankfully, since sf(n) is a sum of digits, if sf(n) = 100, then we know we need at least 11 digits of 9 and one 1 to make it.
+    Since f(n) = 199999999999 is a huge n, requiring at least 551146 9's, we know that the minimal n is probably going to have
+    f(n) = 199999999999 since any other f(n) for which sf(n) = 100 is going to require many more digits.
+
+    Thus, f(n) = (n%9) + '9' * (n/9) for n > 63, and we can backsolve to get n from f(n), which gives us our answer. Woot!
 
 """

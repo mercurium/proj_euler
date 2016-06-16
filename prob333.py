@@ -1,46 +1,37 @@
-import time
-from math import log
-START = time.time()
-SIZE = 10**6
-END_CASE = int(math.log(SIZE,3))
+import time, math
+from primes import get_primes
+START         = time.time()
+SIZE          = 10**6
+MAX_THREE_POW = int(math.log(SIZE,3))+1
 
-def prime_gen(size): #Find all primes < the input size
-    primes = [2]
-    ints = [0,1,2] + [1,2] *(size/2-1)
-    for i in xrange(3,size,2):
-        if ints[i] == 1:
-            for j in xrange(i**2,size,i*2):
-                ints[j] = i
-            ints[i] = i
-            primes.append(i)
-    return primes
+primes = get_primes(SIZE)
 
+def incrValDict(valDict, value):
+  if value in valDict:
+    valDict[value] += 1
+  else:
+    valDict[value] = 1
 
-prevComputedValues = dict()
-def recurse(threePow, twoPow, runningSum): # Int, Int, Int
-    if threePow == END_CASE:
-        if runningSum in prevComputedValues:
-            prevComputedValues[runningSum] += 1
-        else:
-            prevComputedValues[runningSum] = 1
-        return
+values = dict()
+def recurse(threePow, twoPow, runningSum):
+  if threePow >= MAX_THREE_POW:
+    incrValDict(values, runningSum)
+    return
 
-    for i in range(0, twoPow):
-        nextPartitionItem = 2**i * 3**threePow
-        if nextPartitionItem + runningSum > SIZE:
-            break
-        recurse( threePow +1, i, runningSum + nextPartitionItem)
-    recurse(threePow +1, twoPow, runningSum)
+  for i in xrange(0, twoPow):
+    nextPartitionItem = 2**i * 3**threePow
+    if nextPartitionItem + runningSum > SIZE:
+      break
+    recurse( threePow +1, i, runningSum + nextPartitionItem)
+  recurse(threePow +1, twoPow, runningSum)
 
 
-
-primes = prime_gen(SIZE)
 recurse(0, int(math.log(SIZE, 2) + 1), 0)
 
 sumz = 0
 for p in primes:
-    if p in prevComputedValues and prevComputedValues[p] == 1:
-        sumz += p
+  if p in values and values[p] == 1:
+    sumz += p
 
 print sumz
 print "Time Taken:", time.time() - START
