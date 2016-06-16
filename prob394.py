@@ -46,9 +46,8 @@ for i in xrange(1,30):
   probArr = integrate(probArr)
   #print probArr
 
-  probOccur = plugIntoArr(probArr, FRAC) * (1 - totalProb)
-  totalProb += probOccur
-
+  probOccur   = plugIntoArr(probArr, FRAC) * (1 - totalProb)
+  totalProb  += probOccur
   runningSum += probOccur * i
   print str(i) + ":\t", plugIntoArr(probArr, FRAC), runningSum, totalProb
 
@@ -58,7 +57,6 @@ print "Time Taken:", time.time() - START
 
 """
 probInOne = 1 - (1-x)^2
-probInTwo =
 
 p(2-p) -> (1-p)(2-(1-p)) = (1-p)(1+p) = 1-p^2
 
