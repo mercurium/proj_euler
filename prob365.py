@@ -73,7 +73,7 @@ for p1 in xrange(len(prime_nums)):
   for p2 in xrange(p1):
     for p3 in xrange(p2):
       sumz = (sumz + (num_mod_all % (prime_nums[p1] * prime_nums[p2] * prime_nums[p3])))
-  print prime_nums[p1], sumz
+  #print prime_nums[p1], sumz
 
 print "The answer is:", sumz
 print "Time taken:", time.time() - START

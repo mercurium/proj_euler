@@ -2,3 +2,4 @@
 *.dvi
 *.swp
 output*
+.*.py.un~
