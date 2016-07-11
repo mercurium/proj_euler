@@ -1,26 +1,44 @@
 import time
 START = time.time()
-SIZE  = 4
+SIZE  = 100
 
-costs = [[0,0,0,0],[0,0,1,1],[0,1,1,3],[0,1,3,3]]
-squares = set([1,4,9,16,25])
+squares = set([x**2 for x in xrange(1,141)])
+
+def computeCosts(lim):
+  costDict = dict()
+  for a in xrange(1, lim+1):
+    for b in xrange(1, a+1):
+      costDict[(b,a)] = sum([ (a*c - 1) / b for c in xrange(1,b)])
+  return costDict
+
+costDict = computeCosts(SIZE)
 
 count = 0
-for a in xrange(0,SIZE):
-  for b in xrange(0,SIZE):
-    for c in xrange(0,SIZE):
-      for d in xrange(0,SIZE):
-        total_cost = costs[a][b] + costs[b][c] + costs[c][d] + costs[d][a] + a+b+c+d +1
+for a in xrange(1,SIZE+1):
+  for b in xrange(1,SIZE+1):
+    for c in xrange(1,SIZE+1):
+      for d in xrange(1,SIZE+1):
+        total_cost = \
+              costDict[(min(a,b), max(a,b))] \
+            + costDict[(min(b,c), max(b,c))] \
+            + costDict[(min(c,d), max(c,d))] \
+            + costDict[(min(d,a), max(d,a))] \
+            + a+b+c+d-3
         if total_cost in squares:
-          print a+1,b+1,c+1,d+1, total_cost
           count += 1
+  print a
 
-print count
+print "Answer is:", count
 print "Time taken:", time.time() - START
 
 '''
-Triangles (0,0), (a,0), (0,b)
-point (a,b) is in the triangle
+
+Congratulations, the answer you gave to problem 504 is correct.
+You are the 1438th person to have solved this problem.
+
+694687
+Time taken: 37.2965099812
+
 
 
 '''
