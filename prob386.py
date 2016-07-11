@@ -1,11 +1,48 @@
 import time
-START = time.time()
+from primes import pfactor_gen, factor_given_pfactor
+START   = time.time()
+SIZE    = 10**8
 
+pfactor = pfactor_gen(SIZE)
 
+def factor(n):
+  return factor_given_pfactor(n, pfactor)
 
+def mapToFactorPow(n):
+  factors   = factor(n)
+  powCounts = [ factors.count(x) for x in set(factors)]
+  return tuple(sorted(powCounts)[::-1])
 
+primes = [2,3,5,7,11,13,17,19]
+possible = dict()
+def fillFactorDict(index, current=[], maxPow=1000, prod=1):
+  if prod > SIZE or index >= len(primes):
+    return
+  if len(current) > 0:
+    possible[mapToFactorPow(prod)] = 0
+  fillFactorDict(index+1, \
+      current, \
+      current.count(primes[index]), \
+      prod\
+  )
+  if current.count(primes[index]) < maxPow:
+    fillFactorDict(index, \
+        current + [primes[index]], \
+        maxPow, \
+        prod * primes[index] \
+    )
+
+fillFactorDict(0)
+print len(possible)
 print "Time taken:", time.time() - START
 
+for i in xrange(2,SIZE+1):
+  if i % 10**6 == 0:
+    print i
+  arrangement = mapToFactorPow(i)
+  possible[arrangement] += 1
+
+print "Time taken:", time.time() - START
 
 '''
 Theory:

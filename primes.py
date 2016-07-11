@@ -157,12 +157,12 @@ def rep_sq_sqrt(n, powz, mod): #NOTE, n is a tuple... a,b,c so that we had a + b
   return product
 
 def extended_gcd(a, b): #returns c,d such that ac+bd =1
-	if b == 0:
-		return (1, 0)
-	else:
-		q, r = a/b, a%b
-		s, t = extended_gcd(b, r)
-		return (t, s - q * t)
+  if b == 0:
+    return (1, 0)
+  else:
+    q, r = a/b, a%b
+    s, t = extended_gcd(b, r)
+    return (t, s - q * t)
 ext_gcd = extended_gcd
 
 #this takes a set of values and bases so that we can find x s.t.
@@ -251,7 +251,7 @@ def gcd(a,b):
 
 def lcm(a,b):
   return a*b / gcd(a,b)
-    
+
 
 
 import operator as op
