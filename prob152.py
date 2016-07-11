@@ -1,5 +1,4 @@
 #NOTE TODO need to solve it
-
 import time
 START = time.time()
 from primes import factor, is_prime
