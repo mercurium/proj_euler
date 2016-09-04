@@ -1,58 +1,63 @@
 #NOTE TODO need to solve it
 import time
-from primes import m_r
+from primes import m_r, pfactor_gen, factor_given_pfactor, ext_gcd
 START = time.time()
-
-count = 0
-SIZE  = 10**5
+SIZE  = 10**7
 MOD   = 10**9 +7
 
-def get_pfactor(SIZE):
-  pfactor = range(0,SIZE+1)
-  for i in xrange(2,len(pfactor)):
-    if pfactor[i] == i:
-      for j in xrange(i*2,len(pfactor),i):
-        pfactor[j] = i
-  return pfactor
 
-pfactor = get_pfactor(SIZE)
+pfactor = pfactor_gen(SIZE)
 
 def factor(n):
-  factors = []
-  while n != 1:
-    factors.append(pfactor[n])
-    n /= pfactor[n]
-  return factors
+  return factor_given_pfactor(n, pfactor)
 
-print "Part 1 done!", time.time() - START
+def multInverse(n, mod):
+  return ext_gcd(n, mod)[0] % mod
 
-val_dict = {}
+def addToDict(valDict, key, value):
+  if key in valDict:
+    valDict[key] += value
+    if valDict[key] == 0:
+      del valDict[key]
+  else:
+    valDict[key] = value
+
+valDict = {}
+count   = 0
+prod    = 1
+
 for n in xrange(1,SIZE/2+1):
+  changes  = dict()
 
   # Add on the factors from the top
   for f in factor(SIZE-n+1):
-    if f in val_dict:
-      val_dict[f] +=1
+    addToDict(changes, f, 1)
+
+  for f in factor(n):
+    addToDict(changes, f, -1)
+
+  for f in changes.keys():
+    if f in valDict:
+      prod = multInverse(1 + pow(f, valDict[f], MOD), MOD) * prod % MOD
+      if valDict[f] + changes[f] != 0:
+        prod = (1 + pow(f, valDict[f] + changes[f], MOD)) * prod % MOD
     else:
-      val_dict[f] = 1
+      prod = (1 + pow(f, changes[f], MOD)) * prod % MOD
 
-  # Remove the denominator
-  for d in factor(n):
-    val_dict[d] -= 1
-    if val_dict[d] == 0:
-      del val_dict[d]
+  for f in changes.keys():
+    addToDict(valDict, f, changes[f])
 
-  # Increment count
-  prod = 1
-  for f in val_dict.keys():
-    prod = ((1 + pow(f, val_dict[f],MOD)) * prod) % MOD
-  count = (count + prod*2) % MOD # The cases for n are symmetric, so let's only do half the work to finish twice as fast!
+  # The cases for n are symmetric, so only do half the work
+
+  count = (count + prod*2) % MOD
 
   # Progress counter
-  if n% 100 == 0:
+  if n% 1024 == 0:
     print n, time.time() - START
 
 count -= prod # We don't want to count the middle case twice!
+
+# accounting for the sum of the numbers themselves
 count = (count - pow(2,SIZE,MOD)+2) % MOD
 
 print "Answer is:", count
@@ -60,6 +65,26 @@ print "Time Taken:", time.time() - START
 
 
 """
+The number of retractions that a certain base has is equal to the sum of its divisors, excluding itself.
+
+Sum of divisors is (1+p1^k1) * (1+p2^k2) * (1 + pm^km)
+
+ax + b = a(ax+b) + b mod n
+a^2 = a mod n
+ab  = 0 mod n
+
+ex: 6x + 5 mod 15
+-> 6(6x + 5) + 5 mod 15 = 36x + 35 mod 15 = 6x + 5
+
+
+Congratulations, the answer you gave to problem 445 is correct.
+You are the 212th person to have solved this problem.
+
+Answer is: 659104042
+Time Taken: 49.5843429565
+Time Taken: 40.5066130161 Minor optimizations
+Time Taken: 39.6483750343 Printing every 1024 instead of every 100
+
 
 
 
