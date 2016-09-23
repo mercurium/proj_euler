@@ -41,6 +41,8 @@ def insertIntoDict(position, numStepsToPos, numPathsToPos, routes):
                           routes + dictRoutes)
     return True
 
+nextSpot = { 'R' : -1,'L' : 1, 'U' : 4, 'D' : -4}
+
 def nextStep(position, action):
   emptyAbsSpot                         = position.index('e')
   emptySpot                            = (emptyAbsSpot / 4, emptyAbsSpot % 4)
@@ -48,23 +50,11 @@ def nextStep(position, action):
   numStepsToPos, numPathsToPos, routes = pathDict[position]
   routes                               = [route + action for route in routes]
 
-  if action == 'R':
-    newPosition[emptyAbsSpot]   = newPosition[emptyAbsSpot-1]
-    newPosition[emptyAbsSpot-1] = 'e'
+  move                             = nextSpot[action]
+  newPosition[emptyAbsSpot]        = newPosition[emptyAbsSpot + move]
+  newPosition[emptyAbsSpot + move] = 'e'
+  newPosition                      = tuple(newPosition)
 
-  if action == 'L':
-    newPosition[emptyAbsSpot]   = newPosition[emptyAbsSpot+1]
-    newPosition[emptyAbsSpot+1] = 'e'
-
-  if action == 'U':
-    newPosition[emptyAbsSpot]   = newPosition[emptyAbsSpot+4]
-    newPosition[emptyAbsSpot+4] = 'e'
-
-  if action == 'D':
-    newPosition[emptyAbsSpot]   = newPosition[emptyAbsSpot-4]
-    newPosition[emptyAbsSpot-4] = 'e'
-
-  newPosition = tuple(newPosition)
   insertIntoDict(newPosition, numStepsToPos + 1, numPathsToPos, routes)
 
 def computeChecksum(checksumString):

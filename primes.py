@@ -252,8 +252,6 @@ def gcd(a,b):
 def lcm(a,b):
   return a*b / gcd(a,b)
 
-
-
 import operator as op
 def ncr(n, r):
   if r > n:
@@ -285,4 +283,23 @@ def findNumLessThan(lst, num):
     return helper(index, start, end)
   return helper(start, end, index)
 
+def pollard_rho(n):
+  def func(x):
+    return (x**2+1)%n
+  def func2(x):
+    return (x**2+3)%n
+  x,y = 2,2
+  d = 1
+  while d==1:
+    x = func(x)
+    y = func(func(y))
+    d = gcd(abs(x-y),n)
+
+  if d==n:
+    d=1
+    while d==1:
+      x = func2(x)
+      y = func2(func2(y))
+      d = gcd(abs(x-y),n)
+  return d
 
