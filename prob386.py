@@ -1,21 +1,30 @@
-import time
+import time, string
 from primes import pfactor_gen, factor_given_pfactor
+from itertools import combinations
+
 START   = time.time()
 SIZE    = 10**8
-
 pfactor = pfactor_gen(SIZE)
+primes  = [2,3,5,7,11,13,17,19]
 
 def factor(n):
   return factor_given_pfactor(n, pfactor)
 
 def mapToFactorPow(n):
   factors   = factor(n)
-  powCounts = [ factors.count(x) for x in set(factors)]
+  powCounts = [ factors.count(x) for x in set(factors) ]
   return tuple(sorted(powCounts)[::-1])
 
-primes = [2,3,5,7,11,13,17,19]
+def getMaxOptions(distro):
+  lettersMerged = string.join([str(i) * num for i,num in enumerate(distro)], '')
+  return len(set( combinations( \
+      lettersMerged, \
+      len(lettersMerged)/2 )))
+
+gmo = getMaxOptions
+
 possible = dict()
-def fillFactorDict(index, current=[], maxPow=1000, prod=1):
+def fillFactorDict(index, current = [], maxPow = 1000, prod = 1):
   if prod > SIZE or index >= len(primes):
     return
   if len(current) > 0:
@@ -23,7 +32,7 @@ def fillFactorDict(index, current=[], maxPow=1000, prod=1):
   fillFactorDict(index+1, \
       current, \
       current.count(primes[index]), \
-      prod\
+      prod \
   )
   if current.count(primes[index]) < maxPow:
     fillFactorDict(index, \
@@ -33,7 +42,6 @@ def fillFactorDict(index, current=[], maxPow=1000, prod=1):
     )
 
 fillFactorDict(0)
-print len(possible)
 print "Time taken:", time.time() - START
 
 for i in xrange(2,SIZE+1):
@@ -42,60 +50,19 @@ for i in xrange(2,SIZE+1):
   arrangement = mapToFactorPow(i)
   possible[arrangement] += 1
 
+total = 1
+for key in possible:
+  total += gmo(key) * possible[key]
+
+print total
 print "Time taken:", time.time() - START
 
-'''
-Theory:
-  If I take the ncr that has the largest number, then that constitutes the antichain
+"""
 
-  111 -> 3 (2)
-  211 -> 4 (2)
-  221 -> 5 (2)
-  222 -> 7 (3)
+Answer: 528755790
+Time taken: 193.456457853
 
-  311 ->
+Congratulations, the answer you gave to problem 386 is correct.
 
-4 * 9 * 25 = 900
-
-a^2 x b^2 x c (5)
-  0 1 2 3 4 5
-  1 3 5 5 3 1
-  a^2, b^2, ab, ac, bc
-
-a^3 x b x c (4)
-  0 1 2 3 4 5
-  1 3 4 4 3 1
-  a^2, b^2, ab, ac, bc
-
-a^2 x b x c (4)
-  0 1 2 3 4
-  1 3 4 3 1
-  a^2, ab, ac, bc
-
-a^2 x b^2 x c^2 = 27 elements (7)
-  a^2b, a^2c, b^2a, b^2c, c^2a, c^2b, abc (7)
-  1, a,b,c, a^2b^2c, ab^2c^2, a^2bc^2, a^2b^2c^2
-  0,1,2,3,4,5,6
-  1,3,6,7,6,3,1
-
-a^4b^2 (3)
-  0,1,2,3,4,5,6
-  1,2,3,3,3,2,1
-
-a x b x c x d
-  0 1 2 3 4
-  1 4 6 4 1
-
-a^2 x b x c x d (7)
-  0 1 2 3 4 5
-  1 4 7 7 4 1
-
-a^4 x b^4 x c^4 (19)
-  0  1  2  3  4  5  6
-  1  3  6 10 15 18 19
-
-72 = 2^3 x 3^2
-  8, 12, 18
-
-a^k x b^j = min(k,j) + 1
-'''
+You are the 482nd person to have solved this problem.
+"""
