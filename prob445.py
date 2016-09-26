@@ -1,4 +1,3 @@
-#NOTE TODO need to solve it
 import time
 from primes import m_r, pfactor_gen, factor_given_pfactor, ext_gcd
 START = time.time()

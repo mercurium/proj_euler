@@ -1,4 +1,3 @@
-#NOTE TODO need to solve it
 import time
 from primes import m_r, gcd, primes, pollard_rho
 from heapq import *
