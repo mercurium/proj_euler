@@ -1,9 +1,9 @@
 import time, sys
 from primes import *
 START = time.time()
-SIZE  = 10**5
+SIZE  = 10**6
 
-sys.setrecursionlimit(100)
+sys.setrecursionlimit(300)
 
 def sumSq(n):
   return n*(n+1)*(2*n+1)/6
@@ -26,85 +26,65 @@ def binSearch(func, lowerBound, upperBound, target):
 
 def countSmarter(size):
   pivots = set()
+  count = 0
   for m in xrange(1, int((size/2)**.5+5)):
     k = n = 2*m**2+2*m
-    pivots.add(k)
+    pivots.add((k,m,n))
     for index in xrange(20):
       newDiff = k + n - m
-      gcdN = gcd(n, newDiff)
-      spot = lcm(n,newDiff) / gcdN
 
       if k > size:
         break
-
       if index == 0:
         k = 8*m**3 + 10*m**2 + 3*m
         n = 8*m**3 + 14*m**2 + 6*m
-        pivots.add(k)
+        pivots.add((k,m,n))
         continue
       elif index == 1:
         k = 32*m**4 + 56*m**3 + 28*m**2 + 4*m
         n = 32*m**4 + 72*m**3 + 52*m**2 + 12*m
-        pivots.add(k)
+        pivots.add((k,m,n))
         continue
       elif index == 2:
         k = 128*m**5 + 288*m**4 + 216*m**3 + 60*m**2 + 5*m
         n = 128*m**5 + 352*m**4 + 344*m**3 + 140*m**2 + 20*m
-        pivots.add(k)
+        pivots.add((k,m,n))
         continue
 
       k = binSearch(lambda x: comp(x, m, x+newDiff), k, n*newDiff, 0)
       n = k + newDiff
-      #print k,'\t', m, '\t', n
-      pivots.add(k)
+      pivots.add((k,m,n))
 
-  pivots = set(filter(lambda x: x <= SIZE, pivots))
-  return pivots
+  pivots  = set(filter(lambda x: x[0] <= SIZE, pivots))
+  newElem = set()
 
+  for pivotSet in sorted(pivots):
+    k,m,n = pivotSet
+    if n == k:
+      continue
+    count += 1
+    try:
+      newK = binSearch(lambda x: comp(x, n-k+m, x + 2*k-m), k, size, 0)
+    except:
+      continue
+    pivots.add((newK, n-k+m, newK + 2*k-m))
+    newElem.add((newK, n-k+m, newK + 2*k-m))
 
-def oldCount(size):
-  pivots = set()
-  for m in xrange(1, int((size/2)**.5+5)):
-    k = n = 2*m**2+2*m
-    if k < size:
-      pivots.add(k)
-      #print k,'\t', m, '\t', n
-    for index in xrange(20):
-      newDiff = k + n - m
-      gcdN = gcd(n, newDiff)
-      spot = lcm(n,newDiff) / gcdN
-      if index % 2 == 1:
-        spot *= m*(m+1)
-      elif m == 2:
-        spot *= 2
-      elif m == 3:
-        spot *= 4
-
-      if index == 0:
-        k = 8*m**3 + 10*m**2 + 3*m
-        n = 8*m**3 + 14*m**2 + 6*m
-        spot = n
-      elif index == 1:
-        k = 32*m**4 + 56*m**3 + 28*m**2 + 4*m
-        n = 32*m**4 + 72*m**3 + 52*m**2 + 12*m
-        spot = n
-      elif index == 2:
-        k = 128*m**5 + 288*m**4 + 216*m**3 + 60*m**2 + 5*m
-        n = 128*m**5 + 352*m**4 + 344*m**3 + 140*m**2 + 20*m
-        spot = n
-
-      for i in xrange(max(spot-newDiff,1), size):
-        if comp(i, m, i + newDiff) == 0:
-          k = i
-          n = i+newDiff
-          #print k,'\t', m, '\t', n, '\t', i + newDiff - spot
-          pivots.add(k)
-          break
-      if spot > size or i >= size -1:
+  for elem in newElem:
+    k,m,n = elem
+    for iteration in xrange(20):
+      if k > size:
         break
-  pivots = set(filter(lambda x: x <= SIZE, pivots))
-  return pivots
+      newDiff = k + n - m
+      try:
+        k = binSearch(lambda x: comp(x, m, x+newDiff), k, k*n,0)
+        n = k + newDiff
+        pivots.add((k, m, n))
+      except:
+        break
 
+  pivots = set(filter(lambda x: x[0] <= SIZE, pivots))
+  return pivots
 
 def countNum(size):
   pivots = set()
@@ -114,25 +94,25 @@ def countNum(size):
         continue
       for m in xrange(1,int((size/2)**.5)+5):
         if comp(k,m,n) == 0:
-          if k not in ans1:
+          if (k,m,n) not in ans1:
             print k,'\t', m, '\t', n
-          pivots.add(k)
+          pivots.add((k,m,n))
   return pivots
 
 ans1 = countSmarter(SIZE)
-
-print sum(ans1)
-print "\n\n"
-ans2 = countNum(SIZE)
+print sum(set([x[0] for x in ans1]))
+#ans2 = countNum(SIZE)
+#print ans1.difference(ans2)
+#print ans2.difference(ans1)
 print "Time Taken:", time.time() - START
 
 
 """
 
-G(10^4) = 277236
-  badG(10^4)  = 239823
 
-G(10^5) = 8376909
+f(10^4) = 277236
+f(10^5) = 8474349
+f(10^6) = 255978835
 
 import sympy
 
