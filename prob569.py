@@ -19,10 +19,10 @@ for currentPeakIndex in xrange(1, SIZE):
   if currentPeakIndex % 10** 5 == 0:
     print currentPeakIndex, time.time() - START
   currentPeak = coords[currentPeakIndex]
-  peakCount = 0
-  viewAngle = 1
+  peakCount   = 0
+  viewAngle   = 1
   for prevPeakIndex in xrange(currentPeakIndex - 1, currentPeakIndex - min(currentPeakIndex, maxDiff * 2),-1):
-    prevPeak = coords[prevPeakIndex]
+    prevPeak  = coords[prevPeakIndex]
     nextAngle = (1.0 * currentPeak[1] - prevPeak[1]) / (currentPeak[0] - prevPeak[0])
     if nextAngle < viewAngle:
       peakCount +=1
@@ -39,9 +39,7 @@ Congratulations, the answer you gave to problem 569 is correct.
 
 You are the 160th person to have solved this problem.
 
-
 Answer: 21025060
 Time Taken: 1258.95616102
-
 
 """

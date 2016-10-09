@@ -1,11 +1,9 @@
-#NOTE TODO need to solve it
 import time, math
 from primes import gcd, rep_sq_sqrt, multInverse
-from primes import *
 
 START = time.time()
 MOD   = 987898789
-SIZE  = 40
+SIZE  = 2000
 
 def mult(a,b): #multiplying numbers which share a square root (sqrt)
   full = a[0] * b[0] + a[1] * b[1] * a[2]
@@ -49,47 +47,36 @@ def addToDict(valDict, key, value):
   else:
     valDict[key] = value
 
-# I can do better than this... derp
-def compute2(a,c):
-  valDict = { c%2 : 2*a }
+def computeBetter(a):
+  valDict = { 0 : 2*a }
   for b in xrange(a, 0, -2*twoPowerList[a]):
-    addToDict(valDict, pow(c, gcd(a,b), MOD-1), 2)
-    addToDict(valDict, c%2, -2)
-  addToDict(valDict, pow(c,a,MOD-1), -1)
+    addToDict(valDict, gcd(a,b), 2)
+    addToDict(valDict, 0, -2)
+  addToDict(valDict, a, -1)
 
-  return sum([f(key) * valDict[key] for key in valDict.keys()])
+  sumz = (f(1) + f(0)) * valDict[0] * SIZE /2
+  del valDict[0]
+
+  for c in xrange(1,SIZE+1):
+    sumz += sum([f(pow(c,key, MOD-1)) * valDict[key] for key in valDict.keys()])
+  return sumz
 
 sumz = 0
 for a in xrange(1,SIZE+1):
-  #print a, len(prevComputed)
-  for c in xrange(1,SIZE+1):
-    sumz += compute2(a,c)
+  print a
+  sumz += computeBetter(a)
 
 print sumz % MOD
 print "Time Taken:", time.time() - START
 
+
 """
 T(n) = T(k) * T(n-k) + T(k-1) * T(n-k-1)
-
-comp(45,47,c) = c
-comp(45,49,c) = c
-comp(46,50,c) = c**2
-comp(47,49,c) = c
-comp(39,45,c) = c**3
-
-2 4
-3 8
-4 16
-5 32
-6 4 / 64
-7 128
-8 256
-9 8 / 512
 
 970746056
 Time Taken: 650.409888983
 Time Taken: 383.118942976 # removed some excessive calculations
-
+Time Taken: 106.342717886 # merged some computation
 
 
 Congratulations, the answer you gave to problem 440 is correct.
