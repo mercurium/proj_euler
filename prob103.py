@@ -1,42 +1,27 @@
-import time
+import time, string
 START = time.time()
 from itertools import combinations
-import string
 
 def test(setz):
-
-    sub_index = 'abcdefghijk'
-    subset_sums = set()
     SET_SIZE = len(setz)
-    works = True
+    temp_set = set()
     for i in xrange(1,SET_SIZE):
-        temp_set = set()
-        for j in combinations(sub_index[:SET_SIZE],i):
-            k = sum( setz[(ord(l)-97)] for l in j)
-            if k in subset_sums or k in temp_set:
+        for j in combinations(range(SET_SIZE),i):
+            k = sum( setz[l] for l in j)
+            if k in temp_set:
                 return False
-            elif len(subset_sums) >= 1 and k < max(subset_sums):
-                return False
-                works = False
-                print [setz[ord(x)-97] for x in j], k, "error 1"
-                break
-            elif len(subset_sums) >= 1 and k < max(subset_sums):
-                works = False
-                print [setz[ord(x)-97] for x in j], k, "error 2"
-                break
     return True
-
 
 def bb_search(solution):
     if len(solution) == 7 and test(solution) == True:  #case where we've found a good solution.
         return solution
     if not test(solution):  #The current set doesn't work... =/
         return -1
-    new_sol = solution[:]
-    lim = solution[0] + solution[1]
-    lim_start = solution[-1] +1
+    new_sol   = solution[:]
+    lim       = solution[0] + solution[1]
+    lim_start = solution[-1] + 1
     new_sol.append(lim_start)
-    ans = bb_search(new_sol)
+    ans       = bb_search(new_sol)
     while ans == -1 and new_sol[-1] < lim:
         new_sol[-1] +=1
         ans = bb_search(new_sol)
