@@ -1,7 +1,7 @@
 import time, sys
 from primes import *
 START = time.time()
-SIZE  = 10**6
+SIZE  = 10**5
 
 sys.setrecursionlimit(300)
 
@@ -144,5 +144,8 @@ There are results for:
 32m^4  + 72m^3 + 52m^2 + 12m
 128m^5 +352m^4 +344m^3 + 140m^2 + 20m
 
+20 - 21 = 29
+is the same as
+20 - 28 = 22-29
 
 """
