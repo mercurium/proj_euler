@@ -1,77 +1,55 @@
-import time, sys
+import time
+from primes import pfactor_gen, get_totient, get_divisors_given_pfactor, mr, factor_given_pfactor, lcm
 START = time.time()
-
-SIZE = 10**3 if len(sys.argv) <= 1 else int(sys.argv[1])
-
-
-def gcd(a,b):
-    if a == 0:
-        return b
-    return gcd(b%a,a)
-
-def lcm(a,b):
-    return a*b/gcd(a,b)
-
-#returns a list of numbers, each of which are a prime factor of the ith element in the list.
-def get_plst(size):  
-    lst = range(size+1)
-    lst[0] = 1
-    for i in xrange(2,len(lst),2):
-        lst[i] = 2
-    for i in xrange(3,len(lst),2):
-        if lst[i] == i:
-            for j in xrange(i**2,len(lst),2*i):
-                lst[j] = i
-    return lst
-
-def get_totient(size):  #gives you the totients of all numbers i <= size
-    lst = range(size+1)
-    lst[0] = 1
-    for i in xrange(2,len(lst)):
-        if lst[i] == i:
-            for j in xrange(i,len(lst),i):
-                lst[j] = (lst[j] * (i-1))/i 
-    return lst
-
-
-def pfactor(n): #returns the entire list of prime factors of n
-    factors = []
-    while n > 1:
-        factors += [plst[n]]
-        n /= plst[n]
-    return sorted(factors)
+SIZE  = 10**8
 
 def get_divisors(n): # returns all divisors of n.
-    factors = pfactor(n)
-    divisors = set([1])
-    for f in factors:
-        new_set = set()
-        for d in divisors:
-            new_set.add(f*d)
-        for i in new_set:
-            divisors.add(i)
-    return sorted(list(divisors))
+  return get_divisors_given_pfactor(n, pfactors)
+
+def factor(n):
+  return sorted(factor_given_pfactor(n, pfactors))
 
 def rep_dig(n): #Gives the first power of 10 such that 10^k = 1 mod n.
-    potential_pows = get_divisors(totient[n])
-    for powz in potential_pows:
-        if pow(10,powz,n) == 1:
-            return powz
+  potential_pows = get_divisors(totient[n])
+  for powz in potential_pows:
+    if pow(10,powz,n) == 1:
+      return powz
 
-plst = get_plst(SIZE)
-totient = get_totient(SIZE)
-values = [0] * SIZE
+def rep_dig_prime(p):
+  potential_pows = get_divisors(p-1)
+  for powz in potential_pows:
+    if pow(10,powz,p) == 1:
+      return powz
+
+pfactors  = pfactor_gen(SIZE)
+#totient   = get_totient(SIZE)
+values    = [0] * SIZE
 values[3] = 1
 for i in xrange(5,SIZE,2): #Evens are easy to compute, do it later
-    if i %1024 == 1: # My counter, once every 1024 to not add too much time to overall computation.
-        print i
-    if i %5 == 0: # multiples of 5 add no extra digits from the factor of 5.
-        values[i] = values[i/5]
+  if i %1024 == 1:
+    print i
+  if i %5 == 0: # multiples of 5 add no extra digits from the factor of 5.
+    values[i] = values[i/5]
+    continue
+  if pfactors[i] == i:
+    values[i] = rep_dig_prime(i)
+  else:
+    prime_factors = factor(i)
+    values[i]     = values[prime_factors[0]]
+    for index in xrange(1,len(prime_factors)):
+      prime = prime_factors[index]
+      if prime == 3 and index == 1:
         continue
-    values[i] = rep_dig(i)
+      if prime_factors[index] == prime_factors[index-1]:
+        values[i] *= prime
+      else:
+        values[i] = lcm(values[i], values[prime])
+    if i % 237169 == 0:
+      values[i] /= 487
+
 
 for i in xrange(2,SIZE,2):
-    values[i] = values[i/2]
+  values[i] = values[i/2]
 
 print sum(values)
 print "Time Taken:", time.time() - START
@@ -87,6 +65,10 @@ time taken: 22.1281189919
 
 446572970925740 (answer)
 time taken: 4837.17608619
+Time Taken: 2301.69793391 # Used pypy instead on work mac
+Time Taken: 139.207489014 # Holy shit optimization using https://en.wikipedia.org/wiki/Repeating_decimal#Other_properties_of_repetend_lengths
+
+
 For comparison sake... LOL, 7200ish seconds on school computer (via ssh) 7214.40327597
 
 Okay, cool. So for this problem, I used the fact that a fraction, 1/n repeats after we can find a 'k' value such that 10^k = 1 mod n. This can be seen to be true since, supposing we have 5 repeating digits for 1/n. Then

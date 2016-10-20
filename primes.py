@@ -17,7 +17,7 @@ def get_primes(size):  #gives you all the primes < size
 
 primes     = get_primes(10**6)
 primes_set = set(primes)
-primes_few = get_primes(105000)
+primes_few = filter((lambda x: x < 105000), primes)
 
 def factor(n):
   if m_r(n):
