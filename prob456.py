@@ -48,18 +48,10 @@ for i in xrange(SIZE-1):
 
 points = map( lambda (x,y): (x-16161,y-15051), points)
 
-lst1 = [] #points above the x axis
-lst2 = [] #points below the x axis
+lst1   = [] #points above the x axis
 
-for point in points:
-  if point[1] > 0:
-    lst1.append(point)
-  elif point[1] < 0:
-    lst2.append(point)
-  elif point[0] > 0:
-    lst1.append(point)
-  else:
-    lst2.append(point)
+lst1   = filter(lambda (x,y): y > 0 or (y == 0 and x > 0), points)
+lst2   = filter(lambda (x,y): y < 0 or (y == 0 and x <= 0), points)
 
 print "Time Taken:", time.time() - START
 
@@ -93,6 +85,8 @@ Congratulations, the answer you gave to problem 456 is correct.
 You are the 4th person to have solved this problem.
 
 Time Taken: 27.6909570694
+Time Taken: 2.47751903534 # switched to pypy and used less computationally stupid methods xD
+
 Answer is: 333333208685971546
 
 """
