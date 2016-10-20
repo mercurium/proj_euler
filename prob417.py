@@ -1,19 +1,13 @@
 import time
-from primes import pfactor_gen, get_totient, get_divisors_given_pfactor, mr, factor_given_pfactor, lcm
+from primes import pfactor_gen, get_divisors_given_pfactor, factor_given_pfactor, lcm
 START = time.time()
-SIZE  = 10**8
+SIZE  = 10**6
 
 def get_divisors(n): # returns all divisors of n.
   return get_divisors_given_pfactor(n, pfactors)
 
 def factor(n):
   return sorted(factor_given_pfactor(n, pfactors))
-
-def rep_dig(n): #Gives the first power of 10 such that 10^k = 1 mod n.
-  potential_pows = get_divisors(totient[n])
-  for powz in potential_pows:
-    if pow(10,powz,n) == 1:
-      return powz
 
 def rep_dig_prime(p):
   potential_pows = get_divisors(p-1)
@@ -22,7 +16,6 @@ def rep_dig_prime(p):
       return powz
 
 pfactors  = pfactor_gen(SIZE)
-#totient   = get_totient(SIZE)
 values    = [0] * SIZE
 values[3] = 1
 for i in xrange(5,SIZE,2): #Evens are easy to compute, do it later
@@ -35,12 +28,11 @@ for i in xrange(5,SIZE,2): #Evens are easy to compute, do it later
     values[i] = rep_dig_prime(i)
   else:
     prime_factors = factor(i)
-    values[i]     = values[prime_factors[0]]
-    for index in xrange(1,len(prime_factors)):
-      prime = prime_factors[index]
+    values[i]     = 1
+    for (index,prime) in enumerate(prime_factors):
       if prime == 3 and index == 1:
         continue
-      if prime_factors[index] == prime_factors[index-1]:
+      if index > 0 and prime_factors[index] == prime_factors[index-1]:
         values[i] *= prime
       else:
         values[i] = lcm(values[i], values[prime])
@@ -60,11 +52,13 @@ is the right answer for size 10^3
 
 17:43 ~/Desktop/python_projects/proj_euler $ python prob417.py 1000000
 55535191115
-time taken: 22.1281189919
+Time taken: 22.1281189919
+Time Taken: 1.08260798454
+
 
 
 446572970925740 (answer)
-time taken: 4837.17608619
+Time taken: 4837.17608619
 Time Taken: 2301.69793391 # Used pypy instead on work mac
 Time Taken: 139.207489014 # Holy shit optimization using https://en.wikipedia.org/wiki/Repeating_decimal#Other_properties_of_repetend_lengths
 

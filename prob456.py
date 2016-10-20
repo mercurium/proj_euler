@@ -2,20 +2,19 @@ import time
 START = time.time()
 SIZE  = 2*10**6
 
-# This method is buggy
-def bsearch(lst,num, start=0,end=-1):
+def bsearch(lst,num):
   if lst[-1] < num or lst[0] > num:
     return 0,0
 
-  if end == -1:
-    end = len(lst)
+  start = 0
+  end   = len(lst)
   index = (start+end)/2
 
   while True:
     if start == end-1:
-      above = index + 1
-      below = len(lst) - above
-      return above, below
+      start = index + 1
+      end   = len(lst) - start
+      return start, end
     if lst[index] > num:
       end   = index
       index = (start+end)/2
@@ -31,8 +30,7 @@ def bsearch(lst,num, start=0,end=-1):
     start -= 1
   while end < len(lst) and lst[end] == num:
     end   += 1
-  return start + 1, len(lst)-end
-
+  return start + 1, len(lst) - end
 
 def div(point):
   if point[1] == 0:
