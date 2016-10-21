@@ -15,12 +15,23 @@ numPaths    = [0] * (SIZE+1)
 numPaths[6] = 1
 
 for n in xrange(7, SIZE+1):
+  if n % 1024 == 0:
+    print n
   for k in xrange(n-1, 5, -1):
     if totients[n] >= k:
       break
     if totients[k] < totients[n]:
       numPaths[n] += numPaths[k]
+    elif totients[k] == totients[n]:
+      numPaths[n] += numPaths[k]
+      break
   numPaths[n] = numPaths[n] % MOD
 
 print sum(numPaths) % MOD
 print "Time Taken:", time.time() - START
+
+
+"""
+if totient(n) = totient(n-1), then... the number of paths are equivalent!
+
+"""
