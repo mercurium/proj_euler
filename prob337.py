@@ -1,7 +1,7 @@
 import time
 from primes import get_totient
 START = time.time()
-SIZE  = 10**4
+SIZE  = 10**5
 MOD   = 10**8
 
 def putInDict(valsDict, key, value):
@@ -15,8 +15,6 @@ numPaths    = [0] * (SIZE+1)
 numPaths[6] = 1
 
 for n in xrange(7, SIZE+1):
-  if n % 1024 == 0:
-    print n
   for k in xrange(n-1, 5, -1):
     if totients[n] >= k:
       break
@@ -25,6 +23,8 @@ for n in xrange(7, SIZE+1):
     elif totients[k] == totients[n]:
       numPaths[n] += numPaths[k]
       break
+  if n % 1024 == 0:
+    print n, k, numPaths[n]
   numPaths[n] = numPaths[n] % MOD
 
 print sum(numPaths) % MOD

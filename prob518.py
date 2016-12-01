@@ -15,6 +15,7 @@ def divisors(n):
 
 answers = set()
 for p in primesList:
+  print p
   divs = divisors(p+1)
   for div1 in divs:
     for div2 in divs:
@@ -23,7 +24,7 @@ for p in primesList:
       top    = ((p+1) * div1) / div2 - 1
       bottom = ((p+1) * div2) / div1 - 1
       if top > SIZE:
-        continue 
+        continue
       if top in primeSet and bottom in primeSet:
         answers.add((top, p, bottom))
 
