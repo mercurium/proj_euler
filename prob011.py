@@ -4,7 +4,7 @@ START = time.time()
 
 size = 20
 
-temp = open('prob11lst.txt','r')
+temp = open('prob011lst.txt','r')
 lst = string.split(temp.read(),'\n')
 
 for i in xrange(0, len(lst)):
@@ -17,35 +17,38 @@ for i in xrange(0,size):
 ###############################
 #### Processing Input above ###
 ###############################
+
+def prod(array):
+    product = 1
+    for element in array:
+        product *= element
+    return product
         
 maxz = 0
 
 # Checking Rows
 for i in xrange(0,size):
-    for j in xrange(0, size-4):
-        val = lst[i][j]*lst[i][j+1]*lst[i][j+2]*lst[i][j+3]
-        if val > maxz:
-            maxz = val
+    for j in xrange(0, size):
+        val = prod(lst[i][j:j+4])
+        maxz = max(val, maxz)
 
 # Checking Columns
-for i in xrange(0,size-4):
+for i in xrange(0,size-3):
     for j in xrange(0, size):
         val = lst[i][j]*lst[i+1][j]*lst[i+2][j]*lst[i+3][j]
-        if val > maxz:
-            maxz = val
+        maxz = max(val, maxz)
 
 #Checking Diagonal Upper Left to Lower right
-for i in xrange(0,size-4):
-    for j in xrange(0, size-4):
-        val = lst[i][j]*lst[i+1][j+1]*lst[i+2][j+2]*lst[i+3][j+3]
-        if val > maxz:
-            maxz = val
+for i in xrange(0,size-3):
+    for j in xrange(0, size-3):
+        val = prod( [lst[i+x][j+x] for x in range(4) ] )
+        maxz = max(val, maxz)
+
 #Checking Diagonal Upper Right to Lower Left
-for i in xrange(4,size):
-    for j in xrange(0, size-4):
+for i in xrange(3,size):
+    for j in xrange(0, size-3):
         val = lst[i][j]*lst[i-1][j+1]*lst[i-2][j+2]*lst[i-3][j+3]
-        if val > maxz:
-            maxz = val
+        maxz = max(val, maxz)
 print maxz
 
 print "Time Taken:", time.time()-START

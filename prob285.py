@@ -1,13 +1,30 @@
-#NOTE TODO need to solve it
 import time
-start = time.time()
-from math import pi
+START = time.time()
+LIM   = 10
+STEP  = 10**6
+
 
 score = 0
-for i in xrange(1,11):
-  prob = pi*( ((i-.5)**2 - (max(i-1.5,0))**2)/i**2)/4
-  score += prob * i
-  print prob, score
+for k in xrange(1,LIM+1):
+  for a in xrange(0,STEP):
+
+    upperBound  = max((k+.5)**2 - (k*a * 1.0/STEP + 1)**2, 1)
+    lowerBound  = max((k-.5)**2 - (k*a * 1.0/STEP + 1)**2, 1)
+
+    bUpper      = (upperBound**.5 - 1)
+    bLower      = (lowerBound**.5 - 1)
+
+    score      += (bUpper - bLower) / STEP
 
 print score
-print "Time Taken: ", time.time() - start
+print "Time Taken: ", time.time() - START
+
+"""
+integrate over two variables?
+
+int(
+
+    if int(.5 + ((k * a / 1000. + 1)**2 + (k * b / 1000. + 1)**2)**.5) == k:
+      score += k / (1001.)**2
+
+"""

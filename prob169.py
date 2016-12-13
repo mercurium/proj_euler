@@ -1,24 +1,29 @@
 from primes import *
 import time
-start = time.time()
+START = time.time()
+SIZE  = 10**25
 
 
-twos = tuple([2**i for i in xrange(0,84)])
-val = dict()
+val   = dict()
+def helper(n, twoPow):
+  if n == 0:
+    return 1
+  if n % twoPow != 0:
+    return 0
+  if (n,twoPow) in val:
+    return val[(n,twoPow)]
 
-def helper(n, tl):
-  if n == 0: return 1
-  if len(tl) == 0 or n%tl[0] != 0: return 0
-  if (n,tl[0]) in val: return val[(n,tl[0])]
-  val[(n,tl[0])] = helper(n-tl[0],tl[1:])+helper(n-2*tl[0],tl[1:]) + helper(n,tl[1:])
-  return val[(n,tl[0])]
-    
+
+  val[(n,twoPow)] = helper(n-twoPow,   twoPow * 2) \
+                  + helper(n-2*twoPow, twoPow * 2) \
+                  + helper(n,          twoPow * 2)
+  return val[(n,twoPow)]
+
 def compute(n):
-  if n in val: return val[n]
-  val[n] = helper(n,twos)
-  return val[n]
+  return helper(n,1)
 
-print compute(10**25)
-print "Time Taken: " + str(time.time()-start)
+print compute(SIZE)
+assert(compute(SIZE) == 178653872807)
+print "Time Taken:", time.time()-START
 
 

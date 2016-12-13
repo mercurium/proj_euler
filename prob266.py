@@ -1,27 +1,17 @@
 #NOTE TODO need to solve it
 import time
 START = time.time()
-from primes import factor, get_primes
+from primes import factor, get_primes, primes
 
 
-LIM = 190
-
-def get_plst(size):
-  temp = bitarray('1' * size)
-  plst = [2]
-  for i in xrange(3,size,2):
-    if temp[i]:
-      plst.append(i)
-      for j in xrange(i**2,size, 2*i):
-        temp[j] = 0
-  return plst
+prime_list = primes[:42]
 
 # [::-1] ############# reversing the list of primes so that we add bigger items on first.
-plst = get_primes(LIM)
-print plst, len(plst)
+prime_list = prime_list[::-1]
+print prime_list, len(prime_list)
 
 prod = [1]
-for prime in plst:
+for prime in prime_list:
   prod.append(prod[-1] * prime)
 
 PROD_LIM = [int(p**.5) for p in prod]
@@ -51,8 +41,8 @@ def recurse(prod, pos, prime_lst,lim, ratio):
 
 ratio = .5
 for iteration in xrange(1,len(PROD_LIM)):
-  ans = recurse(1,0, plst[:iteration],PROD_LIM[iteration], ratio)
-  print "The optimal answer is:", PROD_LIM[iteration], plst[iteration-1], iteration
+  ans = recurse(1,0, prime_list[:iteration],PROD_LIM[iteration], ratio)
+  print "The optimal answer is:", PROD_LIM[iteration], prime_list[iteration-1], iteration
   print "The answer is:", ans, factor(ans)
   print "The new ratio is:", ratio
   print "Time now is:", time.time() - START, '\n'

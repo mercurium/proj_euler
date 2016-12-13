@@ -1,12 +1,9 @@
-from primes import *
 import time
-start = time.time()
+START = time.time()
+val   = 1777
 
+for i in xrange(0,1854):
+  val = pow(1777, val, 10**6)
 
-powz = 1777
-for i in range(0,1854):
-  powz = rep_sq(1777,powz,10**6)
-
-print rep_sq(1777,powz,10**8)
-
-print "Time Taken: " + str(time.time()-start)
+print "Answer is:", pow(1777, val, 10**8)
+print "Time Taken: ", time.time() - START

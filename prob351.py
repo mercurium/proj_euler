@@ -1,30 +1,32 @@
 import time
-start = time.time()
+START = time.time()
 """
 f(5) = 30
 f(10) = 138
 f(1000) = 1177848
 """
 
-size = 10**8
-arr = [0]*(size+1)
+SIZE = 10**8
+arr  = [0]*(SIZE+1)
 sumz = 0
-for i in xrange(2,size+1):
-  if i > size/2: break
+for i in xrange(2,SIZE+1):
+  if i > SIZE/2:
+    break
+
   if arr[i] == -1: #number isn't squarefree, we don't want it.
     continue
-  a = size//i #size of orchid that we're adding on
+  a = SIZE//i #SIZE of orchid that we're adding on
 
   if arr[i] == 0:
-    for j in xrange(2*i,size/2,i):
+    for j in xrange(2*i,SIZE/2,i):
       #ignore the number if it isn't squarefree.
-      if arr[j] != -1: arr[j] += 1
+      if arr[j] != -1:
+        arr[j] += 1
     sumz += a*(a-1)/2
-    #print i, a*(a-1)/2
 
   #this marks a number as a square, and all of its future nonsquarefree terms.
   elif arr[i] == 1:
-    for j in xrange(2*i,size/2,i):
+    for j in xrange(2*i,SIZE/2,i):
       arr[j] = -1
 
   #if it has an odd # of factors, add it back on
@@ -38,8 +40,8 @@ for i in xrange(2,size+1):
 
 
 #Since we're only computing it for each little triangle, multiply result by 6 to get answer, then add the edges.
-print "actual sum:", sumz*6+(size-2)*6
-print "Time Taken:", time.time() - start
+print "actual sum:", sumz * 6 + (SIZE - 2) * 6
+print "Time Taken:", time.time() - START
 
 
 """

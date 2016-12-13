@@ -9,7 +9,7 @@ print "Time Taken: ", time.time() - START
 
 
 prime_set2 = set([2])
-temp = [0] * (sum(prime_lst)+1)
+temp       = [0] * (sum(prime_lst)+1)
 for i in xrange(3,len(temp),2):
   if temp[i] == 0:
     prime_set2.add(i)
@@ -23,7 +23,7 @@ print "Time Taken: ", time.time() - START
 sumz = 0
 for i in xrange(0,len(prime_lst)):
   for j in xrange(sumz,-1,-1):
-    index = j + prime_lst[i]
+    index      = j + prime_lst[i]
     lst[index] = (lst[j] + lst[index]) % MOD
   sumz += prime_lst[i]
 

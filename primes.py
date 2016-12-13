@@ -17,27 +17,24 @@ def get_primes(size):  #gives you all the primes < size
 
 primes     = get_primes(10**6)
 primes_set = set(primes)
-primes_few = get_primes(105000)
+primes_few = filter((lambda x: x < 105000), primes)
 
-def factor(val): #dumb factoring method, use the other one instead...
-  if mr(val):
-    return [val]
-  factors = []
-  for x in primes_few:
-    if x > val:
-      break
-    while val % x == 0:
-      factors.append(x)
-      val /= x
-      if val == 0:
-        print "BIG FAT ERROR!!!"
-  for x in xrange(primes_few[-1], int(math.sqrt(val)+1)):
-    while val % x == 0:
-      factors.append(x)
-      val /= x
-  if val != 1:
-    factors.append(val)
-  return factors
+def factor(n):
+  if m_r(n):
+    return [n]
+  factor_lst = []
+  for i in primes_few:
+    while n % i == 0:
+      factor_lst.append(i)
+      n /= i
+  while n != 1:
+    if m_r(n):
+      return (factor_lst + [n])
+    d = pollard_rho(n)
+    while n % d == 0:
+      factor_lst.append(d)
+      n /= d
+  return factor_lst
 
 def divisors(n): # don't use for larger numbers...
   factors  = factor(n)
@@ -132,38 +129,40 @@ def cipolla(p, n): # http://en.wikipedia.org/wiki/Cipolla%27s_algorithm
   return val[0]
 
 
-def rep_sq_sqrt(n, powz, mod): #NOTE, n is a tuple... a,b,c so that we had a + b * sqrt(c)
-  def mult(a,b,mod): #multiplying numbers which share a square root (sqrt)
+def rep_sq_sqrt(n, power, mod): #NOTE, n is a tuple... a,b,c so that we had a + b * sqrt(c)
+  def mult(a,b): #multiplying numbers which share a square root (sqrt)
     full = a[0] * b[0] + a[1] * b[1] * a[2]
     frac = a[1] * b[0] + a[0] * b[1]
-    return (full%mod,frac%mod,a[2])
-  if powz == 0: return 1
-  if powz == 1: return (n[0] % mod,n[1] % mod, n[2])
 
-  val = int(math.log(powz,2))
-  lst = [1,n] + [0] * val
-  for i in range(2,len(lst)):
-    lst[i] = mult(lst[i-1],lst[i-1],mod)
+    if abs(full) > mod: full = full % mod
+    if abs(frac) > mod: frac = frac % mod
+    return (full, frac, a[2])
 
-  pows = [0] * (val+1)
-  power = powz
-  for i in range(0,len(pows)):
-    pows[i] = power % 2
-    power = power //2
+  if power == 0: return (1,0,n[0])
+  if power == 1: return n
+
+  binRepOfPower = [int(x) for x in bin(power)[2:][::-1]]
+  numRepSq      = [1,n] + [0] * len(binRepOfPower)
+  for i in xrange(2,len(numRepSq)):
+    numRepSq[i] = mult(numRepSq[i-1],numRepSq[i-1])
+
   product = (1,0,n[2])
-  for i in range(0,len(pows)):
-    if pows[i] == 1:
-      product = mult(product,lst[i+1], mod)
+  for i in xrange(0,len(binRepOfPower)):
+    if binRepOfPower[i] == 1:
+      product = mult(product,numRepSq[i+1])
   return product
 
 def extended_gcd(a, b): #returns c,d such that ac+bd =1
-	if b == 0:
-		return (1, 0)
-	else:
-		q, r = a/b, a%b
-		s, t = extended_gcd(b, r)
-		return (t, s - q * t)
+  if b == 0:
+    return (1, 0)
+  else:
+    q, r = a/b, a%b
+    s, t = extended_gcd(b, r)
+    return (t, s - q * t)
 ext_gcd = extended_gcd
+
+def multInverse(n, mod):
+  return ext_gcd(n, mod)[0] % mod
 
 #this takes a set of values and bases so that we can find x s.t.
 #x = a1 mod b1
@@ -249,6 +248,9 @@ def gcd(a,b):
     a,b = b, a%b
   return a
 
+def lcm(a,b):
+  return a*b / gcd(a,b)
+
 import operator as op
 def ncr(n, r):
   if r > n:
@@ -280,4 +282,23 @@ def findNumLessThan(lst, num):
     return helper(index, start, end)
   return helper(start, end, index)
 
+def pollard_rho(n):
+  def func(x):
+    return (x**2+1)%n
+  def func2(x):
+    return (x**2+3)%n
+  x,y = 2,2
+  d = 1
+  while d==1:
+    x = func(x)
+    y = func(func(y))
+    d = gcd(abs(x-y),n)
+
+  if d==n:
+    d=1
+    while d==1:
+      x = func2(x)
+      y = func2(func2(y))
+      d = gcd(abs(x-y),n)
+  return d
 

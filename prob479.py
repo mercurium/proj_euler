@@ -4,12 +4,12 @@ SIZE  = 10**6
 MOD   = 10**9+7
 
 def ext_gcd(a, b): #returns c,d such that ac+bd =1
-	if b == 0:
-		return (1, 0)
-	else:
-		q, r = a/b, a%b 
-		s, t = ext_gcd(b, r)
-		return (t, s - q * t)
+  if b == 0:
+    return (1, 0)
+  else:
+    q, r = a/b, a%b
+    s, t = ext_gcd(b, r)
+    return (t, s - q * t)
 
 sumz = 0
 for x in range(1,SIZE+1):

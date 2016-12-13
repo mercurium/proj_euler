@@ -1,30 +1,21 @@
 import time
-from bitarray import bitarray
-from primes import *
+from primes import pfactor_gen, factor_given_pfactor
 start = time.time()
 
-sumz = 0
-size = 10**7*2
+SIZE = 10**7*2
 
+pfactor = pfactor_gen(SIZE)
 
-pfactor = range(0,size+1)
-for i in xrange(2,len(pfactor)):
-  if pfactor[i] == i:
-    for j in xrange(i*2,len(pfactor),i):
-      pfactor[j] = i
-
-def factorz(n):
-  if n == 1: return 1
-  return pfactor[n]+factorz(n/pfactor[n])
+def factor(n):
+  return sum(factor_given_pfactor(n, pfactor))
 
 print "Time Taken: ", time.time() - start
 
-
 sumz = 0
-for i in xrange(1,size/4+1):
-  sumz -= factorz(i)
-for i in xrange(size * 3 /4 + 1, size+1):
-  sumz += factorz(i)
+for i in xrange(1,SIZE/4+1):
+  sumz -= factor(i)
+for i in xrange(SIZE * 3 /4 + 1, SIZE+1):
+  sumz += factor(i)
 print sumz
 print "Time Taken: ", time.time() - start
 
@@ -36,6 +27,12 @@ Time Taken:  58.1015560627 (on laptop)
 Time Taken:  10.5234799385
 7526965179680
 Time Taken:  19.4148628712 (on desktop...wtf LOL)
+
+pypy prob231.py
+Time Taken:  0.482394933701
+7526965179680
+Time Taken:  2.60380911827
+
 
 #so the method of attack for this was compute the prime factorization of all numbers up to n using that same method that we used before.
 

@@ -1,63 +1,86 @@
-#NOTE TODO need to solve it
-import time
+import time, math
+from primes import gcd, rep_sq_sqrt, multInverse
+
 START = time.time()
-from primes import m_r
+MOD   = 987898789
+SIZE  = 2000
 
-def gcd(a,b):
-    while a != 0:
-        a,b = b%a, a
-    return b
+def mult(a,b): #multiplying numbers which share a square root (sqrt)
+  full = a[0] * b[0] + a[1] * b[1] * a[2]
+  frac = a[1] * b[0] + a[0] * b[1]
+  return (full, frac, a[2])
 
-def pollard_rho(n):
-    def func(x):
-        return (x**2+1)%n
-    def func2(x):
-        return (x**2+3)%n
-    x,y = 2,2
-    d = 1
-    while d==1: 
-        x = func(x)
-        y = func(func(y))
-        d = gcd(abs(x-y),n)
-    
-    if d==n:
-        d=1
-        while d==1:
-            x = func2(x)
-            y = func2(func2(y))
-            d = gcd(abs(x-y),n)
-    return d
+prevComputed = dict()
+def f(n):
+  n = n % (MOD - 1)
+  if n in prevComputed:
+    return prevComputed[n]
+  a    = (26,  5, 26)
+  b    = (26, -5, 26)
 
-small_primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,113,127,131,137,139,149,151,157,163,167,173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541]
+  aPow = (5, 1,26)
+  bPow = (5,-1,26)
 
+  partAPow = rep_sq_sqrt(aPow, n, MOD)
+  partBPow = rep_sq_sqrt(bPow, n, MOD)
 
-def factor(n):
-    if m_r(n):
-        return [n]
-    factor_lst = []
-    for i in small_primes:
-        while n % i == 0:
-            factor_lst.append(i)
-            n /= i
-    while n != 1:
-        if m_r(n):
-            return (factor_lst + [n])
-        d = pollard_rho(n)
-        while n % d == 0:
-            factor_lst.append(d)
-            n /= d
-    return factor_lst
+  ans = (mult(a, partAPow)[0] \
+       + mult(b, partBPow)[0])\
+       * multInverse(52, MOD) % MOD
 
+  prevComputed[n] = ans
+  return ans
 
-T = [1,10]
-for i in range(31):
-    T.append(T[-1] * 10 + T[-2])
+twoPowerList = [1] * (SIZE+1)
+for twoPow in xrange(1, int(math.log(SIZE+1,2)+1)):
+  for i in xrange(2**twoPow, SIZE+1, 2**twoPow):
+    twoPowerList[i] *= 2
+
+def compute(a,b,c):
+  if (a-b) % (2 * twoPowerList[b]) == 0:
+    return pow(c, gcd(a,b), MOD-1)
+  return c % 2
+
+def addToDict(valDict, key, value):
+  if key in valDict:
+    valDict[key] += value
+  else:
+    valDict[key] = value
+
+def computeBetter(a):
+  valDict = { 0 : 2*a }
+  for b in xrange(a, 0, -2*twoPowerList[a]):
+    addToDict(valDict, gcd(a,b), 2)
+    addToDict(valDict, 0, -2)
+  addToDict(valDict, a, -1)
+
+  sumz = (f(1) + f(0)) * valDict[0] * SIZE /2
+  del valDict[0]
+
+  for c in xrange(1,SIZE+1):
+    sumz += sum([f(pow(c,key, MOD-1)) * valDict[key] for key in valDict.keys()])
+  return sumz
 
 sumz = 0
-for a in range(1,4):
-    for b in range(1,4):
-        for c in range(1,4):
-            sumz += gcd(T[c**a], T[c**b])
-print sumz
+for a in xrange(1,SIZE+1):
+  print a
+  sumz += computeBetter(a)
 
+print sumz % MOD
 print "Time Taken:", time.time() - START
+
+
+"""
+T(n) = T(k) * T(n-k) + T(k-1) * T(n-k-1)
+
+970746056
+Time Taken: 650.409888983
+Time Taken: 383.118942976 # removed some excessive calculations
+Time Taken: 106.342717886 # merged some computation
+
+
+Congratulations, the answer you gave to problem 440 is correct.
+
+You are the 212th person to have solved this problem.
+
+"""

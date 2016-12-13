@@ -1,7 +1,7 @@
 #NOTE TODO need to solve it
 import time
 start = time.time()
-import sys
+import sys   
 
 SIZE = int(sys.argv[1])
 NUM_ITER = int(sys.argv[2])

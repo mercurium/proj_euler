@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #NOTE TODO need to solve it
 
 import time, math
@@ -107,5 +108,119 @@ print "Time Taken:", time.time() - START
   10^4 has 15 answers
   10^5 has 36 answers
   10^6 has 84 answers
+=======
+import time
+
+START = time.time()
+MOD   = 10**9 + 7
+SIZE  = 10**8
+
+#   Input: Size of array
+#   Output: (array of non-repeating elements, array of repeating elements)
+def getNumberSequences(size):
+    allNumHash  = set([0])
+    numberArray   = [0]
+    num         = 0
+    repeatIndex = -1
+
+    for index in xrange(2,SIZE+1):
+        num = (num **2 + 45) % MOD
+        if num in allNumHash:
+            repeatIndex = numberArray.index(num)
+            break
+        allNumHash.add(num)
+        numberArray.append(num)
+
+    nonRepeatingNumArr = numberArray[:repeatIndex]
+    repeatingNumArr    = numberArray[repeatIndex:]
+    return (nonRepeatingNumArr, repeatingNumArr)
+
+#   Key:   (start, end)
+#   Value: max possible value
+naiveDPSolverDict = dict()
+def naiveDPSolver(numberArray, start = 0, end = -1):
+    if end == -1: #setup
+        end = len(numberArray) -1
+    if end -1 == start:
+        return max(numberArray[start: end])
+    if (start, end) in naiveDPSolverDict:
+        return naiveDPSolverDict[(start, end)]
+    if len(numberArray) > 120:
+        pop_first = numberArray[start] \
+                + sum(numberArray[start+1:end]) \
+                -  naiveDPSolver(numberArray, start + 1, end)
+        naiveDPSolverDict[(start,end)] = pop_first
+        return naiveDPSolverDict[(start,end)]
+
+
+    pop_first = numberArray[start] \
+                + sum(numberArray[start+1:end]) \
+                -  naiveDPSolver(numberArray, start + 1, end)
+    pop_last  = numberArray[end]   \
+                +sum(numberArray[start:end-1]) \
+                - naiveDPSolver(numberArray, start, end - 1)
+    naiveDPSolverDict[(start,end)] = max(pop_first, pop_last)
+
+    return naiveDPSolverDict[(start, end)]
+
+
+def iterativeDPSolver(numberArray):
+    probSize = len(numberArray)
+    answersDict   = dict()
+    numberSumDict = dict()
+    for i in xrange(probSize):
+        answersDict[(i,i)]   = numberArray[i]
+        numberSumDict[(i,i)] = numberArray[i]
+
+    #Computing the next row of the problem
+    for lengthOfChain in xrange(2,probSize):
+        print lengthOfChain
+        for start in xrange(0, probSize - lengthOfChain):
+            end = start + lengthOfChain -1
+            answersDict[(start,end)] = max( \
+                    (numberArray[start] \
+                        + numberSumDict[(start+1, end)] \
+                        - answersDict[  (start+1, end)]), \
+                    (numberArray[start] \
+                        + numberSumDict[(start, end-1)] \
+                        - answersDict[(start, end-1)])
+            )
+            numberSumDict[(start,end)] = numberSumDict[(start,end-1)] + numberArray[end]
+
+        #Cleaning up the previous row to avoid running out of memory
+        for start in xrange(0, probSize - lengthOfChain+1):
+            end = start + lengthOfChain-2
+            del answersDict[(start,end)]
+            del numberSumDict[(start,end)]
+
+    return answersDict[(0, probSize-2)]
+
+
+nonRepeatingNums, repeatingNums = getNumberSequences(SIZE)
+print len(nonRepeatingNums), len(repeatingNums)
+
+repeatLen        = SIZE - len(nonRepeatingNums)
+wrapAround       = repeatLen % len(repeatingNums)
+numRepeat        = repeatLen // len(repeatingNums)
+nonRepeatingNums = nonRepeatingNums + repeatingNums[:wrapAround]
+repeatingNums    = repeatingNums[:wrapAround] + repeatingNums[wrapAround:]
+noRepeatCost     = iterativeDPSolver(nonRepeatingNums)
+repeatOnceCost   = iterativeDPSolver(nonRepeatingNums + repeatingNums)
+repeatCost       = repeatOnceCost - noRepeatCost
+answer           = noRepeatCost + repeatCost * numRepeat
+
+print "The answer is:", answer
+print "Time Taken:", time.time() - START
+
+"""
+Notes:
+
+For size = 10^8, and mod = 10^9 + 7, 
+The first number to repeat is 535424698,first occuring when index = 57956, and repeats at 65205
+The cycle is 7248 ints
+57956 + 7248 * 13788 + 6620
+    = 64576 + 7248 * 13788
+
+>>>>>>> Stashed changes
 
 """
