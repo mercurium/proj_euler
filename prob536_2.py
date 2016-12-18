@@ -3,12 +3,13 @@ from primes import get_primes
 from heapq import *
 
 START        = time.time()
-SIZE         = 10**8
+SIZE         = 10**9
 factorDict   = {1 : [], 2: [2]}
 listOfPrimes = get_primes(int(SIZE**.5))
 
 def factor(n):
   return factorDict[n]
+
 
 def checkPropertyLessStupid(m, factors=None):
   if not factors:
@@ -24,44 +25,38 @@ possibleAnswers = set([1])
 primesUsed = set()
 answers    = set()
 
-firstTime  = True
-
-#possibleAnswers = []
-#heapify(possibleAnswers)
+smallNum   = set([1])
 
 for prime in listOfPrimes[1:]:
-  print prime, len(possibleAnswers)
-  newAnswers = set()
+  print prime, len(possibleAnswers), len(smallNum)
 
-  if prime**3 > SIZE:
-    for n in possibleAnswers:
-      if n > prime and n * prime < SIZE:
-        if cpls(n*prime, factorDict[n] + [prime]):
-          answers.add(n*prime)
-
-    # stupid minor optimization
-    if prime % 100 == 37:
-      for n in sorted(possibleAnswers):
-        if n*prime > SIZE:
-          if cpls(n):
-            answers.add(n)
-          possibleAnswers.remove(n)
+  if prime**3/8 > SIZE:
+    num = prime - 4
+    while num * prime < SIZE:
+      if num in possibleAnswers:
+        if cpls(num*prime, factor(num) + [prime]):
+          factorDict[num*prime] = factorDict[num] + [prime]
+          answers.add(num*prime)
+      num += prime -1
     continue
 
-  for n in possibleAnswers:
-    if n * prime < SIZE:
-      if n * prime**2 > SIZE:
-        if cpls(n*prime, factorDict[n] + [prime]):
-          answers.add(n*prime)
-          #primesUsed.update([prime] + factor(n))
-      else:
+  for n in list(smallNum):
+    if n * prime > SIZE:
+      smallNum.remove(n)
+      continue
+
+    if n * prime**2 > SIZE:
+      if cpls(n*prime, factorDict[n] + [prime]):
+        answers.add(n*prime)
         factorDict[n*prime] = factorDict[n] + [prime]
-        newAnswers.add(n*prime)
-  possibleAnswers.update(newAnswers)
+    else:
+      factorDict[n*prime] = factorDict[n] + [prime]
+      possibleAnswers.add(n*prime)
+      if n*prime**2 < SIZE:
+        smallNum.add(n*prime)
 
 
-
-possibleAnswers.add(2)
+answers.add(2)
 possibleAnswers = sorted(possibleAnswers)
 print "Time Taken:", time.time() - START
 
@@ -73,8 +68,11 @@ for i in possibleAnswers:
 
 
 print sum(answers), len(answers), len(possibleAnswers)
+
+#for ans in sorted(answers):
+#  print ans, factor(ans)
 #print sorted(answers)
-print sorted(primesUsed)
+#print sorted(primesUsed)
 
 print "Time Taken:", time.time() - START
 
@@ -99,6 +97,7 @@ print "Time Taken:", time.time() - START
   10^5 has 36   answers
   10^6 has 84   answers
   10^7 has 175  answers
-  10^8 has 1038 answers
+  10^8 has 439  answers
+  10^9 has 1038 answers?
 
 """
