@@ -1,27 +1,22 @@
 import time, math
-from primes import pfactor_gen, factor_given_pfactor
+from primes import pfactor_gen, get_primes
+
 START = time.time()
 SIZE  = 10**6
 
-def primeGen(size): #for each number n, return some factor of it.
-  primes = [2]
-  factors = [0,1,2] + [1,2] *(size/2-1)
-  for i in xrange(3,size,2):
-    if factors[i] == 1:
-      for j in xrange(i**2,size,i*2):
-        if factors[j] == 1:
-          factors[j] = i
-      factors[i] = i
-      primes.append(i)
-  return primes
+factorDict = {1 : [], 2: [2]}
 
-def checkPropertyLessStupid(m, factorization):
-  for factor in factorization:
-    if (m / factor + 3) % (factor - 1) != 0:
+def factor(n):
+  return factorDict[n]
+
+def checkPropertyLessStupid(m):
+  for f in factor(m):
+    if (m / f + 3) % (f - 1) != 0:
       return False
   return True
-
 cpls = checkPropertyLessStupid
+
+
 def checkPropertyStupid(m):
   for i in xrange(2,m):
     if not (pow(i,m+4, m) == i):
@@ -29,26 +24,32 @@ def checkPropertyStupid(m):
   return True
 cps = checkPropertyStupid
 
-START = time.time()
 print "Time Taken:", time.time() - START
 
-listOfPrimes = primeGen(int(SIZE**.5))
-possibleAnswers = [1]
+listOfPrimes    = get_primes(int(SIZE**.5))
+possibleAnswers = set([1])
 for prime in listOfPrimes[1:]:
-  possibleAnswers.extend([x * prime for x in possibleAnswers])
-  possibleAnswers = filter((lambda x: x < SIZE), possibleAnswers)
+  newAnswers      = set()
+  for n in possibleAnswers:
+    if n * prime < SIZE:
+      factorDict[n*prime] = factorDict[n] + [prime]
+      newAnswers.add(n*prime)
+  possibleAnswers.update(newAnswers)
 
-possibleAnswers.append(2)
-possibleAnswers.sort()
+possibleAnswers.add(2)
+possibleAnswers = sorted(possibleAnswers)
 print "Time Taken:", time.time() - START
-START = time.time()
 
-sumz = 0
+sumz  = 0
 count = 0
+
+primesUsed = set()
 for i in possibleAnswers:
-  if cps(i):
-    sumz += i
+  if cpls(i):
+    sumz  += i
     count += 1
+    #print i, factor(i)
+    primesUsed.update(set(factor(i)))
 
 print sumz, count, len(possibleAnswers)
 
