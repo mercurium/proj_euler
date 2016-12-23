@@ -251,6 +251,9 @@ def gcd(a,b):
 def lcm(a,b):
   return a*b / gcd(a,b)
 
+def lcm_list(lst):
+  return reduce(lambda x,y: lcm(x,y), lst)
+
 import operator as op
 def ncr(n, r):
   if r > n:
