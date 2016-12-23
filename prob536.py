@@ -1,83 +1,106 @@
-import time, math
-from primes import get_primes
-from heapq import *
+import time
+from primes import get_primes, gcd, crt, lcm_list
 
-START        = time.time()
-SIZE         = 10**9
-factorDict   = {1 : [], 2: [2]}
-listOfPrimes = get_primes(int(SIZE**.5))
+START       = time.time()
+SIZE        = 10**12
+factor      = {1 : [], 2: [2], 3: [3]}
+answers     = set([1,2])
+possibleAns = set([1])
+primes      = get_primes(int(SIZE**.5))
 
-def factor(n):
-  return factorDict[n]
-
-
-def checkPropertyLessStupid(m, factors=None):
+def checkProperty(m, factors=None):
   if not factors:
-    factors = factor(m)
+    factors = factor[m]
   for f in factors:
-    if (m / f + 3) % (f - 1) != 0:
+    if (m + 3) % (f - 1) != 0:
       return False
   return True
-cpls = checkPropertyLessStupid
+
+compatCache = dict()
+def compat_check(p1, p2):
+  if (p1,p2) in compatCache:
+    return compatCache[(p1,p2)]
+  gcd1 = gcd(p1-1, p2)
+  if gcd1 != 1:
+    if (p1-4) % gcd1 != 0:
+      compatCache[(p1,p2)] = False
+      return False
+
+  gcd2 = gcd(p2-1, p1)
+  if gcd2 != 1:
+    if (p2-4) % gcd2 != 0:
+      compatCache[(p1,p2)] = False
+      return False
+  compatCache[(p1,p2)] = True
+  return True
 
 
-possibleAnswers = set([1])
-primesUsed = set()
-answers    = set()
+def cheat_crt(prime_list):
+  prime_prod = reduce(lambda x,y: x*y, prime_list)
+  prime_tot  = lcm_list([x-1 for x in prime_list])
 
-smallNum   = set([1])
+  prime_prod /= gcd(prime_prod, prime_tot)
+  return crt([prime_prod, prime_tot], [0, prime_tot - 3])
 
-for prime in listOfPrimes[1:]:
-  print prime, len(possibleAnswers), len(smallNum)
+def dealWithLargePrime(prime):
+  num = prime - 4
+  while num * prime < SIZE:
+    if num in possibleAns:
+      if checkProperty(num*prime, factor[num] + [prime]):
+        factor[num*prime] = factor[num] + [prime]
+        answers.add(num*prime)
+    num += prime - 1
 
-  if prime**3/8 > SIZE:
-    num = prime - 4
-    while num * prime < SIZE:
-      if num in possibleAnswers:
-        if cpls(num*prime, factor(num) + [prime]):
-          factorDict[num*prime] = factorDict[num] + [prime]
-          answers.add(num*prime)
-      num += prime -1
-    continue
+def check(prime, lim=64):
+  if prime**3/lim > SIZE:
+    dealWithLargePrime(prime)
+    return
 
-  for n in list(smallNum):
-    if n * prime > SIZE:
-      smallNum.remove(n)
+  for n in list(possibleAns):
+    if n * prime > SIZE or len(factor[n]) == 9:
+      possibleAns.remove(n)
+      if checkProperty(n):
+        answers.add(n)
       continue
 
     if n * prime**2 > SIZE:
-      if cpls(n*prime, factorDict[n] + [prime]):
+      if checkProperty(n*prime, factor[n] + [prime]):
+        factor[n*prime] = factor[n] + [prime]
         answers.add(n*prime)
-        factorDict[n*prime] = factorDict[n] + [prime]
     else:
-      factorDict[n*prime] = factorDict[n] + [prime]
-      possibleAnswers.add(n*prime)
-      if n*prime**2 < SIZE:
-        smallNum.add(n*prime)
+      if not cheat_crt(factor[n] + [prime]) < SIZE:
+        continue
+      if not all([compat_check(x, prime) for x in factor[n]]):
+        continue
 
+      factor[n*prime] = factor[n] + [prime]
+      possibleAns.add(n*prime)
+
+
+for prime in primes[1:]:
+  print prime, len(possibleAns), time.time() - START
+  check(prime)
 
 answers.add(2)
-possibleAnswers = sorted(possibleAnswers)
 print "Time Taken:", time.time() - START
 
-for i in possibleAnswers:
-  if cpls(i):
+for i in possibleAns:
+  if checkProperty(i):
     answers.add(i)
-    #print i, factor(i)
-    primesUsed.update(set(factor(i)))
 
-
-print sum(answers), len(answers), len(possibleAnswers)
-
-#for ans in sorted(answers):
-#  print ans, factor(ans)
-#print sorted(answers)
-#print sorted(primesUsed)
-
+print sum(answers), len(answers)
 print "Time Taken:", time.time() - START
 
 
 """
+
+  Congratulations, the answer you gave to problem 536 is correct.
+
+  You are the 182nd person to have solved this problem.
+
+  Answer: 3557005261906288
+
+
   Numbers that seem to work: products of primes with no repeats (aka, p^2k does not work), and no evens besides 2.
 
   For each prime, p, we need the number to equal:
@@ -95,9 +118,12 @@ print "Time Taken:", time.time() - START
   10^3 has 9    answers
   10^4 has 15   answers
   10^5 has 36   answers
-  10^6 has 84   answers
-  10^7 has 175  answers
-  10^8 has 439  answers
-  10^9 has 1038 answers?
+  10^6 has 84   answers (0.044378 seconds)
+  10^7 has 175  answers (0.1339559 seoncds)
+  10^8 has 439  answers (1.19557906 seconds)
+  10^9 has 1038 answers? (12.05828 seconds)
+  10^10 has 2348 answers? (46.2426 seconds now!)
+  10^12 has 12997 answers (4500ish seconds, didn't actually time it, had to modify it later)
+
 
 """
