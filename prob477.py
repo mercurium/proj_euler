@@ -25,34 +25,26 @@ def getNumberSequences(size):
 
 def dpSolver(numberArray):
     probSize      = len(numberArray)
-    answersDict   = dict()
-    numberSumDict = dict()
-    for i in xrange(probSize):
-        answersDict[(i,i)]   = numberArray[i]
-        numberSumDict[(i,i)] = numberArray[i]
+    answersList   = numberArray[:]
+    numberSumList = numberArray[:]
+    newAnswersList = [0] * len(numberArray)
+    newNumSumList  = [0] * len(numberArray)
 
     #Computing the next row of the problem
     for lengthOfChain in xrange(2, probSize+1):
-        print lengthOfChain
-        newAnswersDict = dict()
-        newNumSumDict  = dict()
         for start in xrange(0, probSize - lengthOfChain+1):
             end = start + lengthOfChain - 1
-            newAnswersDict[(start,end)] = max( \
-                    (numberArray[start] \
-                        + numberSumDict[(start+1, end)] \
-                        - answersDict[(start+1, end)]), \
-                    (numberArray[end] \
-                        + numberSumDict[(start, end-1)] \
-                        - answersDict[(start, end-1)])
-            )
-            newNumSumDict[(start,end)] = numberSumDict[(start,end-1)] + numberArray[end]
 
-        answersDict   = newAnswersDict
-        numberSumDict = newNumSumDict
+            val1 = numberArray[start] + numberSumList[start+1] - answersList[start+1]
+            val2 = numberArray[end]   + numberSumList[start]   - answersList[start]
 
-    return answersDict[(0, probSize-1)]
+            newAnswersList[start] = max( val1, val2)
+            newNumSumList[start]  = numberSumList[start] + numberArray[end]
 
+        answersList, newAnswersList  = newAnswersList, answersList
+        numberSumList, newNumSumList = newNumSumList, numberSumList
+
+    return answersList[0]
 
 nonRepeatingNums, repeatingNums = getNumberSequences(SIZE)
 
@@ -89,5 +81,9 @@ You are the 168th person to have solved this problem.
 
 The answer is: 25044905874565165
 Time Taken: 7318.35272813
+Time Taken: 116.254349947 (I used lists instead of dictionaries and stopped making new ones. Holy shit that speed improvement
+Time Taken: 96.1503489017 (removed expensive print statements)
+
+This could almost definitely be cut in half if I just returned both values for noRepeatCost and repeatOnceCost in one call to dpSolver, but the runtime isn't that bad right now, and i'd prefer to leave it readable atm.
 
 """
