@@ -83,5 +83,11 @@ The cycle is 7248 ints
 57956 + 7248 * 13788 + 6620
     = 64576 + 7248 * 13788
 
+Congratulations, the answer you gave to problem 477 is correct.
+
+You are the 168th person to have solved this problem.
+
+The answer is: 25044905874565165
+Time Taken: 7318.35272813
 
 """
