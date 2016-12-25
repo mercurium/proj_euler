@@ -3,7 +3,7 @@ import time
 from fractions import Fraction
 
 START      = time.time()
-SIZE       = 700
+SIZE       = 5000
 INF_SLOPE  = 10**5 # Arbitrary marker value > max possible slope here
 MOD        = 50515093
 START_SEED = 290797
@@ -28,16 +28,31 @@ class Line():
         self.start = start
         self.end   = end
 
-        if start.x != end.x:
-            self.slope = Fraction((end.y - start.y), (end.x - start.x))
-        else:
+        if start.x == end.x:
             self.slope = INF_SLOPE
+        else:
+            self.slope = Fraction((end.y - start.y), (end.x - start.x))
+
         self.yInter = start.y - self.slope * start.x
         if self.slope != 0:
             self.xInter = -self.yInter / self.slope
+        else:
+            self.xInter = self.xInter = self.yInter
 
     def eq(self, line):
         return self.start.eq(line.start) and self.end.eq(line.end)
+
+    def inBounds(self, point):
+        if min(self.start.x, self.end.x) > point.x \
+          or max(self.start.x, self.end.x) < point.x \
+          or min(self.start.y, self.end.y) > point.y \
+          or max(self.start.y, self.end.y) < point.y:
+            return False
+        if self.start.x != self.end.x and point.x == self.start.x:
+            return False
+        if self.start.y != self.end.y and point.y == self.start.y:
+            return False
+        return True
 
     def isIntersecting(self, l):
         if self.slope == l.slope:
@@ -61,14 +76,13 @@ class Line():
         if l.slope == 0:
             return compareZeroSlopeLineToNormalLine(l, self)
 
-        intersect  = (self.yInter - l.yInter) / (l.slope - self.slope)
-        intersectY = self.yInter + intersect * self.slope
-
-        if intersect < self.end.x and \
-                intersect > self.start.x and \
-                intersect < l.end.x and \
-                intersect > l.start.x:
-            intersectionPoints.add((intersect, intersectY))
+        intersectX = (self.yInter - l.yInter) / (l.slope - self.slope)
+        intersectY = self.yInter + intersectX * self.slope
+        
+        intersect  = Point(intersectX, intersectY)
+        
+        if self.inBounds(intersect) and l.inBounds(intersect):
+            intersectionPoints.add((intersectX, intersectY))
             return True
         return False
 
@@ -78,14 +92,20 @@ class Line():
 
 def compareInfSlopeTONormalLine(infLine, normalLine):
     intersect = normalLine.yInter + infLine.start.x * normalLine.slope # TODO fix
-    if min(infLine.start.y, infLine.end.y) < intersect < max(infLine.start.y, infLine.end.y):
+
+    p = Point(infLine.start.x, intersect)
+
+    if infLine.inBounds(p) and normalLine.inBounds(p):
         intersectionPoints.add((infLine.start.x, intersect))
         return True
     return False
 
 def compareZeroSlopeLineToNormalLine(zeroSlopeLine, normalLine):
     intersect = normalLine.xInter + zeroSlopeLine.start.y / normalLine.slope  # TODO fix
-    if intersect > zeroSlopeLine.start.x and intersect < zeroSlopeLine.end.x:
+
+    p = Point(intersect, zeroSlopeLine.start.y)
+
+    if zeroSlopeLine.inBounds(p) and normalLine.inBounds(p):
         intersectionPoints.add((intersect, zeroSlopeLine.start.y))
         return True
     return False
