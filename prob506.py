@@ -1,197 +1,125 @@
-import time, math
-START = time.time()
-SIZE  = 10**6
-MOD   = 11111**2
+import time, math, string
+START          = time.time()
+SIZE           = 10**14
+MOD            = 11111**2
+TEN_REPEAT_NUM = 55555 # 10^55555 = 1 mod 11111^2
 
-def pow10(power):
-  base = 1 + (10**5-1) * (power // 5) % MOD
-  return (base * 10**(power % 5)) % MOD
+repeatNumLst = [1,2,3,4,3,2]
+repeatNum    = '123432'
 
-seq         = [1,2,3,4,3,2]
-seqLen      = 6
+def lstToInt(lst):
+    if len(lst) == 0:
+        return 0
+    return int(string.join([str(x) for x in lst], ''))
 
-startPos    = [0,0,1,2,3,4,0,3,5,3,0,4,3,2,1,0]
-endPos      = [0,1,2,3,4,0,3,5,3,0,4,3,2,1,0]
-startSeqSum = [0,0,14,12,9,5,0,9,2,9,0,5,9,12,14]
+def getSmallClockSeq():
+    smalls = [None] * 15
+    index = 0
+    for i in xrange(15):
+        nums  = []
+        while sum(nums) < i:
+            nums.append(repeatNumLst[index % 6])
+            index += 1
+        smalls[i] = nums
 
+    return smalls
 
-startSeq   = [
-    0,
-    0, \
-    23432, \
-    3432, \
-    432, \
-    32, \
-    0, \
-    432, \
-    2, \
-    432, \
-    0, \
-    32, \
-    432, \
-    3432, \
-    23432, \
-]
-endSeq     = [
-    0, \
-    1, \
-    12, \
-    123, \
-    1234, \
-    0, \
-    123, \
-    12343, \
-    123, \
-    0, \
-    1234, \
-    123, \
-    12, \
-    1, \
-    0, \
-]
+smalls = getSmallClockSeq()
 
-prevCost    = startSeq[:]
+def getOffsetRepeat(n):
+    n     = n % 15
+    index = (repeatNum * 2).index(string.join([str(x) for x in smalls[n]], ''))
 
-# =================================================================================
-prevCost   = startSeq[:]
-costDict   = {}
+    return repeatNumLst[index:] + repeatNumLst[:index]
 
-seqPointer = 0
-totalSum   = 0
-adjustment = 16 + (SIZE % 15)
+def getClockSeq(n):
+    if n < 15:
+        return smalls[n]
 
-# could probably integrate 1-15 as well, but it's a hassle
-for n in xrange(1, min(15,SIZE+1)):
-  numSum = 0
-  digSum = 0
-  while numSum < n:
-    numSum     += seq[seqPointer]
-    digSum      = (digSum * 10) % MOD
-    digSum     += seq[seqPointer]
-    seqPointer  = (seqPointer + 1) % seqLen
-  totalSum += digSum
+    numRepeat = n // 15
+    repeatSeq = getOffsetRepeat(n)
 
-for n in xrange(15, min(adjustment+15, SIZE+1)):
-  k          = n % 15
-  # start of seq
-  digSum  = prevCost[k]
+    return repeatSeq * numRepeat + smalls[n % 15]
 
-  # mid of seq, repeating 123432...etc
-  if n - startSeqSum[k] >= 15:
-    digSum = (digSum * 10**6 + 123432) % MOD
-  prevCost[k] = digSum
+def clockSeqInt(n):
+    return lstToInt(getClockSeq(n))
 
-  # end of seq
-  digSum    = digSum * 10**endPos[k] + endSeq[k] % MOD
-  totalSum += digSum
+csi = clockSeqInt
 
-  # keeping track of beginning costs to be more efficient later
-  if n >= adjustment:
-    numStepReq = endPos[k] # since we need to adjust by the number of elements at the end... this part counts
-    prevCostEndPos, seqEndCost,count = 0,0,0
-    if numStepReq in costDict:
-      prevCostEndPos, seqEndCost, count = costDict[numStepReq]
-    prevCostEndPos       += prevCost[k]
-    seqEndCost           += endSeq[k]
-    costDict[numStepReq]  = (prevCostEndPos, seqEndCost, count+1)
+def getMidMultiplier(numRepeat, numDigTail):
+    return sum([ \
+        pow(10, 6*dig + numDigTail, MOD) \
+        for dig in xrange(numRepeat) \
+    ])
+
+def computeClockSeqMod(n):
+    tail   = smalls[n%15]
+    mid    = getOffsetRepeat(n)
+
+    numRepeatMid = n / 15
+    numDigTail   = len(tail)
+
+    sumz = lstToInt(tail) \
+            + lstToInt(mid) * getMidMultiplier(numRepeatMid, numDigTail)
+    return sumz % MOD
+
+def getMidMultMany(numRepeat, numDigTail):
+    multiplier = 0
+    for dig in xrange(min(numRepeat, TEN_REPEAT_NUM)):
+        numTimes = (numRepeat - dig) / TEN_REPEAT_NUM + 1
+        tenMult  = numTimes * ((numRepeat - dig) % TEN_REPEAT_NUM) \
+                    + numTimes * (numTimes - 1)/2 * TEN_REPEAT_NUM
+        multiplier += tenMult * pow(10, 6*dig + numDigTail, MOD)
+    return multiplier
+
+# computes sum of numbers equal to n % 15 and <= n
+def computeClockSeqModMany(n):
+    tail = smalls[n%15]
+    mid  = getOffsetRepeat(n)
+
+    numRepMid  = n / 15
+    numDigTail = len(tail)
+
+    sumz = lstToInt(tail) * (numRepMid + 1) \
+            + lstToInt(mid) * getMidMultMany(numRepMid, numDigTail)
+    return sumz % MOD
 
 
-for key in costDict.keys():
-  prevCostEndPos, seqEndCost, count = costDict[key]
-  numTimesApplied = SIZE//15 - 2
+def computeClockSum(n):
+    if n < 15:
+        return sum(smalls[:n+1])
 
-  for multiplier in xrange(SIZE//15 - 2):
-    prevCostEndPos = (prevCostEndPos * 10**6 + 123432 * count) % MOD
-
-    digSum    = prevCostEndPos * 10**key + seqEndCost % MOD
-    totalSum += digSum
-
-print "Answer:", totalSum % MOD
-time1 = time.time() - START
-print "Time taken:", time1
-
-# =================================================================================
-# reset conditions
-START      = time.time()
-prevCost   = startSeq[:]
-costDict   = {}
-
-seqPointer = 0
-totalSum   = 0
-adjustment = 16 + (SIZE % 15)
-
-# could probably integrate 1-15 as well, but it's a hassle
-for n in xrange(1, min(15,SIZE+1)):
-  numSum = 0
-  digSum = 0
-  while numSum < n:
-    numSum     += seq[seqPointer]
-    digSum      = (digSum * 10) % MOD
-    digSum     += seq[seqPointer]
-    seqPointer  = (seqPointer + 1) % seqLen
-  totalSum += digSum
-
-for n in xrange(15, min(adjustment+15, SIZE+1)):
-  k          = n % 15
-  # start of seq
-  digSum  = prevCost[k]
-
-  # mid of seq, repeating 123432...etc
-  if n - startSeqSum[k] >= 15:
-    digSum = (digSum * 10**6 + 123432) % MOD
-  prevCost[k] = digSum
-
-  # end of seq
-  digSum    = digSum * 10**endPos[k] + endSeq[k] % MOD
-  totalSum += digSum
-
-  # keeping track of beginning costs to be more efficient later
-  if n >= adjustment:
-    numStepReq = endPos[k] # since we need to adjust by the number of elements at the end... this part counts
-    prevCostEndPos, seqEndCost,count = 0,0,0
-    if numStepReq in costDict:
-      prevCostEndPos, seqEndCost, count = costDict[numStepReq]
-    prevCostEndPos       += prevCost[k]
-    seqEndCost           += endSeq[k]
-    costDict[numStepReq]  = (prevCostEndPos, seqEndCost, count+1)
+    sumz = 0
+    for i in xrange(SIZE,SIZE-15,-1):
+        sumz += computeClockSeqModMany(i)
+    return sumz % MOD
 
 
-numTimesApplied = SIZE//15 - 2
 
-for key in costDict.keys():
-  prevCostEndPos, seqEndCost, count = costDict[key]
-  headCost        = prevCostEndPos * pow10(numTimesApplied * 6)
+answer = computeClockSum(SIZE)
+print "Answer:", answer
 
-  multiplier    = 0
-  for power in xrange(0,5):
-    k = pow(10,power)
-    b = (numTimesApplied + 1 - power) / 5
-    a = 10**5 - 1
+print "Time Taken:", time.time() - START
 
-    multiplier += k * b + 9 * k * b * a + 54 * k * (b * (b+1)/2) * a
+"""
+Congratulations, the answer you gave to problem 506 is correct.
 
-  digSum = multiplier * prevCostEndPos + seqEndCost * b
-  # todo: still missing the mid section...
+You are the 513th person to have solved this problem.
 
-  for multiplier in xrange(SIZE//15 - 2):
-    prevCostEndPos = (prevCostEndPos * 10**6 + 123432 * count) % MOD
+Answer: 18934502
+Time Taken: 0.755791187286
 
-    digSum    = prevCostEndPos * 10**key + seqEndCost % MOD
-    totalSum += digSum
+This problem is pretty simple actually. Since 1+2+3+4+3+2 = 15, any number > 15 is equal to:
+(1,2,3,4,3,2 shifted around) * (n/15) + seq(n % 15)
 
-print "Answer:", totalSum % MOD
-time2 = time.time() - START
-print "Time taken:", time2
-print "Second method is faster by a factor of:", time1 / time2
+Ex: seq(8) = 2123
+seq(23 = 8+15)   =        212343 2123
+seq(38 = 8+15*2) = 212343 212343 2123
 
-'''
-10^5k = (10^5 - 1) * k + 1 % 11,111^2
+So computing each number is simple. Beyond that, summing them up is just adding similar numbers.
 
+Given that 10^55555 = 1 mod 11111^2, we repeat our numbers after a while and it makes it an O(1) adding operation rather than O(n).
 
-123454321 = 41**2 * 271**2
-1234321   = 11**2 * 101**2
+I'm leaving a few extra methods around, though they aren't necessary for solving the problem because they help generate valeus for this problem
 
-10**5 % (41 * 271) = 1
-10**55555 % 123454321 = 1
-'''
-
+"""
