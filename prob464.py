@@ -1,7 +1,7 @@
 #NOTE TODO need to solve it
 import time
 START = time.time()
-SIZE = 10
+SIZE = 500
 
 vals = [0,1]+ [2] * (SIZE-1) #Using 2 to indicate that we haven't checked it yet.
 for i in range(2,SIZE+1):
@@ -21,10 +21,8 @@ for i in range(1,SIZE+1):
     P[i] = P[i-1] + (vals[i] == 1)
     N[i] = N[i-1] + (vals[i] == -1)
 
-#print P
-#print N
 count = 0
-off = [0] * 100
+off   = [0] * 100
 
 for a in range(1,SIZE+1):
     b = a

@@ -1,13 +1,13 @@
 #NOTE TODO need to solve it
-import time
+import time, math
 from primes import get_primes, factor
 
 START      = time.time()
 MAX_SIZE   = 10**11
-LIM        = MAX_SIZE / (7*13*19*31)
+LIM        = MAX_SIZE / (7*13*19*9)
 
 prime_lst  = get_primes(LIM)
-prime_lst  = filter( (lambda x: x % 3 == 1), prime_lst)
+prime_lst  = sorted([9] + filter( (lambda x: x % 3 == 1), prime_lst))
 other_nums = range(LIM)
 
 for prime in prime_lst:
@@ -15,51 +15,39 @@ for prime in prime_lst:
     other_nums[prime] = 0
 
 def test(n):
-  return sum(filter(lambda x: x==1, [x**3 % n for x in xrange(n)])) == 3
+  return sum(filter(lambda x: x==1, [x**3 % n for x in xrange(n)]))
 
+def getAnswer(currentProd, currentIndex, numLeft):
+  if numLeft == 0:
+    return currentProd * sum(other_nums[1:MAX_SIZE/currentProd + 1])
 
-SIZE = 1000
-count = [0] * 6
-for i in xrange(4,SIZE):
-  if test(i):
-    #print i, factor(i)
-    count[i%6] += 1
+  sumz = 0
+  for index in xrange(currentIndex, len(prime_lst)):
+    if currentProd * prime_lst[index]**numLeft > MAX_SIZE:
+      break
+    if currentIndex == 0:
+      print index
 
-print count, len(filter(lambda x: x < SIZE, prime_lst))
+    currentPrime = prime_lst[index]
+    if currentPrime != 9:
+      for i in xrange(1, int(math.log(MAX_SIZE / currentProd, currentPrime) + 1 )):
+        sumz += getAnswer(currentProd * currentPrime**i, index + 1, numLeft - 1)
+    else:
+      for i in xrange(2, int(math.log(MAX_SIZE / currentProd, 3) + 1 )):
+        sumz += getAnswer(currentProd * 3**i, index + 1, numLeft - 1)
+
+  return sumz
 
 print len(prime_lst)
-
-sumz       = 0
-loop_count = 0
-
-for a in xrange(len(prime_lst)):
-  break
-  item1 = prime_lst[a]
-  if item1**5 > MAX_SIZE:
-    break
-  for b in xrange(a+1,len(prime_lst)):
-    item2 = prime_lst[b]
-    if item1*item2**4 > MAX_SIZE:
-      break
-    for c in xrange(b+1,len(prime_lst)):
-      item3 = prime_lst[c]
-      if item1 * item2 * item3**3 > MAX_SIZE:
-        break
-      for d in xrange(c+1,len(prime_lst)):
-        item4 = prime_lst[d]
-        if item1 * item2 * item3 * item4**2 > MAX_SIZE:
-          break
-        for e in xrange(d+1,len(prime_lst)):
-          item5 = prime_lst[e]
-          prod  = item1 * item2 * item3 * item4 * item5
-          if prod >= MAX_SIZE:
-            break
-          sumz       += prod * sum(other_nums[:MAX_SIZE/prod+1])
-          loop_count += MAX_SIZE/prod
-          #print item1, item2, item3, item4, item5, MAX_SIZE/prod
-  print a, item1, loop_count
-print sumz, loop_count
-
+print getAnswer(1,0,5)
 
 
 print "Time Taken:", time.time() - START
+
+"""
+Answer: 13157952743404478203  ? Maybe..
+
+Need to have 5 numbers, 9, or a prime = 1 mod 3, and any number of powers on them.
+
+
+"""

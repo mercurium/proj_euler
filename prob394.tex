@@ -1,0 +1,69 @@
+%\documentstyle [12pt,amsmath,amsfonts] {article}
+
+\documentclass [12pt] {article}
+
+\addtolength{\oddsidemargin}{-.75in}
+\addtolength{\evensidemargin}{-.75in}
+\addtolength{\textwidth}{1.3in}
+\addtolength{\topmargin}{-.75in}
+\addtolength{\textheight}{1.85in}
+
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{ latexsym, graphicx }
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+
+\newcommand{\ov}{\overline}
+\newcommand{\overbar}{\overline}
+\newcommand{\union}{\bigcup}
+\newcommand{\intersect}{\bigcap}
+\newcommand{\ud}{\underline}
+\newcommand{\Rarr}{\Rightarrow}
+\newcommand{\rarr}{\rightarrow}
+\newcommand{\rawrr}{\rightarrow}
+\newcommand{\Righarrow}{\Rightarrow}
+\newcommand{\LRarr}{\Leftrightarrow}
+\newcommand{\trileft}{\vartriangleleft}
+\newcommand{\infinity}{\infty}
+\newcommand{\fract}{\frac}
+\newcommand{\no}{\noindent}
+\newcommand{\dst}{\displaystyle}
+\newcommand{\dsp}{\displaystyle}
+\newcommand{\dps}{\displaystyle}
+\newcommand{\bs}{\backslash}
+
+\begin{document}
+
+$$Problem\ \ 394$$
+
+Jeff eats a pie in an unusual way. \\
+The pie is circular. He starts with slicing an initial cut in the pie along a radius. \\
+While there is at least a given fraction $F$ of pie left, he performs the following procedure: \\
+- He makes two slices from the pie centre to any point of what is remaining of the pie border, any point on the remaining pie border equally likely. This will divide the remaining pie into three pieces. \\
+- Going counterclockwise from the initial cut, he takes the first two pie pieces and eats them. \\
+When less than a fraction $F$ of pie remains, he does not repeat this procedure. Instead, he eats all of the remaining pie.\\
+
+For $x \geq 1$, let $E(x)$ be the expected number of times Jeff repeats the procedure above with $F = 1/x$.
+It can be verified that E(1) = 1, E(2) ≈ 1.2676536759, and E(7.5) ≈ 2.1215732071.
+
+$$Pr[X=1] = 2p - p^2 $$
+$$Pr[Exactly\ p\ left\ after\ 1\ slice] = 2(1-p) dx$$
+
+$$Pr[Exactly\ p\ left\ after\ 2\ slices] = \int_{p}^1((1-k)(1-p/k) d^2k$$
+
+$$ = \int_{p}^1(1 - k - p/k + p) d^2k$$
+$$ = k - k^2/2 - p \log(k) + pk$$
+$$ = (1 - 1/2  + p) - ( p - p^2/2 - p \log(p) + p^2)$$
+$$ = 1/2  - p^2/2 + p \log(p) dk$$
+$$ \rightarrow \int_p^1 1/2  - p^2/2 + p \log(p) dk$$
+$$ = p/2 - p^3/6 + p^2\log(p)/2 - p^2/2$$
+
+\end{document}

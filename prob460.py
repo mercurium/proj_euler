@@ -2,42 +2,43 @@
 import time, random
 START = time.time()
 from math import *
-SIZE = 100
+SIZE = 10
 
 minDist = SIZE if SIZE != 10**4 else 180.460086537
 for k in range(20,300):
-    break
-    for h in range(2200,SIZE):
-        velocity = (h-1)/log(h)
-        dist = ((h-1)**2+k**2)**.5
-        for k2 in range(min(5000,SIZE/2-k+1),1,-1):
-            for h2 in range(h+SIZE/4,SIZE):
-                velocity2 = h if h2==h else (h2-h)/(log(h2)-log(h))
-                dist2 = ((h2-h)**2+k2**2)**.5
-                totalDist = (SIZE-2.*k-2*k2)/h2 + dist/velocity * 2  +dist2/velocity2 * 2
-                if totalDist < minDist:
-                    minDist = totalDist
-                    print h,h2,k,k2,minDist
+  break
+  for h in range(2200,SIZE):
+    velocity = (h-1)/log(h)
+    dist = ((h-1)**2+k**2)**.5
+    for k2 in range(min(5000,SIZE/2-k+1),1,-1):
+      for h2 in range(h+SIZE/4,SIZE):
+        velocity2 = h if h2==h else (h2-h)/(log(h2)-log(h))
+        dist2 = ((h2-h)**2+k2**2)**.5
+        totalDist = (SIZE-2.*k-2*k2)/h2 + dist/velocity * 2  +dist2/velocity2 * 2
+        if totalDist < minDist:
+          minDist = totalDist
+          print h,h2,k,k2,minDist
 
 for n in range(4,10):
-    print n
-    for iteration in range(10**6):
-        hLst = [1]
-        kLst = [0]
-        for i in range(1,n+1):
-            hLst.append(random.randint(2,SIZE))
-            kLst.append(random.randint(max(0,min(kLst)-20),SIZE/2))
-        #kLst = [0, 14, 352, 1070, 2535, 4034]
-        #hLst = [1, 656, 1833, 3087, 4388, 4889]
-        hLst.sort()
-        kLst.sort()
-        totalDist = (SIZE-2.*kLst[-1])/hLst[-1]
-        for i in range(1,n+1):
-            vel = hLst[i] if hLst[i]==hLst[i-1] else (hLst[i]-hLst[i-1])/(log(hLst[i])-log(hLst[i-1]))
-            totalDist += 2*((hLst[i]-hLst[i-1])**2+(kLst[i]-kLst[i-1])**2)**.5 / vel
-        if totalDist < minDist:
-            minDist = totalDist
-            print hLst, kLst,minDist
+  print n
+  for iteration in range(10**6):
+    hLst = [1]
+    kLst = [0]
+    for i in range(1,n+1):
+      hLst.append(random.randint(2,SIZE))
+      kLst.append(random.randint(max(0,min(kLst)-20),SIZE/2))
+    hLst.sort()
+    kLst.sort()
+    totalDist = (SIZE-2.*kLst[-1])/hLst[-1]
+    for i in range(1,n+1):
+      if hLst[i] == hLst[i-1]:
+        vel = hLst[i]
+      else:
+        vel = (hLst[i] - hLst[i-1])/ (log(hLst[i]) - log(hLst[i-1]))
+      totalDist += 2*((hLst[i]-hLst[i-1])**2+(kLst[i]-kLst[i-1])**2)**.5 / vel
+    if totalDist < minDist:
+      minDist = totalDist
+      print hLst, kLst,minDist
 
 print "Time Taken:", time.time() - START
 

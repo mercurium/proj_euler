@@ -1,3 +1,5 @@
+#NOTE TODO need to solve it
+
 import time
 SIZE  = 10**14
 

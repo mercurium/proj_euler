@@ -9,10 +9,6 @@ pfactor = pfactor_gen(SIZE)
 
 def factor(n):
   return factor_given_pfactor(n, pfactor)
-
-def multInverse(n, mod):
-  return ext_gcd(n, mod)[0] % mod
-
 def addToDict(valDict, key, value):
   if key in valDict:
     valDict[key] += value
@@ -85,6 +81,12 @@ Time Taken: 40.5066130161 Minor optimizations
 Time Taken: 39.6483750343 Printing every 1024 instead of every 100
 
 
+a^2 - 1 = 0 mod n
+b(a+1)  = 0 mod n
 
 
 """
+
+
+
+

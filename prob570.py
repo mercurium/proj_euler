@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time
 from primes import gcd
 from primes import *
@@ -43,7 +44,7 @@ for order in xrange(2,SIZE+1):
   val3 = sum(countDict[key] for key in filter( (lambda key: key[0] == order and key[1] == 3), countDict.keys()))
   count += gcd(val1, val3)
   if gcd(val1, val3) > 30:
-    print order, gcd(val1, val3)
+    print order, gcd(val1, val3), time.time() - START
 
 
 print count
@@ -63,7 +64,6 @@ for value in sorted(set(gcdDict.values())):
 A(n+1) = 3 x 4^n - 2 x 3^n (  http://oeis.org/A255463 )
 
 3 x 4^n - 2 x 3^n
-
 
 
 by default, the gcd = 6 for most numbers

@@ -20,6 +20,8 @@ primes_set = set(primes)
 primes_few = filter((lambda x: x < 105000), primes)
 
 def factor(n):
+  if n == 0:
+    return []
   if m_r(n):
     return [n]
   factor_lst = []
@@ -170,10 +172,9 @@ def multInverse(n, mod):
 #... and so on for any number of bases
 
 def crt(bases, vals):
-  big_base = 1
+  big_base = reduce(lambda x,y: x*y, bases)
   sumz = 0
-  for val in bases: big_base *= val
-  for i in range(0,len(bases)):
+  for i in xrange(0,len(bases)):
     curr_base = big_base / bases[i]
     inverse = ext_gcd(bases[i],curr_base)[1]
     sumz += vals[i] * curr_base * inverse

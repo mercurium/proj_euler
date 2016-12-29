@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time, math
 from primes import gcd, get_totient
 START = time.time()

@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time, math
 from primes import crt, get_primes
 

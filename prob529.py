@@ -1,3 +1,4 @@
+#NOTE TODO need to solve it
 import time
 from primes import ncr
 START     = time.time()
