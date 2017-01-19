@@ -1,24 +1,20 @@
 #NOTE TODO need to solve it
 import time, math
+from primes import ncr
 START = time.time()
 
-
-N = 10**7
-K = 20
-
-import operator as op
-def ncr(n, r):
-  r = min(r, n-r)
-  if r == 0: return 1
-  num = reduce(op.mul, xrange(n, n-r, -1))
-  denom = reduce(op.mul, xrange(1, r+1))
-  return num//denom
+N = 10**9
+K = 3
 
 sumz = 0
-k = ncr(N + K,K)
-for i in xrange(1, N+1):
-  k =  k *(N-(i-1))/(N+K-(i-1))
-  sumz += k * 1.0 / i
+k    = ncr(N + K, K)
+
+for i in xrange( N ):
+  k     = k * (N - i) / (N + K - i)
+  sumz += k * 1.0  / (i + 1)
+  if i % 10**4 == 0:
+    print i+1, k, k * 1.0  / (i + 1)
+
 print sumz
 
 print "Time Taken:", time.time() - START
